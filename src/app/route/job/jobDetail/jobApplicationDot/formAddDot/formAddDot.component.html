@@ -1,0 +1,121 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #addApplicationForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{application.id?'Edit':'Add'}} Location</h4>
+    </div>
+    <div class="modal-body pt15 pb0">
+      <div class="form-add-application">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="row form-group">
+              <div class="col-sm-4">
+                <label for="Type">Type*</label>
+                <div>
+                  <ng-select name="appType" [items]="applicationType" bindLabel="description" bindValue="id" placeholder="Type"
+                    [(ngModel)]="application.idJobApplicationType" required #appType="ngModel">
+                  </ng-select>
+                  <div class="error-message pl0">
+                    <div *ngIf="appType.errors && (appType.dirty || appType.touched)">
+                      {{errorMsg.requireJobApplicationTypeForDob}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="Application">Tracking#</label>
+                <input type="text" placeholder="Tracking#" name="appnumber" id="appnumber" [(ngModel)]="application.applicationNumber"
+                [required]="appNUmberRequired" #appnumber="ngModel" class="form-control application" pattern="^$|^[A-Za-z0-9]+"
+              />
+                <div class="error-message pl0">
+                  <div *ngIf="appnumber.invalid && (appnumber.dirty || appnumber.touched)">
+                    <div *ngIf="appnumber.errors.minlength">
+                      {{errorMsg.applicationNumber}}
+                    </div>
+                    <div *ngIf="appnumber.errors.required">
+                      {{errorMsg.requiredApplicationNumber}}
+                    </div>
+                    <div *ngIf="appnumber.errors.pattern && !appnumber.errors.minlength">
+                      {{errorMsg.onlyAllowAlphaNumericAppNum}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="for">For</label>
+                <input type="text" placeholder="For" readonly="readonly" [(ngModel)]="application.applicationFor" name="appFor" #appFor="ngModel"
+                  class="form-control" />
+              </div>
+            </div>
+  
+            <div class="row form-group">
+              <div class="col-sm-4">
+                <label for="for">Street On</label>
+                <input type="text" name="streetWorkingOn" placeholder="Street On" [(ngModel)]="application.streetWorkingOn" #streetWorkingOn="ngModel"
+                  class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <label for="status">Street From</label>
+                <input type="text" name="streetFrom" placeholder="Street From" [(ngModel)]="application.streetFrom" #streetFrom="ngModel"
+                  class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <label for="for">Street To</label>
+                <input type="text" name="streetTo" placeholder="Street To" [(ngModel)]="application.streetTo" #streetTo="ngModel" class="form-control"/>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="status">Status</label>
+                <ng-select name="appStatus" [items]="applicationStatus" bindLabel="name" bindValue="id" placeholder="Status" [(ngModel)]="application.idApplicationStatus"
+                  #appStatus="ngModel">
+                </ng-select>
+              </div>
+              <div class="col-sm-8">
+                <label for="for">Notes</label>
+                <textarea rows="2" class="form-control" name="applicationNote" id="applicationNote" placeholder="Notes" [(ngModel)]="application.applicationNote"></textarea>
+              </div>
+            </div>
+            <div class="mt15" *ngIf="application.jobWorkPermitHistories?.length > 0">
+              <label for="">Tracking# History</label>
+                <div class="scroll-table">
+                  <table class="table display blue-table mb0 no-footer">
+                    <thead>
+                      <tr>
+                        <th>New Tracking#</th>
+                        <th>Old Tracking#</th>
+                        <th>Updated date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let history of application.jobWorkPermitHistories">
+                        <td>{{history.newNumber}}</td>
+                        <td>{{history.oldNumber}}</td>
+                        <td>{{history.createdDate}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+        <div class="col-sm-7 text-left">
+            <div class="modify" *ngIf="application.lastModifiedDate && application.lastModifiedDate">Last modified by {{application.lastModifiedByEmployeeName}} on {{application.lastModifiedDate | date :'MM/dd/yyyy, h:mm a'}}</div>
+          </div>
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="submit" class="btn btn-blue" [disabled]="!addApplicationForm.form.valid" (click)="saveJobApplication()">{{application.id?'Update':'Save'}}</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

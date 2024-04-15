@@ -1,0 +1,36 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-6 left-area">
+      <div class="component-body">
+        <h4 class="component-title">Locations</h4>
+        <div class="search-area">
+          <div class="search middle pull-left">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input class="form-control" type="text" placeholder="Search Location" [(ngModel)]="srch" (ngModelChange)="search($event)">
+            </div>
+          </div>
+          <button class="btn btn-panel pull-right no-padding {{btnShowHide}} {{showJobApplicationAddBtn}}" (click)="openModalFormAddApplication(formAddDot)" *ngIf="!isCustomerLoggedIn">Add Location</button>
+        </div>
+        <div class="overflow-table jobDotApplication">
+          <table  id="dt-aplication" class="display"  style="width:100%"></table>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 right-area" *ngIf="jobDetail">
+      <div class="component-body">
+        <h4 class="component-title">Work Permits</h4>
+        <job-dot-work-permit [jobDetail]="jobDetail"></job-dot-work-permit>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #formAddDot>
+  <div form-add-dot [modalRef]="modalRef" [onSave]="onSave" [idJob]="idJob"
+    [selectedJobType]="selectedJobType" [idJobApp]="idJobApp" [reload]="reload"></div>
+</ng-template>
+
+
+
+  

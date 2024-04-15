@@ -1,0 +1,123 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #bisCompanyList="ngForm" novalidate>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{isBisDetailFound ? 'Company BIS Detail' : 'Select Company'}}</h4>
+        </div>
+        <div class="modal-body pt15">
+            <table class="table mb0 comp-list" *ngIf="!isBisDetailFound">
+                <tr>
+                    <th>Company Name</th>
+                    <th>Licencee Name</th>
+                    <th>Licence Number</th>
+                </tr>
+                <tr *ngFor="let company of bisListOfCompanies" (click)="getCompanyBISInfo(company.business_name,company.license_number)">
+                    <td>{{toTitleCase(company.business_name)}}</td>
+                    <td>{{toTitleCase(company.first_name)}} {{toTitleCase(company.last_name)}}</td>
+                    <td>{{company.license_number}}</td>
+                </tr>
+            </table>
+            <div *ngIf="isBisDetailFound">
+                    <div class="bis-info" >
+                            <div>
+                                <p class="mb10" *ngIf="companyBisInfo.business_name">
+                                    <label>Company Name:</label>
+                                    <span>{{this.companyBisInfo.business_name}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.first_name">
+                                    <label>Licencee Name:</label>
+                                    <span>{{this.companyBisInfo.first_name}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.trackingNumber">
+                                    <label>Tracking#:</label>
+                                    <span>{{companyBisInfo.license_number}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.trackingExpiry">
+                                    <label>Tracking Expiry:</label>
+                                    <span>{{companyBisInfo.trackingExpiry}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.specialInspectionAgencyNumber">
+                                    <label>Special Inspection Agency#:</label>
+                                    <span>{{companyBisInfo.specialInspectionAgencyNumber}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.ctLicenseNumber">
+                                    <label>Concrete Testing Lab License#:</label>
+                                    <span>{{companyBisInfo.ctLicenseNumber}}</span>
+                                </p>
+                                <h2 *ngIf="companyBisInfo.insuranceDisability || companyBisInfo.insuranceGeneralLiability || companyBisInfo.insuranceWorkCompensation ||
+                                companyBisInfo.specialInspectionAgencyExpiry || companyBisInfo.ctExpirationDate">INSURANCE EXPIRY DATES</h2>
+                                <p class="mb10" *ngIf="companyBisInfo.insuranceDisability">
+                                    <label>Disability:</label>
+                                    <span>{{companyBisInfo.insuranceDisability}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.insuranceGeneralLiability">
+                                    <label>General Liability:</label>
+                                    <span>{{companyBisInfo.insuranceGeneralLiability}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.insuranceWorkCompensation">
+                                    <label>Work Compensation:</label>
+                                    <span>{{companyBisInfo.insuranceWorkCompensation}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.specialInspectionAgencyExpiry">
+                                    <label>Special Inspection Agency Expiry Date:</label>
+                                    <span>{{companyBisInfo.specialInspectionAgencyExpiry}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.ctExpirationDate">
+                                    <label>Concrete Testing Lab Expiry Date:</label>
+                                    <span>{{companyBisInfo.ctExpirationDate}}</span>
+                                </p>
+                                <h2 *ngIf="companyBisInfo.endorsementsDemolition || companyBisInfo.endorsementsConstruction 
+                                || companyBisInfo.endorsementsConcrete">ENDORSEMENTS</h2>
+                                <p class="mb10" *ngIf="companyBisInfo.endorsementsDemolition">
+                                    <label>Demolition:</label>
+                                    <span>{{companyBisInfo.endorsementsDemolition}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.endorsementsConstruction">
+                                    <label>Construction:</label>
+                                    <span>{{companyBisInfo.endorsementsConstruction}}</span>
+                                </p>
+                                <p class="mb10" *ngIf="companyBisInfo.endorsementsConcrete">
+                                    <label>Concrete:</label>
+                                    <span>{{companyBisInfo.endorsementsConcrete}}</span>
+                                </p>
+                                <p class="mb10">
+                                    <label>Address 1:</label>
+                                    <span>{{companyBisInfo.business_house_number}} {{companyBisInfo.business_street_name}}</span>
+                                </p>
+                                <p class="mb10">
+                                    <label>City:</label>
+                                    <span>{{companyBisInfo.license_business_city}}</span>
+                                </p>
+                                <p class="mb10">
+                                    <label>State:</label>
+                                    <span>{{companyBisInfo.business_state}}</span>
+                                </p>
+                                <p class="mb10">
+                                    <label>Zip:</label>
+                                    <span>{{companyBisInfo.business_zip_code}}</span>
+                                </p>
+                                <p class="mb10">
+                                    <label>Phone:</label>
+                                    <span>{{companyBisInfo.business_phone_number}}</span>
+                                </p>
+                                <p *ngIf="companyBisInfo.license_number">{{errorMsg.updatecompanyBisInfo}}</p>
+                                <p *ngIf="noResultFound" class="text-center">{{noResultFound}}</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer pr0 pb0 pt0">
+                            <button type="button" class="btn btn-blue pull-right" *ngIf="!noResultFound" (click)="saveBisInfo()">Yes</button>
+                            <button type="button" class="btn btn-white pull-right" *ngIf="!noResultFound" (click)="modalRefViewBis.hide()">No</button>
+                        </div>
+            </div>
+        </div>
+        
+    </form>
+</div>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

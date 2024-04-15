@@ -1,0 +1,52 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #dohmhPenaltyForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} DOHMH Penalty Schedule</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Section of Law*</label>
+          <input id="sectionOfLaw" name="sectionOfLaw" type="text" class="form-control" [(ngModel)]="dohmhPenalty.sectionOfLaw" #sectionOfLaw="ngModel"
+          required/>
+          <div class="error-message pl0">
+            <div *ngIf="sectionOfLaw.errors && (sectionOfLaw.dirty || sectionOfLaw.touched)">
+              {{errorMsg.requireSectionOfLaw}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Description</label>
+          <input id="description" name="description" type="text" class="form-control" [(ngModel)]="dohmhPenalty.description"
+            #classification="ngModel" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Penalty: First Violation ($)</label>
+          <input id="penaltyFirstViolation" name="penaltyFirstViolation" type="text" class="form-control" [(ngModel)]="dohmhPenalty.penaltyFirstViolation"
+            #penaltyFirstViolation="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Repeat Violation ($)</label>
+          <input id="penaltyRepeatViolation" name="penaltyRepeatViolation" type="text" class="form-control" [(ngModel)]="dohmhPenalty.penaltyRepeatViolation"
+            #penaltyRepeatViolation="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!dohmhPenaltyForm.form.valid" (click)="saveDohmhPenalty()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  
+  </form>
+</div>

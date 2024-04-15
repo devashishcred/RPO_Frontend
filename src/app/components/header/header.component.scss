@@ -1,0 +1,27 @@
+.sidebar-backdrop {
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    background: rgba(0,0,0,0);
+    height: 100vh;
+    width: 85%;
+    display: block;
+    padding-top: 8px;
+}
+.visibility-none {
+    visibility: hidden!important;
+    font-size: 0px!important;
+}
+.clearfix label{
+    text-transform: uppercase;
+}
+.input-box{
+    width: 200px;
+    display: inline-block;
+    margin: 0 15px 0 0;
+}
+.project-name {
+    background-color: #fff5c4;
+    color: #000000;
+}

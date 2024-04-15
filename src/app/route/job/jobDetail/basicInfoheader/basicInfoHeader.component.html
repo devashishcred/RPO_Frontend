@@ -1,0 +1,193 @@
+<div class="col-sm-6">
+    <ul class="breadcrumb rfp-bread">
+        <li>
+            <small>
+                <a class="pointer" routerLink="/jobs">Projects</a>
+            </small>
+        </li>
+        <li *ngIf="jobDetail?.id">
+            <a>Project# {{jobDetail?.id}}</a>
+        </li>
+    </ul>
+    <div class="sub-heading">
+        <span class="title">{{jobDetail.rfpAddress.houseNumber}} {{jobDetail.rfpAddress.street}}, {{jobDetail.borough.description}}
+            {{jobDetail.rfpAddress.zipCode}} | {{jobDetail.rfpAddress.specialPlace}}</span>
+        <!-- <span class="blue">M</span>
+        <span class="yellow">S</span>
+        <span class="orange">N</span> -->
+        <ng-container *ngIf="teamInitials && teamInitials.length > 0">
+            <ng-container *ngFor="let doBT of teamInitials; let e = index">
+              <div size="25" class="avtar-letters" [tooltip] = "doBT.fullName" >{{doBT.itemName}}</div>
+            </ng-container>
+        </ng-container> 
+    </div>
+
+</div>
+<div class="col-sm-6 text-right job-head-right" *ngIf="statusData.jobStatus">
+    <span>Workstream</span>
+    <!-- <select class="select"  (ngModelChange)="onSelectionChange($event)"  [(ngModel)]="yearSelected"  >
+        <option *ngFor="let type of jobDetail.jobApplicationTypes;"    [value]="type.id">{{type.description}}</option>
+    </select> -->
+    <ng-select (change)="onSelectionChange($event)" [items]="jobDetail.jobApplicationTypes" bindLabel="description" bindValue="id"  [(ngModel)]="selectedJobType123" >
+</ng-select>
+<li class="more-width dropdown" dropdown>
+    <div  class="pointer inner-dropdown" dropdownToggle>
+      <label class="address">Job Info</label>
+      
+    </div>
+    <div *dropdownMenu class="dropdown-menu quickinfo address" (click)="dropdownPropagation($event)">
+      <div class="column-data clearfix">
+       new job info
+      </div>
+      <div class="text-right">
+        <button class="btn btn-panel btn-panel-bordered mt0" (click)="closeDropdown()">Close</button>
+      </div>
+    </div>
+  </li>
+    <div class="job_info_block">
+        <a class="job-info">Job Info <i class="icofont-info-circle"></i></a>
+        <div class="job_popover">
+            <ul class="two_block">
+                <li>
+                    <span>JOB#</span>
+                    <p>{{jobDetail.jobNumber}}</p>
+                </li>
+                <li>
+                    <span>START</span>
+                    <p>{{jobDetail.startDate | date:'MM/dd/yyyy'}}</p>
+                </li>
+                <li>
+                    <span>FLOOR</span>
+                    <p>{{jobDetail.floorNumber}}</p>
+                </li>
+                <li>
+                    <span>APT</span>
+                    <p>{{jobDetail.apartment}}</p>
+                </li>
+                <li>
+                    <span>HOUSE#</span>
+                    <p>{{jobDetail.houseNumber}}</p>
+                </li>
+                <li>
+                    <span>STREET ADDRESS</span>
+                    <p>{{jobDetail.streetNumber}}</p>
+                </li>
+            </ul>
+            <ul class="single_block">
+                <li>
+                    <span>SPECIAL PLACE NAME</span>
+                    <p>{{jobDetail.specialPlace}}</p>
+                </li>
+                <li>
+                    <span>JOB ADDRESS</span>
+                    <p>{{jobDetail.rfpAddress.houseNumber}} {{jobDetail.rfpAddress.street}}, {{jobDetail.borough.description}}
+                        {{jobDetail.rfpAddress.zipCode}}</p>
+                </li>
+                <li>
+                    <span>SPECIAL PLACE NAME</span>
+                    <p>{{jobDetail.rfpAddress.specialPlace}}</p>
+                </li>
+                <li>
+                    <span *ngIf="redIcon && jobDetail.contact" class="red-icn" tooltip="License# is expired">
+                        <svg version="1.2" preserveAspectRatio="none" viewBox="0 0 24 24" class="ng-element" data-id="16b70ceb2463d58a557eacd94afaf0aa"
+                          style="fill: rgb(245, 44, 17); width: 18px; height: 18px;">
+                          <g>
+                            <path xmlns:default="http://www.w3.org/2000/svg" d="M18 2h-8L4.02 8 4 20c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-5 15h-2v-2h2v2zm0-4h-2V8h2v5z"
+                              style="fill: rgb(245, 44, 17);"></path>
+                          </g>
+                        </svg>
+                    </span><span> {{jobDetail.contact.idPrefix!= null ? jobDetail.contact.prefix?.name : ''}}
+        
+                    {{jobDetail.contact.firstName}} {{jobDetail.contact.lastName}}</span>
+
+                    <p>{{jobRecord.company.name}}</p>
+
+                </li>
+            </ul>
+            <ul class="three_block">
+                <li>
+                    <span>PM</span>
+                    <p>{{pm}}</p>
+                </li>
+                <li>
+                    <span>PC</span>
+                    <p>{{pc}}</p>
+                </li>
+                <li>
+                    <span>SC</span>
+                    <p>{{sc}}</p>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <span>PROJECT DESCRIPTION</span>
+                    <p>{{jobDetail.projectDescription}}</p>
+                </li>
+                <li>
+                    <span>JOB STATUS NOTE</span>
+                    <p>{{jobDetail.jobStatusNotes}}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <label class="job-status {{statusData.statusColor}}">{{statusData.jobStatus}}</label>
+    <i class="fa fa-lg fa-ellipsis-v pointer dropdown-toggle" data-toggle="dropdown" style="padding:0px 5px;" aria-expanded="false"></i>
+    <ul class="dropdown-menu widget">
+        <li class="{{showJobAddBtn}}">
+            <a href="javascript:void(0)" *ngIf="jobDetail?.status == 1" class="link-blue" (click)="openAddJobModal(formJob)">Edit Job kkkk</a>
+        </li>
+        <li class="{{showJobAddBtn}}">
+            <a href="javascript:void(0)" *ngIf="jobDetail?.status == 1" class="link-blue" [ngClass]="statusData.job_on_hold" (click)="changeTheStatusOnReason(2,'swap','on-hold')">Put Job on Hold</a>
+            <a href="javascript:void(0)" *ngIf="jobDetail?.status == 2" class="link-blue" [ngClass]="statusData.job_in_progress" (click)="changeTheStatusOnReason(1,'swap','In-progress')">Put Job In-Progress</a>
+        </li>
+        <li class="{{showJobAddBtn}}">
+            <a href="javascript:void(0)" *ngIf="jobDetail?.status == 1" class="link-blue" [ngClass]="statusData.job_completed" (click)="changeTheStatusOnReason(3,'','Completed')">Job Completed</a>
+            <a href="javascript:void(0)" *ngIf="jobDetail?.status == 3" class="link-blue" [ngClass]="statusData.job_re_open" (click)="changeTheStatusOnReason(1,'Notswap','Re-open')">Re-Open</a>
+        </li>
+        <li class="{{showTaskAddBtn}}">
+            <a href="javascript:void(0)" class="link-blue" *ngIf="jobDetail?.status == 1"(click)="openModalFormCreateTask(addtask)">Create Task</a>
+        </li>
+        <li class="hide">
+            <a href="javascript:void(0)" class="link-blue" (click)="downloadPdf()">Download Proposal</a>
+        </li>
+        <li class="hide">
+            <a href="javascript:void(0)" class="link-blue">Add Time Note</a>
+        </li>
+        <li class="{{showJobTransmittalBtn}}">
+            <a href="javascript:void(0)" *ngIf="jobDetail?.status == 1" class="link-blue" (click)="openCreateTransmittalModal(addtransmittal,'',this.idJob)">Send Email</a>
+        </li>
+        <li class="{{showGenerateLabelBtn}}">
+            <a href="javascript:void(0)" (click)="generateLabel(jobDetail?.id)" class="link-blue" *ngIf="jobDetail?.status == 1">​​​​​​​Generate Job Label</a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" (click)="viewOnBis(jobDetail?.binNumber)" class="link-blue">View On BIS</a>
+        </li>
+        <!-- <li class="{{showGenerateLabelBtn}}">
+            <a href="javascript:void(0)" (click)="generateLabel(jobDetail?.id)" *ngIf="jobDetail?.status == 1">​​​​​​​View on DOB NOW</a>
+        </li> -->
+             <li class="{{showGenerateLabelBtn}}">
+            <a href="javascript:void(0)" (click)="viewOnDob()" class="link-blue">​​​​​​​View on DOB NOW</a>
+        </li>
+        <li class="{{showJobDeleteBtn}}">
+            <a href="javascript:void(0)" class="link-blue">Delete Job</a>
+        </li>
+    </ul>
+</div>
+<ng-template #addtask>
+    <div add-task [addtask]="addtask" [modalRef]="modalRef" [idJob]="jobDetail.id" [frommodeule]="frommodeule" [isNew]="true" [isHeader]="true"></div>
+</ng-template>
+<ng-template #formJob>
+    <div form-job [job]="jobDetail" [modalRefJob]="modalRefJob" [onSave]="onSave" [isAddressDisable]="isAddressDisabled" [isReAssign]="isReAssigned"></div>
+</ng-template>
+<ng-template #addtransmittal>
+    <div add-transmittal [modalRef]="modalRef" [idJob]="jobDetail.id" [jobObj]="jobDetail" [isHeader]="true"></div>
+</ng-template>
+<ng-template #addreason>
+    <div add-reason [modalRef]="modalRef" [idJob]="jobDetail.id" [jobObj]="jobDetail" [changeStatusFromReason]="changeStatusFromReason" [statusToSet]="statusToSet" (EventToFire)="EventForChangingTheStatus($event)"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

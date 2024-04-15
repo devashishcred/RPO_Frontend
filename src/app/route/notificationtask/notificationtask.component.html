@@ -1,0 +1,219 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #taskForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <div class="btn-right">
+                <button type="button" (click)="editTask()">Edit</button>
+                <button type="button" (click)="openJob()">Open Project</button>
+                <button type="button" (click)="addProgressNotes()">Add Progress Note</button>
+            </div>
+            <h4 class="modal-title pull-left">View Task {{'( Task # ' + task.id + ')' }}</h4>
+        </div>
+        <div class="modal-body pt15">
+            <div class="row task-row">
+                <div class="col-sm-7 column-data view-det">
+
+                    <div class="row form-group">
+                        <div class="col-sm-4" *ngIf="task.taskType">
+                            <label class="block">Task type</label>
+                            <span>{{task.taskType}}</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.assignedTo">
+                            <label class="block">Assigned to</label>
+                            <span>{{task.assignedTo}}</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.completeBy">
+                            <label *ngIf="task.idTaskType!=2" class="block">Due Date</label>
+                            <label *ngIf="task.idTaskType==2" class="block">Appointment Date</label>
+                            <span>{{task.completeBy}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group" *ngIf="task.taskDuration || task.examiner || task.generalNotes">
+                        <div class="col-sm-4" *ngIf="task.taskDuration">
+                            <label class="block">Duration</label>
+                            <span class="block">{{task.taskDuration}} hours</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.examiner">
+                            <label class="block">Contact</label>
+                            <span class="block">
+                                {{task.examiner}}
+                            </span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.generalNotes">
+                            <label class="block">Task details</label>
+                            <span class="block">
+                                {{task.generalNotes}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-sm-4" *ngIf="task.assignedBy">
+                            <label class="block">Assigned By</label>
+                            <span class="block">{{task.assignedBy}}</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.assignedDate">
+                            <label class="block">Assigned On</label>
+                            <span class="block">{{task.assignedDate}}</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.taskStatus">
+                            <label class="block">Status</label>
+                            <span class="block">{{task.taskStatus}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-sm-4" *ngIf="task.idJob">
+                            <label class="block">Project#</label>
+                            <span class="block">
+                                <a routerLink="//job/{{task.idJob}}/application" class="link-blue" (click)="redirectJobDetail()" href="#" target="_blank"
+                                   rel='noreferrer'>
+                                    {{task.jobNumber}}
+                                </a>
+                            </span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.jobCompany">
+                            <label class="block">Project Company</label>
+                            <span class="block">{{task.jobCompany}}</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.jobContact">
+                            <label class="block">Project Contact</label>
+                            <span class="block">{{task.jobContact}}</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.idContact">
+                            <label class="block">Contact Name</label>
+                            <span class="block">
+                                <a routerLink="/contactdetail/{{task.idContact}}" href="#" class="link-blue" target="_blank" rel='noreferrer'>
+                                    {{task.contactName}}
+                                </a>
+                            </span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.idRfp">
+                            <label class="block">RFP#</label>
+                            <span class="block">
+                                <a routerLink="/editSiteInformation/{{task.idRfp}}" href="#" class="link-blue" target="_blank" rel='noreferrer'>
+                                    {{task.rfpNumber}}
+                                </a>
+                            </span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.idCompany">
+                            <label class="block">Company Name</label>
+                            <span class="block">
+                                <a routerLink="/companydetail/{{task.idCompany}}" href="#" class="link-blue" target="_blank" rel='noreferrer'>
+                                    {{task.companyName}}
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4" *ngIf="task.costType && task.jobBillingType">
+                            <label class="block">Billing Type</label>
+                            <span class="block" *ngIf="task.jobBillingType == 1">
+                                Scope Billing
+                            </span>
+                            <span class="block" *ngIf="task.jobBillingType == 2">
+                                Other Billable Service
+                            </span>
+                            <span class="block" *ngIf="task.jobBillingType == 3">
+                                Non Billable Service
+                            </span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.jobFeeSchedule || task.rfpJobType">
+                            <label class="block">Service Item</label>
+                            <span class="block">
+                                {{task.jobBillingType == 1 ? task.jobFeeSchedule : task.rfpJobType}}
+                            </span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.costType == 2 || task.costType == 3 ||
+                            task.costType == 4 ||task.costType == 6 ||task.costType == 7">
+                            <label class="block">Service Quantity</label>
+                            {{task.serviceQuantity}}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4" *ngIf="task.jobApplication">
+                            <label class="block">Application</label>
+                            <span class="block">
+                                {{task.jobApplication}}
+                            </span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.closedDate">
+                            <label class="block">Complete Date</label>
+                            <span class="block" *ngIf="task.closedDate != '0001-01-01T00:00:00'">
+                                {{  task.closedDate | date: 'MM/dd/yyyy' }}
+                            </span>
+                            <span class="block" *ngIf="task.closedDate == '0001-01-01T00:00:00'">
+                                --
+                            </span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="task.workPermitType">
+                            <label class="block">Work Permit Type</label>
+                            <span class="block">
+                                {{task.workPermitType}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row form-group" *ngIf="task.taskDocuments?.length > 0 || task.taskJobDocuments?.length > 0">
+                        <div class="col-sm-6" *ngIf="task.taskDocuments?.length > 0">
+                            <label class="block">Attachments</label>
+                            <div class="rpo-file-upload" *ngFor="let attachment of task.taskDocuments">
+                                <a href="{{attachment.documentPath}}" target="_blank" class="link-blue">{{attachment.name}}</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" *ngIf="task.taskJobDocuments?.length > 0">
+                            <label class="block">Project Documents</label>
+                            <div class="rpo-file-upload" *ngFor="let attachment of task.taskJobDocuments">
+                                <a href="{{attachment.documentPath}}" target="_blank" class="link-blue">{{attachment.itemName}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group" *ngIf="task.taskJobTransmittals?.length > 0">
+                        <div class="col-sm-12">
+                            <label class="block">Transmittal#</label>
+                            <div class="trans-links" *ngFor="let transmittal of task.taskJobTransmittals">
+                                <a href="javascript:void(0)" (click)="printTrasmittal(transmittal.id)" class="link-blue"
+                                   rel='noreferrer'>{{transmittal.transmittalNumber}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="modify">Last modified by {{task.lastModified}} on {{task.lastModifiedDate | date :'MM/dd/yyyy, h:mm a'}}
+                            </div>
+                            <div class="modify">Created by {{task.createdByEmployee}} on {{task.createdDate | date :'MM/dd/yyyy, h:mm a'}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5" *ngIf="task.notes?.length > 0 ">
+                    <h2 class="blue-title">Progression Note</h2>
+                    <div class="note-list">
+                        <div class="single-note" *ngFor="let option of task.notes;  let i = index">
+                            <p class="desc">
+                                {{option.notes}}
+                            </p>
+                            <p class="users">
+                                added by {{option.lastModified}} on {{option.lastModifiedDate | date :'MM/dd/yyyy, h:mm a'}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ng-template #Edittask>
+    <div add-task [addtask]="addtask" [modalRef]="modalRef" [idJob]="idJob" [frommodeule]="frommodeule" [isNew]="isNew" [idTaskType]='idTaskType' [idTask]="idTask" [reload]="reload" [isFromNotification]="true"></div>
+</ng-template>
+<ng-template #progressionnote>
+    <div add-progression-note [progressionNote]="progressionNote" [modalRef]="modalRef" [idTask]="idTask" [reload]="reload" [fromTask]="true" [isFromNotification]="true"></div>
+</ng-template>

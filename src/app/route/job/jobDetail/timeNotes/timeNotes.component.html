@@ -1,0 +1,43 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-12 pt15">
+      <div class="component-body">
+        <h4 class="component-title pull-left mr-2">Time Notes</h4>
+        <div class="search-area">
+          <div class="search middle pull-left">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input class="form-control" type="text" placeholder="Search Time Note" [(ngModel)]="srch" (ngModelChange)="search(srch)">
+            </div>
+          </div> 
+          <div class="work-status permit-status pull-right">
+            <label>
+              <span class="green"></span>QB Synced
+            </label>
+            <label>
+              <span class="red"></span>QB Error
+            </label>
+            <label>
+                <span class="yellow"></span>Pending
+            </label>
+            <label>
+                <span class="grey"></span>Non Billable
+            </label>
+        </div>       
+        </div>
+        <div class="timeNotes">          
+          <table id="dt-TimeNotes" class="display"  style="width:100%"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #editTimeNote>
+    <div add-time-notes [modalRef]="modalRef" [idTimeNote]="idTimeNote" [idJob]="id" (reload)="reload($event)"></div>
+  </ng-template>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

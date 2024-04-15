@@ -1,0 +1,157 @@
+<div class="content-area {{showMilestoneViewBtn}}">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="search-area">
+                <div class="inner-addon left-addon">
+                    <h4> Billing Points</h4>
+                </div>
+            </div>
+            <div class="job-ml-grid">
+                <div class="fl-row">
+                    <div class="col col1">
+                        <label>BILLING POINT DESCRIPTION</label>
+                    </div>
+                    <div class="col col2 text-center" *ngIf="!costrightDisabled">
+                        <label>COST ($)</label>
+                    </div>
+                    <div class="col col3">
+                        <label>SERVICES</label>
+                    </div>
+                    <div class="col col4 text-center">
+                        <label>STATUS</label>
+                    </div>
+                    <div class="col col5 {{showBtnStatus}}"></div>
+                </div>
+                <div>
+                    <form class="form-horizontal" #addMilestoneForm="ngForm" novalidate>
+                        <div class="scope-item fl-row">
+                            <div class="col col1">
+                                <input type="text" name="mileStoneName" [(ngModel)]="tmpMilestone.name" placeholder="Billing point description*" #mileStoneName="ngModel" class="form-control"
+                                       required/>
+                                <div class="error-message pl0">
+                                    <div *ngIf="mileStoneName.errors && (mileStoneName.dirty || mileStoneName.touched)">
+                                        {{ errorMsg.milestoneName }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col2" *ngIf="!costrightDisabled">
+                                <input type="text" name="mileStoneCost" [(ngModel)]="tmpMilestone.value" (keypress)="isNumber($event);" placeholder="Cost ($)*"
+                                       maxlength="9" #mileStoneCost="ngModel" class="form-control text-right" required/>
+                                <div class="error-message pl0">
+                                    <div *ngIf="(tmpMilestone.value<1 || tmpMilestone.value=='' || tmpMilestone.value==null) && (mileStoneCost.dirty || mileStoneCost.touched)">
+                                        {{ errorMsg.requriredCost }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col3">
+                                <angular2-multiselect [data]="services" name="mileStoneServices" [(ngModel)]="tmpMilestone.jobMilestoneServices" [settings]="dropdownSettings"
+                                                      (onSelect)="onItemSelect()" (onDeSelect)="OnItemDeSelect()" (onDeSelectAll)="onDeSelectAll()" (onSelectAll)="onSelectAll()">
+                                </angular2-multiselect>
+                            </div>
+                            <div class="col col4" *ngIf="milestoneStatus?.length > 0">
+                                <ng-select name="idStatus" [items]="milestoneStatus" bindLabel="itemName" bindValue="itemName" placeholder="Status" [(ngModel)]="tmpMilestone.status"
+                                           #idStatus="ngModel" required>
+                                </ng-select>
+                            </div>
+                            <div class="col col5 action-icns text-right {{showBtnStatus}}">
+                                <button type="button" class="btn btn-sm btn-primary {{showMilestoneAddBtn}}" id="addMilestoneBtn" [disabled]="!tmpMilestone.name || !tmpMilestone.value || tmpMilestone.value <1"
+                                        (click)="addMileStone(addMilestoneForm)">Add Billing Point
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div *ngIf="jobMilestone?.length > 0">
+                    <div class="job-milestone" *ngFor="let item of jobMilestone; index as j">
+                        <div class="scope-item fl-row">
+                            <div class="col col1">
+                                <p *ngIf="!item.isVisible">{{ item.name }}</p>
+
+                                <input *ngIf="item.isVisible" class="form-control" name="name_{{item.id}}_{{j}}" [(ngModel)]="item.name" (ngModelChange)="isFieldValChange()"
+                                       placeholder="Billing point description*"/>
+                                <div class="error-message pl0">
+                                    <div *ngIf="item.name=='' || item.name==null">
+                                        {{ errorMsg.milestoneName }}
+                                    </div>
+                                </div>
+                                <div class="modify">
+                                    Last modified by {{ item.lastModifiedBy }} on {{ item.lastModified | date:'MM/dd/yyyy h:mm a' }}
+                                </div>
+                            </div>
+                            <div class="col col2 text-right" *ngIf="!costrightDisabled">
+                                <label *ngIf="!item.isVisible">{{ item.formattedValue }}</label>
+                                <input *ngIf="item.isVisible" class="form-control text-right" (keypress)="isDecimal($event);" name="value_{{item.value}}_{{j}}" [(ngModel)]="item.value"
+                                       maxlength="9" (ngModelChange)="isFieldValChange();" placeholder="Cost ($)*"/>
+                                <div class="error-message pl0">
+                                    <div *ngIf="item.value<1 || (item.value=='' || item.value==null)">
+                                        {{ errorMsg.requriredCost }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col3">
+                                <!-- if it is in view mode code start-->
+                                <angular2-multiselect *ngIf="!item.isVisible" [data]="item.milestoneServiceList" name="selectCompType_{{jobMilestoneServices[j]}}_{{j}}"
+                                                      [(ngModel)]="item.selectedMilesStone" [settings]="dropdownDisableSettings" (onSelect)="onItemSelect($event,jobMilestoneServices[j])"
+                                                      (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)">
+                                </angular2-multiselect>
+                                <!-- if it is in view mode code end-->
+                                <!-- if it is in edit mode code start-->
+                                <angular2-multiselect *ngIf="item.isVisible && item.milestoneServiceList" [data]="item.milestoneServiceList" name="select_{{jobMilestoneServices[j]}}_{{j}}"
+                                                      [(ngModel)]="item.selectedMilesStone" [settings]="dropdownSettings" (onSelect)="onItemSelect($event,jobMilestoneServices[j])"
+                                                      (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)">
+                                </angular2-multiselect>
+                                <!-- if it is in edit mode code end-->
+                            </div>
+                            <div class="col col4 text-center">
+                                <div *ngIf="!item.isVisible && item.status=='Completed'">
+                                    <span class="scope-status label-success">{{ item.status }}</span>
+                                </div>
+                                <ng-select *ngIf="item.isVisible" class="text-left" name="status_{{item.id}}_{{j}}" [items]="milestoneStatus" bindLabel="itemName" bindValue="id"
+                                           placeholder="Status" [(ngModel)]="item.status">
+                                </ng-select>
+                            </div>
+                            <div class="col col5 action-icns text-right {{showBtnStatus}}">
+                                <button class="btn btn-xs btn-primary  {{showMilestoneAddBtn}}" *ngIf="!item.isVisible" [disabled]="item.showEditDeleteBtn"
+                                        id="editBtnMilestone{{j}}" (click)="editMilestone(item,item.id,j)">Edit
+                                </button>
+
+                                <button class="btn btn-xs btn-success" *ngIf="item.isVisible && item.name!='' && item.value > 0" id="saveMilestone{{j}}"
+                                        (click)="updateMilestone(item,item.id);">Save
+                                </button>
+                                <button class="btn btn-xs btn-danger {{showMilestoneDeleteBtn}}" id="deleteMilestone{{j}}" *ngIf="jobMilestone?.length > 0"
+                                        [disabled]="item.showEditDeleteBtn" (click)="deleteMilestone(item,item.id)">Delete
+                                </button>
+                                <button class="btn btn-xs btn-default " *ngIf="item.isVisible" id="cancelMilestone{{j}}" (click)="cancelMilestone(item,item.id,j)">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<ng-template #tpldeletemilestone>
+    <div class="modal-custom-content" cdkDrag>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">Confirmation</h4>
+        </div>
+
+        <div class="modal-body" *ngIf="!this.args">
+            <label>Are you sure you want to delete this Billing point?</label>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-blue pull-right" (click)="ConfirmationDelete()">Yes</button>
+            <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">No</button>
+        </div>
+    </div>
+</ng-template>

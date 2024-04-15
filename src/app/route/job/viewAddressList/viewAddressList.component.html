@@ -1,0 +1,199 @@
+<div class="modal-custom-content" cdkDrag>
+
+    <form #bisCompanyList="ngForm" novalidate>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left" *ngIf="!dobpermitdata">{{isAddressDetailFound && !dobpermitdata ? 'Address
+                Detail' : 'Select Address'}}</h4>
+            <h4 class="modal-title pull-left" *ngIf="dobpermitdata">{{!isAddressDetailFound && dobpermitdata ? 'Permit
+                details' : ''}}</h4>
+        </div>
+        <ng-conatiner *ngIf="!isAddressDetailFound &&!dobpermitdata">
+            <div class="modal-body pt15">
+                <table class="table mb0 comp-list" >
+                    <tr>
+                        <th>Borough</th>
+                        <th>House Number</th>
+                        <th>Street</th>
+                    </tr>
+                    <tr *ngFor="let address of addressList"
+                        (click)="getAddressDetail(address.borough,address.houseNumber,address.streetName)">
+                        <td>{{address.borough}}</td>
+                        <td>{{address.houseNumber}}</td>
+                        <td>{{address.streetName}}</td>
+                    </tr>
+                </table>
+            </div>
+        </ng-conatiner>
+
+        <ng-container *ngIf="isAddressDetailFound">
+            <div class="modal-body pt15">
+                <div >
+                    <div class="bis-info">
+                        <div>
+                            <p class="mb10" *ngIf="address.streetName">
+                                <span>
+                                    <b>{{toTitleCase(address.houseNumber)}}, {{toTitleCase(address.streetName)}},
+                                        {{toTitleCase(address.borough)}}</b>
+                                </span>
+                            </p>
+                            <p class="mb10" *ngIf="address.bisAddress">
+                                <label>BIS Address:</label>
+                                <span>{{address.bisAddress}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.zip">
+                                <label>Zip:</label>
+                                <span>{{address.zip}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.block">
+                                <label>Block:</label>
+                                <span>{{address.block}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.lot">
+                                <label>Lot:</label>
+                                <span>{{address.lot}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.bin">
+                                <label>Bin#:</label>
+                                <span>{{address.bin}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.communityBoard">
+                                <label>Community Board#:</label>
+                                <span>{{address.communityBoard}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.zoneDistrinct">
+                                <label>Zone Distrinct(s):</label>
+                                <span>{{address.zoneDistrinct}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.overlays">
+                                <label>Overlays:</label>
+                                <span>{{address.overlays}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.specialDistrict">
+                                <label>Special District:</label>
+                                <span>{{toTitleCase(address.specialDistrict)}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.map">
+                                <label>Map:</label>
+                                <span>{{address.map}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.strories">
+                                <label>Stories:</label>
+                                <span>{{address.strories}}</span>
+                            </p>
+    
+                            <p class="mb10" *ngIf="address.dwellingUnits">
+                                <label>Dwelling Units:</label>
+                                <span>{{address.dwellingUnits}}</span>
+                            </p>
+                            <p class="mb10" *ngIf="address.grossArea">
+                                <label>Gross Area:</label>
+                                <span>{{address.grossArea}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>Landmark:</label>
+                                <span>{{address.landmark ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>Environmental Restrictions:</label>
+                                <span>{{address.little_E ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>Tidal Wetlands Map:</label>
+                                <span>{{address.tidalWetlandsMapCheck ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>Coastal Erosion Hazard Area Map:</label>
+                                <span>{{address.coastalErosionHazardAreaMapCheck ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>Special Flood Hazard Area:</label>
+                                <span>{{address.specialFloodHazardAreaCheck ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>Freshwater Wetlands Map:</label>
+                                <span>{{address.freshwaterWetlandsMapCheck ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>BSA Decision:</label>
+                                <span>{{address.bsaDecision ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>Loft Law:</label>
+                                <span>{{address.loftLaw ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>City Owned:</label>
+                                <span>{{address.cityOwned ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p class="mb10">
+                                <label>SRO Restricted:</label>
+                                <span>{{address.sRORestricted ? 'Yes' : 'No'}}</span>
+                            </p>
+                            <p *ngIf="address.streetName">{{errorMsg.addressInfo}}</p>
+                            <p *ngIf="noResultFound" class="text-center">{{noResultFound}}</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer pr0 pb0 pt0">
+    
+                        <button type="button" [disabled]="isAnomalyBin" class="btn btn-blue pull-right" *ngIf="!noResultFound"
+                            (click)="setAddressInfo()">Yes</button>
+                        <button type="button" class="btn btn-white pull-right" *ngIf="!noResultFound"
+                            (click)="modalRefAddress.hide()">No</button>
+    
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <div class="modal-body pt15" *ngIf="dobpermitdata">
+            <div>
+                <div class="bis-info">
+                    <div>
+                        <p>Are you sure you want to update the dates for permit
+                            <strong>{{permitdata?.documentDescription}}</strong> for
+                            <strong>{{permitdata?.applicationType}}</strong> application #
+                            <strong>{{permitdata?.jobApplicationNumber}}</strong> based on
+                            <strong> {{permitdata?.numberDocType}}</strong> ?
+                        </p>
+                    </div>
+                    <div>
+                        <p class="mb10">
+                            <label>Issue Date:</label>
+                            <span>{{permitdata.issuedDate | date:'MM/dd/yyyy'}}</span>
+                        </p>
+                        <p class="mb10">
+                            <label>Expiry Date:</label>
+                            <span>{{permitdata.expiredDate| date:'MM/dd/yyyy'}}</span>
+                        </p>
+                        <p class="mb10">
+                            <label>Permittee:</label>
+                            <span>{{permitdata.permitee}}</span>
+                        </p>
+                        <!-- <p *ngIf="address.streetName">{{errorMsg.addressInfo}}</p>
+                    <p *ngIf="noResultFound" class="text-center">{{noResultFound}}</p> -->
+                    </div>
+                </div>
+                <div class="modal-footer pr0 pb0 pt0">
+
+                    <button type="button" [disabled]="isAnomalyBin" class="btn btn-blue pull-right" *ngIf="!noResultFound && !dobpermitdata"
+                        (click)="setAddressInfo()">Yes</button>
+                    <button type="button" [disabled]="isAnomalyBin" class="btn btn-blue pull-right" *ngIf="!noResultFound && dobpermitdata"
+                        (click)="setPermitInfo()">Yes</button>
+                    <button type="button" class="btn btn-white pull-right" *ngIf="!noResultFound"
+                        (click)="modalRefAddress.hide()">No</button>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

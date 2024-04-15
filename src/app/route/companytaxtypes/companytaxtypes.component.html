@@ -1,0 +1,29 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left">Company Tax Types</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showTaxAddBtn}}" (click)="openModalForm(companytaxtypesform,null,true)">Add Company Tax Type</button>
+        <div class="pull-right search middle">
+            <div class="inner-addon right-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Company Tax Type" [(ngModel)]="search" (ngModelChange)="searchCompanyTaxTypes(search)"
+            />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-JobContact-types" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #companytaxtypesform>
+    <div add-companytax-types  [modalRef]="modalRef" [reload]="reload" [CompanyTaxTypesId]="CompanyTaxTypesId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

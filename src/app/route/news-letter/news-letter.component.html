@@ -1,0 +1,28 @@
+<div class="rpo-address-type rpo-component">
+    <div class="row component-header">
+      <div class="col-sm-12">
+          <h2 class="component-title pull-left mr-2">News Letter</h2>
+          <button type="button" class="btn btn-panel pull-right middle {{showAddBtn}}" (click)="openModalForm(newsForm,'',true)">Add News</button>
+          <div class="pull-left search middle">
+              <div class="inner-addon left-addon">
+                <i class="icon fa fa-search"></i>
+                <input type="text" class="form-control pull-right" placeholder="Search News" [(ngModel)]="search" (ngModelChange)="searchNews(search)" />
+            </div>
+          </div>
+      </div>
+    </div>
+  
+    <div class="component-body">
+      <table id="dt-news" class="display"  style="width:100%"></table>
+    </div>
+    <ng-template #newsForm>
+      <div add-edit-news-letter  [modalRef]="modalRef" [reload]="reload" [id]="id" [isNew]="isNew"></div>
+    </ng-template>
+  
+  </div>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple"> 
+      <div></div> 
+      <div></div>
+    </div>
+  </div>

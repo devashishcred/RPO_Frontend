@@ -1,0 +1,77 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+
+      <h2 class="component-title pull-left mr-2">Projects</h2>
+      <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+          <a *ngIf="showsrch" href="javascript:void(0)" (click)='clearsearch()' class="search-clear">
+            <span class="icon fa fa-times"></span>
+          </a>
+          <em class="icon fa fa-search"></em>
+          <input type="text" class="form-control" placeholder="Search Projects" [(ngModel)]="srch"
+            (keydown.enter)="searchJob(srch)" />
+        </div>
+      </div>
+      <ng-container *ngIf="!isCustomerLoggedIn">
+        <a href="javascript:void(0)" tooltip="Advanced Search" class="pull-left mt-12 material-icon"
+          (click)="openModalAdvanceSearch(formAdvanceSearch)">
+          <img src="./assets/images/filter_icon.svg" width="24px">
+        </a>
+        <export-xls-pdf-widget (onExportClick)="exportJobs($event)" [disabled]='disableExport'></export-xls-pdf-widget>
+      </ng-container>
+      <ng-container *ngIf="!isCustomerLoggedIn">
+        <button type="button" class="btn btn-panel middle {{showJobAddBtn}} pull-right"
+          (click)="openAddJobModal(formJob,'',true)">Add
+          Project</button>
+        <div class="pull-right status-label">
+          <label class="inprogress">
+            <span></span> In-Progress</label>
+          <label class="onhold">
+            <span></span> On Hold</label>
+          <label class="completed">
+            <span></span> Completed</label>
+          <!-- <label class="cancelled">
+              <span></span> Cancelled</label> -->
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isCustomerLoggedIn">
+        <button tooltip="If you have a new project that you would like to manage in SnapCor click here." type="button"
+          class="btn btn-panel middle pull-right" (click)="openRequestProposalModal()">Request a proposal</button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-job" class="display" style="width:100%"></table>
+  </div>
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<ng-template #formAdvanceSearch>
+  <div form-advance-search [modalRefAdvanceSearch]="modalRefAdvanceSearch" [reloadAdvanceSearch]="reloadAdvanceSearch"
+    [filledFilter]="filter" [isSearchFromAddress]="isSearchFromAddress"></div>
+</ng-template>
+
+<ng-template #formJob>
+  <div form-job [job]="rec" [modalRefJob]="modalRefJob" [onSave]="onSave" [isAddressDisable]="isAddressDisable"
+    [isReAssign]="isReAssign" [isFromListing]="true"></div>
+</ng-template>
+
+<ng-template #addtask>
+  <div add-task [addtask]="addtask" [modalRef]="modalRef" [idJob]="idJob" [isNew]="true" [reload]="reload"
+    [frommodeule]="from"></div>
+</ng-template>
+
+<ng-template #addtransmittal>
+  <div add-transmittal [modalRef]="modalRef" [idJob]="idJob" [jobObj]="jobDetail"></div>
+</ng-template>
+<ng-template #addreason>
+  <div add-reason [modalRef]="modalRef" [idJob]="idJob" [jobObj]="jobDetail" [statusToSet]="statusToSet"
+    [changeStatusFromReason]="changeStatusFromReason" (EventToFire)="EventForChangingTheStatus($event)"></div>
+</ng-template>

@@ -1,0 +1,29 @@
+<div class="modal-custom-content" cdkDrag>
+  <div class="modal-header" cdkDragHandle>
+    <button type="button" class="close close-icn" cdkDragHandle>
+      <span class="fa fa-arrows"></span>
+    </button>
+    <h4 class="modal-title pull-left">Project Selection</h4>
+  </div>
+
+  <div class="modal-body pb0 pt15">
+    <div class="row form-group">
+      <div class="col-sm-12">
+        <label>Project</label>
+        <ng-select name="job" [items]="jobList" bindLabel="itemName" bindValue="id" placeholder="Select Project" [(ngModel)]="selectedJobId">
+        </ng-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-white" (click)="modelClose()">Cancel</button>
+    <button type="button" class="btn btn-blue pull-right" [disabled]="!selectedJobId"
+      (click)="openCreateTransmittalModal(selectedJobId)">Next</button>
+  </div>
+</div>
+
+<ng-template #addtransmittal>
+  <div add-transmittal [modalRef]="modalRefCreateTransmittal" [idJob]="selectedJobId" [jobObj]="jobDetail" fromReports='true'
+    [reportDocument]='reportDocument'></div>
+</ng-template>

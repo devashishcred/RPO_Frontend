@@ -1,0 +1,105 @@
+<div class="rpo-scopeReview rpo-component">
+    <div class="row component-header rfp-status">
+        <div class="col-sm-6">
+            <ul class="breadcrumb rfp-bread">
+                <li>
+                    <small>
+                        <a class="pointer" routerLink="/rfp">Proposals</a>
+                    </small>
+                </li>
+                <li *ngIf="rfpNumber">
+                    <a>Proposal# {{rfpNumber}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <ul class="list-inline text-right rfp-md">
+                <li class="modify">
+                    <span *ngIf="createdBy">Created by {{createdBy}}</span>
+                    <span *ngIf="modifiedBy">Last modified by {{modifiedBy}}</span>
+                </li>
+                <li class="rfp-note" (click)="addGeneralNote()">
+                    <span class="material-symbols-rounded note-icon">text_snippet</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="component-body">
+        <div class="rpo-wizard">
+            <div class="wizard-head clearfix text-center">
+                <div class="wizard-head-inner">
+                    <div class="wizard-nav">
+                        <div class="stepwizard-step {{showStep1}}" [ngClass]="(showStep1=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/editSiteInformation')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>site information</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep2}}" [ngClass]="(showStep2=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/projectDetails')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>project detail</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step active">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/scopeReview')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>SCOPE REVIEW</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep4}}" [ngClass]="(showStep4=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/proposalReview')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>PROPOSAL REVIEW</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep5}}" [ngClass]="(showStep5=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/rfpSubmit')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>SUBMIT</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form ngNativeValidate name="scopeReviewForm" #scopeReviewForm="ngForm">
+                <div class="wizard-body">
+                    <div class="score-review">
+                        <div class="form-group">
+                            <ck-editor name="description" [(ngModel)]="scopeReview.description" (change)="isFieldValChange($event)" id="scopeDesc" (ready)="onReady()" [readonly]="false"
+                                       [config]="configuration" debounce="100" #ckeditor>
+                            </ck-editor>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <angular2-multiselect [data]="contacts" name="selectCompType" [(ngModel)]="tmpContactId" (click)="isFieldValChange('contact')" (ngModelChange)="isFieldValChange('contact')"
+                                                      [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                                                      (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)">
+                                </angular2-multiselect>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-area text-right">
+                        <button class="btn btn-panel-bordered small" (click)='saveScopeReview(true,"")'>Save & Exit</button>
+                        <button class="btn btn-panel small" (click)='saveScopeReview(false,"")'>Save & Next</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<ng-template #rfpprogressionnote>
+    <div add-rfp-progression-note [idRfp]="rfpDetail.id" [modalRef]="modalRef"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #progressNoteForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <ng-container *ngIf="!isCustomerLoggedIn">
+                <h4 class="modal-title pull-left">{{exsitingComments?.length > 0 ? 'View/Add Comments' : 'Add Comments'}}
+                </h4>
+            </ng-container>
+            <ng-container *ngIf="isCustomerLoggedIn">
+                <h4 class="modal-title pull-left">View Comments
+                </h4>
+            </ng-container>
+        </div>
+        <div class="modal-body pt15" *ngIf="!isCustomerLoggedIn">
+            <textarea class="form-control comment-textarea" name="Description" rows="10" [(ngModel)]="addChecklistComment.Description"
+                placeholder="Enter Comment" #Description="ngModel" required></textarea>
+            <div class="error-message pl0">
+                <div *ngIf="Description.errors && (Description.dirty || Description.touched)">
+                    Please Enter Comment
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer pt0">
+            <ng-container *ngIf="exsitingComments?.length > 0">
+                <div class="text-right" *ngIf="!isCustomerLoggedIn">
+                    <button *ngIf="!isPlChecklist" class="btn btn-blue" [disabled]="!progressNoteForm.form.valid"
+                        (click)="saveChecklistComment()">Add</button>
+                    <button *ngIf="isPlChecklist" class="btn btn-blue" [disabled]="!progressNoteForm.form.valid"
+                        (click)="saveChecklistCommentPL()">Add</button>
+                </div>
+                <div class="text-left" *ngIf="exsitingComments?.length > 0">
+                    <div class="note-list">
+                        <div class="single-note" *ngFor="let comment of exsitingComments;  let i = index">
+                            <p class="desc">
+                                <read-more [text]="comment.description" [maxLength]="250"></read-more>
+                            </p>
+                            <p class="users">Added by
+                                {{comment.createdByEmployee}} on {{comment.lastModifiedDate| date :'MM/dd/yyyy h:mm a'}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right mt20">
+                    <button type="button" class="btn btn-white" (click)="modalRef.hide()">Close</button>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="exsitingComments?.length == 0 && !isCustomerLoggedIn">
+                <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+                <button *ngIf="!isPlChecklist" class="btn btn-blue" [disabled]="!progressNoteForm.form.valid"
+                    (click)="saveChecklistComment()">Add</button>
+                <button *ngIf="isPlChecklist" class="btn btn-blue" [disabled]="!progressNoteForm.form.valid"
+                    (click)="saveChecklistCommentPL()">Add</button>
+            </ng-container>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

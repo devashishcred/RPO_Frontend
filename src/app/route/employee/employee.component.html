@@ -1,0 +1,552 @@
+<div class="rpo-employee rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <h2 class="component-title pull-left mr-2">Employee</h2>
+      <button type="button" class="btn btn-panel pull-right middle {{showEmpAddBtn}}" (click)="openModal(formEmployeeTpl)">Add Employee</button>
+      <div class="pull-left search middle">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search Employee" [(ngModel)]="srch" (ngModelChange)="search(srch)" />
+        </div>
+      </div>
+      <div class="pull-left search middle">
+        <ng-select name="idRfpAddress" [items]="filterList" bindLabel="itemName" bindValue="id" placeholder="Select Status" [(ngModel)]="filter['isActive']"
+          (change)="changeStatus($event)" #idRfpAddress="ngModel">
+        </ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="component-body">
+    <table id="dt-employee" class="display"  style="width:100%"></table>
+  </div>
+
+  <ng-template #formEmployeeTpl>
+    <div class="modal-custom-content" cdkDrag>
+      <form (submit)="save()" #employeeForm="ngForm" ngNativeValidate novalidate>
+        <div class="modal-header" cdkDragHandle>
+          <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+          </button>
+          <h4 class="modal-title pull-left">{{new ? 'Add Employee' : ViewEmployee ? 'Edit Employee' :'View Employee'}}</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+          <div class="form-employee">
+            <div class="row">
+              <!-- col1 -->
+              <div class="col-sm-5 border-right">
+                <div class="row form-group">
+                  <div class="col-sm-6">
+                    <input autofocus required maxlength="50" placeholder="First Name*" id="firstName" type="text" name="firstName" [(ngModel)]="rec.firstName"
+                      #firstName="ngModel" class="form-control" [disabled]="!ViewEmployee">
+                    <div class="error-message pl0">
+                      <div *ngIf="employeeForm.hasError('required', 'firstName') && (firstName.dirty || firstName.touched)">
+                        {{errorMessage.requireFirstName}}
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="col-sm-6">
+                    <input required maxlength="50" placeholder="Last Name*" id="lastName" type="text" name="lastName" [(ngModel)]="rec.lastName"
+                      #lastName="ngModel" class="form-control" [disabled]="!ViewEmployee" />
+                    <div class="error-message pl0">
+                      <div *ngIf="employeeForm.hasError('required', 'lastName') && (lastName.dirty || lastName.touched)">
+                        {{errorMessage.requireLastName}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <div class="col-sm-6">
+                    <input autocomplete="false" placeholder="Email*" required maxlength="255" id="email" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"
+                      type="email" name="email" [disabled]="!ViewEmployee" [(ngModel)]="rec.email" class="form-control" #email="ngModel" />
+  
+                    <div class="error-message pl0">
+                      <div *ngIf="employeeForm.hasError('required', 'email') && (email.dirty || email.touched)">
+                        {{errorMessage.requireEmail}}
+                      </div>
+                      <div *ngIf="employeeForm.hasError('pattern', 'email') && (email.dirty || email.touched)">
+                        {{errorMessage.validEmail}}
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="col-sm-6">
+                    <div class="inner-addon right-addon">
+                      <i class="icon material-symbols-rounded eye clickable"  (click)="togglePassword('applicationPasswordType')">
+                        {{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}
+                      </i>
+                      <input id="applicationPassword" autocomplete="false" minlength="6" maxlength="25" type="{{applicationPasswordType}}" placeholder="Password*"
+                        name="applicationPassword" [(ngModel)]="rec.loginPassword" class="form-control password" [required]="(rec.isActive && !rec.id) || (email.dirty || email.touched)"
+                        #applicationPassword="ngModel" [disabled]="!ViewEmployee" />
+                    </div>
+                    <div class="error-message pl0">
+                      <div *ngIf="rec.isActive && employeeForm.hasError('minlength', 'applicationPassword') && (applicationPassword.dirty || applicationPassword.touched)">
+                        {{errorMessage.requireminlengthPassword}}
+                      </div>
+                      <div *ngIf="rec.isActive && employeeForm.hasError('required', 'applicationPassword') && (applicationPassword.dirty || applicationPassword.touched)">
+                        {{errorMessage.requirePassword}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="row form-group" *ngIf="groupsDrp?.length > 0">
+                  <div class="col-sm-6">
+                    <ng-select id="idGroup" name="idGroup" [items]="groupsDrp" bindLabel="name" bindValue="id" placeholder="User Group*" [(ngModel)]="rec.idGroup"
+                      #idGroup="ngModel" required [disabled]="!ViewEmployee">
+                    </ng-select>
+                    <div class="error-message">
+                      <div *ngIf="select2error">
+                        {{errorMessage.requirePassword}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-check checkbox-inline">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="isActive" [(ngModel)]="rec.isActive" #isActive="ngModel" [disabled]="!ViewEmployee || EDITSTATUS=='hide'" />Active
+                        <i class="input-helper"></i>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="error-message" *ngIf="groups?.length > 0">
+                    <div *ngIf="employeeForm.hasError('required', 'idGroup') && (idGroup.dirty || idGroup.touched)">
+                      {{errorMessage.requireUserGroup}}
+                    </div>
+                  </div>
+                </div>
+                <div class="row" [ngClass]="VIEWCONTACTINFO">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <input maxlength="50" id="qbEmployeeName" type="text" placeholder="QuickBooks Name" name="qbEmployeeName" [(ngModel)]="rec.qbEmployeeName" [disabled]="!ViewEmployee"
+                        class="form-control" />
+                    </div>
+  
+                  </div>
+                </div>
+  
+                <div class="row" [ngClass]="VIEWCONTACTINFO">
+                  <div class="col-sm-12">
+                    <fieldset>
+                      <h4 class="no-border blue-title">CONTACT INFORMATION</h4>
+                      <div class="form-group">
+                        <input maxlength="50" id="address1" type="text" placeholder="Address 1" name="address1" [(ngModel)]="rec.address1" class="form-control" autocomplete="off" 
+                          [disabled]="EDITCONTACTINFO == 'hide' || !ViewEmployee" />
+                      </div>
+                      <div class="form-group">
+                        <input maxlength="50" id="address2" type="text" placeholder="Address 2" name="address2" [(ngModel)]="rec.address2" class="form-control"
+                          [disabled]="EDITCONTACTINFO == 'hide' || !ViewEmployee" />
+                      </div>
+  
+                      <div class="row form-group">
+                        <div class="col-sm-6">
+                          <input type="text" id="idCity" placeholder="City" name="idCity" [(ngModel)]="rec.city" class="form-control" [disabled]="EDITCONTACTINFO == 'hide'|| !ViewEmployee"
+                          />
+                        </div>
+                        <div class="col-sm-3">
+                          <ng-select id="idState" placeholder="State" name="idState" [(ngModel)]="rec.idState" (change)="onStateCityChange(true)" #idState="ngModel"
+                            [disabled]="EDITCONTACTINFO == 'hide'|| !ViewEmployee" [items]="states" bindLabel="itemName" bindValue="id">
+                          </ng-select>
+                        </div>
+                        <div class="col-sm-3">
+                          <input maxlength="5" placeholder="Zip" id="zipCode" type="text" pattern="[0-9]{1,5}" name="zipCode" [(ngModel)]="rec.zipCode"
+                            #zipCode="ngModel" class="form-control" [disabled]="EDITCONTACTINFO == 'hide'|| !ViewEmployee" />
+                          <div class="error-message" *ngIf="employeeForm.hasError('pattern', 'zipCode') && (zipCode.dirty || zipCode.touched)">
+                            {{errorMessage.validZip}}
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="row form-group">
+                        <div class="col-sm-5">
+                          <input placeholder="Work Phone" minlength="14" maxlength="14" id="workPhone" type="text" name="workPhone" [(ngModel)]="rec.workPhone"
+                            class="form-control phone-number" (blur)="rec.workPhone = $event.target.value" (paste)=" rec.workPhone = $event.clipboardData.getData('Text')"
+                            #workPhone="ngModel" [disabled]="EDITCONTACTINFO == 'hide'|| !ViewEmployee" (keypress)="isNumber($event)"
+                          />
+  
+                        </div>
+                        <div class="col-sm-3">
+                          <input maxlength="5" placeholder="Ext" id="workPhoneExt" type="text" name="workPhoneExt" [(ngModel)]="rec.workPhoneExt" class="form-control"
+                            [disabled]="EDITCONTACTINFO == 'hide'|| !ViewEmployee" />
+  
+                        </div>
+                        <div class="error-message">
+                          <div *ngIf="workPhone.invalid && (workPhone.dirty || workPhone.touched)">
+                            <div *ngIf="workPhone.errors.minlength">
+                              {{errorMessage.workPhone}}
+                            </div>
+                          </div>
+                          <div *ngIf="!rec.workPhone && rec.workPhoneExt">
+                            {{errorMessage.workPhone}}
+                          </div>
+                        </div>
+                      </div>
+  
+  
+                      <div class="row form-group">
+                        <div class="col-sm-5">
+                          <input placeholder="Home Phone" minlength="14" maxlength="14" id="homePhone" type="text" name="homePhone" [(ngModel)]="rec.homePhone"
+                            class="form-control phone-number" (blur)="rec.homePhone = $event.target.value" #homePhone="ngModel"
+                            (keypress)="isNumber($event)" [disabled]="EDITCONTACTINFO == 'hide'|| !ViewEmployee" (paste)=" rec.homePhone = $event.clipboardData.getData('Text')"
+                          />
+                          <div class="error-message">
+                            <div *ngIf="homePhone.invalid && (homePhone.dirty || homePhone.touched)">
+                              <div *ngIf="homePhone.errors.minlength">
+                                {{errorMessage.homePhone}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-5">
+                          <input placeholder="Mobile Phone" minlength="14" maxlength="14" id="mobilePhone" type="text" name="mobilePhone" [(ngModel)]="rec.mobilePhone"
+                            class="form-control phone-number" (blur)="rec.mobilePhone = $event.target.value" #mobilePhone="ngModel"
+                            (keypress)="isNumber($event)" [disabled]="EDITCONTACTINFO == 'hide'|| !ViewEmployee" (paste)=" rec.mobilePhone = $event.clipboardData.getData('Text')"
+                          />
+                          <div class="error-message">
+                            <div *ngIf="mobilePhone.invalid && (mobilePhone.dirty || mobilePhone.touched)">
+                              <div *ngIf="mobilePhone.errors.minlength">
+                                {{errorMessage.mobilePhone}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+  
+                <div class="row" [ngClass]="VIEWEMERGENCYCONTACTINFO">
+                  <div class="col-sm-12">
+                    <fieldset>
+                      <h4 class="no-border blue-title">Emergency Contact Information</h4>
+                      <div class="row form-group">
+                        <div class="col-sm-6">
+                          <ng-select *ngIf="allergyTypes?.length > 0" id="idAllergyType" name="idAllergyType" [items]="allergyTypes" bindLabel="itemName"
+                            bindValue="id" placeholder="Allergy" [(ngModel)]="rec.allergyType" [disabled]="EDITAGENTCERTIFICATES == 'hide'|| !ViewEmployee">
+                          </ng-select>
+                        </div>
+                        <div class="col-sm-6">
+                          <input placeholder="Allergy Description" id="allergyDescription" type="text" name="allergyDescription" [(ngModel)]="rec.allergyDescription"
+                            class="form-control" #allergyDescription="ngModel" [disabled]="EDITCONTACTINFO == 'hide'|| !ViewEmployee || rec.allergyType!=1"
+                          />
+                          <div class="error-message">
+                            <div *ngIf="allergyDescription.invalid && (allergyDescription.dirty || allergyDescription.touched)">
+                              <div *ngIf="allergyDescription.errors.minlength">
+                                {{errorMessage.homePhone}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row form-group">
+                        <div class="col-sm-6">
+                          <input maxlength="50" placeholder="Emergency Contact Name" id="emergencyContactName" type="text" name="emergencyContactName" [(ngModel)]="rec.emergencyContactName"
+                            #emergencyContactName="ngModel" class="form-control" [disabled]="EDITEMERGENCYCONTACTINFO == 'hide'|| !ViewEmployee"
+                          />
+                        </div>
+                        <div class="col-sm-6">
+                          <input placeholder="Emergency Contact Phone" minlength="14" maxlength="14" id="emergencyContactNumber" type="text" name="emergencyContactNumber"
+                            [(ngModel)]="rec.emergencyContactNumber" (blur)="rec.emergencyContactNumber= $event.target.value"
+                            class="form-control phone-number" #emergencyContactNumber="ngModel" [disabled]="EDITEMERGENCYCONTACTINFO == 'hide'|| !ViewEmployee"
+                            (keypress)="isNumber($event)" (paste)=" rec.emergencyContactNumber = $event.clipboardData.getData('Text')"
+                          />
+                        </div>
+                        <div class="error-message">
+                          <div *ngIf="emergencyContactNumber.invalid && (emergencyContactNumber.dirty || emergencyContactNumber.touched)">
+                            <div *ngIf="emergencyContactNumber.errors.minlength">
+                              {{errorMessage.emergencyContact}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+  
+  
+              </div>
+  
+              <!-- col2 -->
+              <div class="col-sm-7 force-col">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <fieldset [ngClass]="VIEWPHONEINFO">
+                      <h4 class="no-border blue-title">Cellphone Information</h4>
+                      <div class="row form-group">
+                        <div class="col-sm-5">
+                          <div class="inner-addon right-addon">
+                            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('lockScreenPasswordType')">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+                            <input autocomplete="false" maxlength="25" id="lockScreenPassword" type="{{lockScreenPasswordType}}" placeholder="Lock Screen Password"
+                              name="lockScreenPassword" [(ngModel)]="rec.lockScreenPassword" class="form-control password" [disabled]="EDITPHONEINFO == 'hide'|| !ViewEmployee"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <input maxlength="50" placeholder="Apple ID" id="appleId" type="text" name="appleId" [(ngModel)]="rec.appleId" #appleId="ngModel"
+                            class="form-control" [disabled]="EDITPHONEINFO == 'hide'|| !ViewEmployee" />
+                        </div>
+                        <div class="col-sm-3">
+                          <div class="inner-addon right-addon">
+                            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('applePasswordType')">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+                            <input autocomplete="false" maxlength="25" id="applePassword" type="{{applePasswordType}}" placeholder="Password" name="applePassword"
+                              [(ngModel)]="rec.applePassword" class="form-control password" [disabled]="EDITPHONEINFO == 'hide'|| !ViewEmployee"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <fieldset [ngClass]="VIEWSYSTEMACCESSINFORMATION">
+                      <h4 class="no-border blue-title">SYSTEM ACCESS INFORMATION</h4>
+                      <div class="row form-group">
+                        <div class="col-sm-6">
+                          <div class="inner-addon right-addon">
+                            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('telephonePasswordType')">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+                            <input autocomplete="false" maxlength="25" id="telephonePassword" type="{{telephonePasswordType}}" placeholder="Telephone Password"
+                              name="telephonePassword" [(ngModel)]="rec.telephonePassword" class="form-control password" [disabled]="EDITSYSTEMACCESSINFORMATION == 'hide'|| !ViewEmployee"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="inner-addon right-addon">
+                            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('computerPasswordType')">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+                            <input autocomplete="false" maxlength="25" id="computerPassword" type="{{computerPasswordType}}" placeholder="Computer Password"
+                              name="computerPassword" [(ngModel)]="rec.computerPassword" class="form-control password" [disabled]="EDITSYSTEMACCESSINFORMATION == 'hide'|| !ViewEmployee"
+                            />
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="row form-group">
+                        <div class="col-sm-6">
+                          <input maxlength="25" placeholder="E-filing Username" id="efillingUserName" type="text" name="efillingUserName" [(ngModel)]="rec.efillingUserName"
+                            class="form-control" [disabled]="EDITSYSTEMACCESSINFORMATION == 'hide'|| !ViewEmployee" />
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="inner-addon right-addon">
+                            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('efillingPasswordType')">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+                            <input autocomplete="false" maxlength="25" id="efillingPassword" type="{{efillingPasswordType}}" placeholder="E-filing Password"
+                              name="efillingPassword" [(ngModel)]="rec.efillingPassword" class="form-control password" [disabled]="EDITSYSTEMACCESSINFORMATION == 'hide'|| !ViewEmployee"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </fieldset>
+  
+                    <fieldset [ngClass]="VIEWAGENTCERTIFICATES">
+                      <h4 class="no-border blue-title">AGENT CERTIFICATES</h4>
+                      <div class="row">
+                        <form (submit)="addAgentCertificate()">
+                          <div class="col-sm-3">
+                            <ng-select *ngIf="documentTypes?.length > 0" id="idDocumentType" name="idDocumentType" [items]="documentTypes" bindLabel="name"
+                              bindValue="id" placeholder="Type" [(ngModel)]="agentCertificate.idDocumentType" (change)="onChangeDocumentType()"
+                              [required]="isRequiredCertificate" [disabled]="EDITAGENTCERTIFICATES == 'hide'|| !ViewEmployee">
+                            </ng-select>
+                            <div class="error-message pl0" *ngIf="isRequiredCertificate && !agentCertificate.idDocumentType">
+                              {{errorMessage.certificateType}}
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <input id="numberId" placeholder="ID" type="text" name="numberId" [disabled]="EDITAGENTCERTIFICATES == 'hide'|| !ViewEmployee"
+                              [(ngModel)]="agentCertificate.numberId" class="form-control" />
+                            <div class="error-message pl0" *ngIf="isRequiredCertificateId && !agentCertificate.numberId">
+                              {{errorMessage.certificateId}}
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <div datetime-picker class="inner-addon right-addon input-group">
+                              <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                              <input placeholder="Expiration Date" id="expirationDate" type="text" name="expirationDate" [disabled]="EDITAGENTCERTIFICATES == 'hide'|| !ViewEmployee"
+                                [(ngModel)]="agentCertificate.expirationDate" class="form-control" (keypress)="isNumber($event)"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <div class="row">
+                              <div class="col-sm-6">
+                                <div class="inner-addon right-addon">
+                                  <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('pin')">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+                                  <input autocomplete="false" id="pin" type="{{pin}}" placeholder="PIN" name="pin" [disabled]="EDITAGENTCERTIFICATES == 'hide'|| !ViewEmployee"
+                                    [(ngModel)]="agentCertificate.pin" class="form-control password" />
+                                </div>
+                              </div>
+                              <div class="col-sm-6" *ngIf="ViewEmployee">
+                                <button type="submit" class="btn btn-blue no-padding btn-add" (click)=setRequireMsg() [ngClass]="EDITAGENTCERTIFICATES">Save</button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="row agent-certificates mb10">
+                        <div *ngFor="let ac of rec.agentCertificates; index as i" class="row ac-wrapper">
+                          <div class="ac-content">
+                            <div class="col-sm-4">{{ac.documentType.name}}</div>
+                            <div class="col-sm-3">{{ac.numberId}}</div>
+                            <div class="col-sm-3">{{ac.expirationDate}}</div>
+                            <div class="col-sm-2">
+                              <ng-template #tolTemplate>{{ac.pin}}</ng-template>
+                              <i *ngIf="ac.pin" class="material-symbols-rounded pointer table-eye" [tooltip]="tolTemplate" triggers="mouseenter:mouseout" placement="left">visibility</i>
+  
+                              <span class="pull-right acts" *ngIf="ViewEmployee">
+                                <i class="material-symbols-rounded pointer" tooltip="Edit" style="font-size: 22px;" placement="left" (click)="editAgentCertificate(ac, i)" [ngClass]="EDITAGENTCERTIFICATES">edit_square</i>
+                                <i class="material-symbols-rounded pointer" tooltip="Delete" placement="left" (click)="deleteAgentCertificate(ac)" [ngClass]="EDITAGENTCERTIFICATES">delete</i>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+  
+                    </fieldset>
+  
+                    <fieldset [ngClass]="VIEWPERSONALINFORMATION">
+                      <h4 class="no-border blue-title">PERSONAL INFORMATION</h4>
+  
+                      <div class="row form-group">
+                        <div class="col-sm-6">
+                          <div class="inner-addon right-addon">
+                            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('ssnType')">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+                            <input autocomplete="false" maxlength="10" id="ssn" type="{{ssnType}}" placeholder="SSN" name="ssn" [(ngModel)]="rec.ssn"
+                              class="form-control password" [disabled]="EDITPERSONALINFORMATION == 'hide' || !ViewEmployee" />
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div datetime-picker pastOrFuture="past" class="inner-addon right-addon input-group">
+                            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('dobType')">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+                            <i class="icon nested material-symbols-outlined clickable datepickerbutton">event</i>
+                            <input autocomplete="false" id="dob" type="{{dobType}}" [disabled]="EDITPERSONALINFORMATION == 'hide' || !ViewEmployee" placeholder="DOB"
+                              name="dob" [(ngModel)]="rec.dob" class="form-control password" />
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="row form-group">
+                        <div class="col-sm-6">
+                          <div id="startDate" datetime-picker rangeEndDate="#finalDate" class="inner-addon right-addon input-group">
+                            <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                            <input placeholder="Start Date" id="startDate" type="text" name="startDate" [disabled]="EDITPERSONALINFORMATION == 'hide'|| !ViewEmployee"
+                              [(ngModel)]="rec.startDate" class="form-control" />
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div id="finalDate" datetime-picker rangeStartDate="#startDate" class="inner-addon right-addon input-group">
+                            <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                            <input placeholder="Final Date" id="finalDate" type="text" name="finalDate" [disabled]="EDITPERSONALINFORMATION == 'hide'|| !ViewEmployee"
+                              [(ngModel)]="rec.finalDate" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="row form-group">
+                        <div class="col-sm-12">
+                          <textarea id="notes" placeholder="Notes" name="notes" [(ngModel)]="rec.notes" class="form-control" rows="5" [disabled]="EDITPERSONALINFORMATION == 'hide'|| !ViewEmployee"></textarea>
+                        </div>
+                      </div>
+                    </fieldset>
+  
+  
+                    <fieldset [ngClass]="VIEWDOCUMENTS">
+                      <h4 class="no-border blue-title" *ngIf="ViewEmployee">DOCUMENTS
+                        <div class="fl-upload">
+                          <label for="employee-file-upload" class="upload-link rpo-file-upload mb0" [ngClass]="EDITDOCUMENTS">
+                            Click to <span>Browse</span> to Upload your files 
+                          </label>
+                          <input id="employee-file-upload" type="file" class="rpo-file-upload" (change)="documentUpload($event)" multiple />
+                        </div>
+                      </h4>
+                      <div class="file-upload-wrap">
+                        <div class="rpo-file-upload" *ngFor="let document of rec.documents">
+                          <span class="doc-name" *ngIf="!document.id" style="vertical-align: top;" tooltip="{{document.name}}" placement="top">{{document.name}}</span>
+                          
+                          <a *ngIf="ViewEmployee" target="" class="remove" tooltip="Delete" placement="right" [ngClass]="EDITDOCUMENTS" (click)="deleteDocument(document)"  >
+                            <i class="material-symbols-rounded">delete</i>
+                          </a>
+                          <a *ngIf="document.id" target="_blank" href="{{document.documentPath}}" class="pointer doc-name link-blue" style="vertical-align: top;"
+                            tooltip="{{document.name}}" placement="top">{{document.name}}</a>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col-sm-8 ">
+              <div class="modify text-left" *ngIf="rec.lastModifiedByEmployeeName">
+                Last modified by {{rec.lastModifiedByEmployeeName}} on {{rec.lastModifiedDate | date:'MM/dd/yyyy h:mm a'}}
+              </div>
+            </div>
+            <div class="col-sm-4" *ngIf="ViewEmployee">
+              <button type="submit" class="btn btn-blue pull-right" [disabled]="!employeeForm.form.valid  || (!rec.workPhone && rec.workPhoneExt) ">Save</button>
+              <button type="button" class="btn btn-white pull-right" (click)="closePopup()">Cancel</button>
+            </div>
+            <div class="col-sm-4" *ngIf="!ViewEmployee">
+              <button type="button" class="btn btn-white pull-right" (click)="closePopup()">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+          <div class="lds-ripple">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template #changePasswordTpl>
+    <div class="modal-custom-content" cdkDrag>
+      <form (submit)="actionFormData.action(true)" ngNativeValidate>
+        <div class="modal-header" cdkDragHandle>
+          <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+          </button>
+          <h4 class="modal-title pull-left">{{actionFormData.changePassword ? 'Change Password' : 'Change Password'}}</h4>
+        </div>
+  
+        <div class="modal-body">
+          <label for="newPassword"> New Password</label>
+          <div class="inner-addon right-addon form-group">
+            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('newPasswordType',actionFormData)">{{applicationPasswordType=='password' ? 'visibility' : 'visibility_off'}}</i>
+            <input type="{{actionFormData.newPasswordType}}" placeholder="**********" (change)="validatePassword(newPassword, confirmPassword)"
+              autocomplete="false" minlength="6" maxlength="25" id="newPassword" name="newPassword" [(ngModel)]="actionFormData.newPassword"
+              #newPassword class="form-control password" required/>
+          </div>
+  
+          <label for="confirmPassword"> Confirm Password</label>
+          <div class="inner-addon right-addon">
+            <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('confirmPasswordType',actionFormData)">
+              {{actionFormData.confirmPasswordType=='password' ? 'visibility' : 'visibility_off'}}
+            </i>
+            <input type="{{actionFormData.confirmPasswordType}}" placeholder="**********" (keyup)="validatePassword(newPassword, confirmPassword)"
+              autocomplete="false" minlength="6" maxlength="25" validateEqual="newPassword" id="confirmPassword" name="confirmPassword"
+              [(ngModel)]="actionFormData.confirmPassword" #confirmPassword class="form-control password" required/>
+          </div>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-blue pull-right">Change</button>
+          <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+  <ng-template #permissionUsergroup>
+    <div permission-user-group [modalRef]="modalRef" [empId]="empId" [reloadEmployee]="reload"></div>
+  </ng-template>
+</div>
+
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

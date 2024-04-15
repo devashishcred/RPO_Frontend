@@ -1,0 +1,284 @@
+<div class="rpo-proposalReview rpo-component">
+    <div class="row component-header rfp-status">
+        <div class="col-sm-6">
+            <ul class="breadcrumb rfp-bread">
+                <li>
+                    <small>
+                        <a class="pointer" routerLink="/rfp">Proposals</a>
+                    </small>
+                </li>
+                <li *ngIf="rfpNumber">
+                    <a>Proposal# {{rfpNumber}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <ul class="list-inline text-right rfp-md">
+                <li class="modify">
+                    <span *ngIf="createdBy">Created by {{createdBy}}</span>
+                    <span *ngIf="modifiedBy">Last modified by {{modifiedBy}}</span>
+                </li>
+                <li class="rfp-note" (click)="addGeneralNote()">
+                    <span class="material-symbols-rounded note-icon">text_snippet</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="component-body">
+        <div class="rpo-wizard">
+            <div class="wizard-head clearfix text-center">
+                <div class="wizard-head-inner">
+                    <div class="wizard-nav">
+                        <div class="stepwizard-step {{showStep1}}" [ngClass]="(showStep1=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a  (click)="saveOnHeader('/editSiteInformation')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>site information</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep2}}" [ngClass]="(showStep2=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                        
+                            <a  (click)="saveOnHeader('/projectDetails')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>project detail</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep3}}" [ngClass]="(showStep3=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a  (click)="saveOnHeader('/scopeReview')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>SCOPE REVIEW</p>
+                            </a> 
+                        </div>
+                        <div class="stepwizard-step active">
+                            <div class="progress"></div>
+                            <a  (click)="saveOnHeader('/proposalReview')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>PROPOSAL REVIEW</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep5}}" [ngClass]="(showStep5=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a  (click)="saveOnHeader('/rfpSubmit')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>SUBMIT</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form novalidate name="proposalForm" #proposalForm="ngForm">
+                <div class="wizard-body">
+
+                    <div class="score-review">
+                        <div *ngFor="let option of exsitingProposal;  let i = index">
+                            <div *ngIf="option.verbiageName!='cost' && option.verbiageName!='milestone'">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="clearfix" *ngIf="option.verbiageType==1">
+                                            <div class="pull-left">
+                                                <h2 class="title">
+                                                    Introduction
+                                                </h2>
+                                            </div>
+                                            <div class="pull-left" *ngIf="introductionItems?.length > 0">
+                                                <ng-select class="int-drop" id="introduction" name="introduction" [(ngModel)]="introduction" [items]="introductionItems"
+                                                    bindLabel="name" bindValue="id" placeholder="Introduction" (ngModelChange)="getIntroduction($event,option)">
+                                                    >
+                                                </ng-select>
+                                            </div>
+                                        </div>
+
+                                        <!-- additional scope -->
+                                        <div class="clearfix" *ngIf="option.verbiageType==5">
+                                            <div class="pull-left">
+                                                <h2 class="title">
+                                                    Additional Scope/Exclusion
+                                                </h2>
+                                            </div>
+                                            <div class="pull-left" *ngIf="additionalScopeItems?.length > 0">
+                                                <ng-select class="int-drop" id="additionalScope" name="additionalScope" [(ngModel)]="additionalScope" [items]="additionalScopeItems"
+                                                    bindLabel="name" bindValue="id" placeholder="Additional Scope/Exclusion"
+                                                    (ngModelChange)="getAdditionalScope($event,option)">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Conclusion -->
+                                        <div class="clearfix" *ngIf="option.verbiageType==6">
+                                            <div class="pull-left">
+                                                <h2 class="title">
+                                                    Conclusion
+                                                </h2>
+                                            </div>
+                                            <div class="pull-left" *ngIf="conclusionItems?.length > 0">
+                                                <ng-select class="int-drop" id="conclusion" name="conclusion" [(ngModel)]="conclusion" [items]="conclusionItems" bindLabel="name"
+                                                    bindValue="id" placeholder="Conclusion" (ngModelChange)="getConclusion($event,option)">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix" *ngIf="option.verbiageType==7">
+                                            <div class="pull-left">
+                                                <h2 class="title">
+                                                    Sign
+                                                </h2>
+                                            </div>
+                                            <div class="pull-left">
+                                                <ng-select class="int-drop" id="sign" name="sign" [(ngModel)]="sign" [items]="signItems" bindLabel="name" bindValue="id"
+                                                    placeholder="Sign" (ngModelChange)="getSign($event,option)">
+                                                    >
+                                                </ng-select>
+                                            </div>
+                                            <div class="pull-left ml15 form-check" style="padding-top: 15px;">
+                                                <label class="checkbox-inline form-check-label" style="margin-left: 5px!important;">
+                                                    <input type="checkbox" class="form-check-input" name="isSignatureNewPage" [(ngModel)]="proposalReview.isSignatureNewPage" />Signature on new page
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                            <div class="pull-left signature-error-message-container">
+                                                <ng-select class="int-drop pull-left" id="idSignature" name="idSignature" [(ngModel)]="proposalReview.idSignature" [items]="signatoryItems" bindLabel="name" bindValue="id"
+                                                #idSignature="ngModel"   placeholder="Select Signatory*" required>
+                                                    >
+                                                </ng-select>
+                                                <div class="pull-left error-message pl0 signature-error-message">
+                                                    <div *ngIf="idSignature.errors && (idSignature.dirty || idSignature.touched || !proposalForm.form.valid)">
+                                                        Please Select Signatory
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- for Scope -->
+                                        <div class="clearfix" *ngIf="option.idVerbiage == 2 || option.verbiageName == 'Header'|| option.verbiageName == 'addressee' || option.verbiageName == 'subject'">
+                                            <div class="pull-left">
+                                                <h2 class="title" *ngIf="option.idVerbiage==2">Scope</h2>
+                                                <h2 class="title" *ngIf="option.verbiageName == 'addressee'">Addressee</h2>
+                                                <h2 class="title" *ngIf="option.verbiageName == 'subject'">Subject</h2>
+                                                <h2 class="title" *ngIf="option.verbiageName == 'Header'">Header</h2>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <ck-editor [(ngModel)]="option.content" name="tmpproposalSections{{i}}" (change)="isFieldValChange()" [readonly]=" false "
+                                                [config]="constantValues.CKEDITORCONFIGSETTING" debounce="100 "></ck-editor>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="option.verbiageName=='cost'">
+                                <div class="col-md-12 ">
+                                    <h2 class="title ">Cost ($)</h2>
+                                    <div class="form-group row cost-schedule  {{costClass}}">
+                                        <div class="col-md-2 ">
+                                            <input type="text " name="cost" (keypress)="isDecimal($event) " [(ngModel)]="proposalReview.cost" maxlength="9" (input)="isFieldValChange('cost',proposalReview.cost) "
+                                                class="form-control cost " placeholder="Cost ($)" [disabled]="disabledBtn" />
+                                        </div>
+                                        <a *ngIf="proposalReview.cost!=autoCalculatedCost" class="ac-btns" (click)="resetCost()" tooltip="Reset cost">
+                                            <i class="fa fa-refresh"></i>
+                                        </a>
+                                        <a class="ac-btns icon" (click)="openModalFeeSchedule(feeschedule)" data-toggle="tooltip" data-placement="top" title="Fee schedule">
+                                            <span class="material-symbols-outlined">auto_schedule</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="option.verbiageName=='milestone'">
+                                <div class="row  ml-title">
+
+                                    <div class="col-md-12">
+                                        <h2 class="title pull-left">Billing Points
+                                            <Label (click)="addNewMileStone() " data-toggle="tooltip" data-placement="top" title="Add new billing point">
+                                                <i class="fa fa-plus"></i>Add New
+                                            </Label>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="row mt10">
+                                    <div class="col-sm-12 modify">
+                                        Note : Total billing point cost should be same as the Cost mentioned above to approve and send the proposal
+                                    </div>
+                                </div>
+                                <div class="row ml-desc mt10 mb10" *ngFor="let item of milestone; index as j ">
+                                    <div class="col-md-3 ml-name">
+                                        <input class="form-control " name="name_{{item.name}}_{{j}}" [(ngModel)]="item.name" (input)="isFieldValChange('cost')" placeholder="Billing point description*"
+                                        />
+                                    </div>
+                                    <div class="col-md-1 ml-cost">
+                                            <!-- | number: '1.2-2 -->
+                                            <!-- | number: '1.2-2 -->
+                                        <input class="form-control text-right" (keypress)="isDecimal($event);" name="value_{{item.value}}_{{j}}" [(ngModel)]="item.value"
+                                            maxlength="9" (ngModelChange)="isFieldValChange('cost');setTotalMileStoneCost();valueUpdated();"
+                                            (focusout)="valueUpdated()" placeholder="Cost ($)*" />
+                                    </div>
+                                    <div class="col-md-7 ml-service">
+                                        <angular2-multiselect [data]="services" name="selectCompType_{{tmpServicesId[j]}}_{{j}}" [(ngModel)]="tmpServicesId[j]" (ngModelChange)="isFieldValChange('cost')"
+                                            [settings]="dropdownSettings" (onSelect)="onItemSelect($event,tmpServicesId[j])"
+                                            (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)">
+                                        </angular2-multiselect>
+                                    </div>
+
+
+                                    <div class="pull-left ">
+                                        <a href="javascript:void(0)" class="delete-milestone" (click)="deleteMilestone(j)">
+                                            <i class="fa fa-times "></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-3 text-right">
+                                        <label for="">Total:</label>
+                                    </div>
+                                    <div class="col-sm-1 text-right">
+                                        <span style="padding-right: 12px;">{{totalMileStoneCost| currency:'USD':true}}</span>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <label for="">Pending:</label>
+                                        {{pendingMilestoneCost| currency:'USD':true}}
+                                    </div>
+                                </div>
+                                <div *ngIf="milestoneCost>proposalReview.cost">
+                                    <div class="error-message pl0">
+                                        {{errorMsg.mileStoneCost}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row form-group">
+
+                    </div>
+                    <div class="footer-area text-right ">
+                        <button class="btn btn-panel-bordered small " (click)="downloadPdf()" [disabled]="!proposalForm.form.valid || !saveBtnEnable || milestoneCost>proposalReview.cost ">
+                            <i class="fa fa-file-pdf-o"></i>
+                                <span> Preview Proposal</span>
+                        </button>
+                        <button class="btn btn-panel-bordered small " (click)="saveProposalReview(true,'') " [disabled]="!proposalForm.form.valid ||!saveBtnEnable  || milestoneCost>proposalReview.cost ">Save & Exit</button>
+                        <button class="btn btn-panel-bordered small " (click)="saveProposalReview(false,'save') " [disabled]="!proposalForm.form.valid ||!saveBtnEnable || milestoneCost>proposalReview.cost">Save</button>
+                        <button class="btn btn-panel small " *ngIf="showReviewBtn" [disabled]="!proposalForm.form.valid ||!saveBtnEnable || milestoneCost!=proposalReview.cost" (click)="submitForReview()">Submit for Review</button>
+                        <button class="btn btn-panel small " (click)="saveProposalReview(false, 'Approve') " [disabled]="!proposalForm.form.valid ||!saveBtnEnable || milestoneCost!=proposalReview.cost">Approve & Send</button>
+                    </div>
+                </div>
+            </form>
+            <br><br>
+        </div>
+    </div>
+</div>
+<ng-template #feeschedule>
+    <div fee-schedule [modalRefFee]="modalRef"></div>
+</ng-template>
+<ng-template #review>
+    <div review-employee [modalRefFee]="modalRef" [idRfp]="id"></div>
+</ng-template>
+<ng-template #rfpprogressionnote>
+    <div add-rfp-progression-note [idRfp]="rfpDetail.id" [modalRef]="modalRef"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

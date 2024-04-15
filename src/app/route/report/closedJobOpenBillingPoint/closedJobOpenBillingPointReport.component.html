@@ -1,0 +1,31 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+
+      <h2 class="component-title pull-left mr-2">
+          Closed Projects with Open Billing Points
+      </h2>
+      <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search Closed Projects with Open Billing Points" [(ngModel)]="srch" (ngModelChange)="searchJob(srch)" />
+        </div>
+      </div>
+      <export-xls-pdf-widget (onExportClick)="exportClick($event)" customClassApply='{{showExportBtn}}' ></export-xls-pdf-widget>            
+      <a href="javascript:void(0)" tooltip="Reset" class="pull-left mt-12 material-icon" (click)="clearSort()">
+        <i class="material-symbols-rounded">cached</i>
+      </a>
+      <a href="javascript:void(0)" tooltip="Advanced Search" class="pull-left mt-12 material-icon" (click)="openModalAdvanceSearch(closedJobReportAdvanceSearch)">
+        <img src="./assets/images/filter_icon.svg" width="24px">
+      </a>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-closedjob-report" class="display"  style="width:100%"></table>
+  </div>
+</div>
+
+<ng-template #closedJobReportAdvanceSearch>
+  <div closedjob-report-advance-search [modalRefAdvanceSearch]="modalRefAdvanceSearch" (reloadAdvanceSearch)="reloadAdvanceSearch($event)" [filledFilter]="filter"></div>
+</ng-template>

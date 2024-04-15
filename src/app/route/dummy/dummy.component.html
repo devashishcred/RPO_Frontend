@@ -1,0 +1,28 @@
+<br>
+<div class="rpo-Company rpo-component">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left mr-2">Cron Job Fetch</h2>
+            <input type="text" style="margin-top: 12px;width: 14%;" name="value" [(ngModel)]="binNumber"
+                placeholder="Please Enter BIN Number">
+            <!-- <button type="button" class="btn btn-panel pull-right middle" (click)="send('Update ECB')">
+                Update ECB
+            </button> -->
+            <!-- <button type="button" class="btn btn-panel pull-right middle" (click)="updateBin()">
+                Update Bin
+            </button>
+            <button type="button" class="btn btn-panel pull-right middle" (click)="send('ECB')">
+                ECB
+            </button>
+            <button type="button" class="btn btn-panel pull-right middle" (click)="send('DOB')">DOB</button> -->
+            <button type="button" class="btn btn-panel pull-right middle" (click)="send('DOB Safety')">DOB
+                Safety</button>
+        </div>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

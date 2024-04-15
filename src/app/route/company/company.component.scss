@@ -1,0 +1,67 @@
+.rpo-Company {
+  button.middle {
+    margin-top: 12px;
+  }
+}
+
+.search {
+  width: 524px;
+  margin-right: 10px;
+  &.middle {
+    margin-top: 15px;
+  }
+  .select-company{
+    width: 230px;
+  }
+  .inner-addon{
+    width: 294px;
+    float: right;
+  }
+}
+
+.static-btn {
+  position: absolute;
+  z-index: 9999;
+  top: 343px;
+  width: 100%;
+  padding: 6px 11px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+
+.list-area {
+  padding-bottom: 30px;
+}
+.static-btn button {
+  border-width: 1px;
+    border-radius: 6px;
+    border-color: #2DB32D;
+    border-style: solid;
+    background-color: #2DB32D;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 20px;
+    -webkit-font-smoothing: antialiased;
+    margin-bottom: 0;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    font-size: 14px;
+    line-height: 1.42857;
+    &:not(:last-child){
+      margin-right: 10px;
+    }
+}
+.static-btn button:hover{ 
+  color: #fff;
+  background-color: #208020;
+}
+
+

@@ -1,0 +1,29 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">Sent Via</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showSentViaAddBtn}}" (click)="openModalForm(sentviaform,null,true)">Add Sent Via</button>
+        <div class="pull-left search middle">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Sent via" [(ngModel)]="search" (ngModelChange)="searchSentvia(search)"
+            />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-sent-via" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #sentviaform>
+    <div add-sent-via  [modalRef]="modalRef" [reload]="reload" [sentViaId]="sentViaId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

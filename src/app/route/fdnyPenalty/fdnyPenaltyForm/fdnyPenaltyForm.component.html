@@ -1,0 +1,83 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #fdnyPenaltyForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} FDNY Penalty Schedule</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Category RCNY</label>
+          <input id="categoryRCNY" name="categoryRCNY" type="text" class="form-control" [(ngModel)]="fdnyPenalty.category_RCNY" #categoryRCNY="ngModel"
+          />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Description of Violation</label>
+          <input id="descriptionOfViolation" name="descriptionOfViolation" type="text" class="form-control" [(ngModel)]="fdnyPenalty.descriptionOfViolation"
+            #descriptionOfViolation="ngModel" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">OATH Violation Code*</label>
+          <input id="oathViolationCode" name="oathViolationCode" type="text" class="form-control" [(ngModel)]="fdnyPenalty.oathViolationCode"
+            #oathViolationCode="ngModel" required/>
+          <div class="error-message pl0">
+            <div *ngIf="oathViolationCode.errors && (oathViolationCode.dirty || oathViolationCode.touched)">
+              {{errorMsg.requireOATHViolationCode}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label for="task">First Violation Penalty ($)</label>
+          <input id="firstViolationPenalty" name="firstViolationPenalty" type="text" class="form-control" [(ngModel)]="fdnyPenalty.firstViolationPenalty"
+            #firstViolationPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">First Violation Mitigated Penalty ($)</label>
+          <input id="firstViolationMitigatedPenalty" name="firstViolationMitigatedPenalty" type="text" class="form-control" [(ngModel)]="fdnyPenalty.firstViolationMitigatedPenalty"
+            #firstViolationMitigatedPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">First Violation Maximum Penalty ($)</label>
+          <input id="firstViolationMaximumPenalty" name="firstViolationMaximumPenalty" type="text" class="form-control" [(ngModel)]="fdnyPenalty.firstViolationMaximumPenalty"
+            #firstViolationMaximumPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Second/Subsequent Violation Penalty ($)</label>
+          <input id="secondSubsequentViolationPenalty" name="secondSubsequentViolationPenalty" type="text" class="form-control" [(ngModel)]="fdnyPenalty.secondSubsequentViolationPenalty"
+            #secondSubsequentViolationPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Second/Subsequent Violation Mitigated Penalty ($)</label>
+          <input id="secondSubsequentViolationMitigatedPenalty" name="secondSubsequentViolationMitigatedPenalty" type="text" class="form-control" [(ngModel)]="fdnyPenalty.secondSubsequentViolationMitigatedPenalty"
+            #secondSubsequentViolationMitigatedPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Second/Subsequent Violation Maximum Penalty ($)</label>
+          <input id="secondSubsequentViolationMaximumPenalty" name="secondSubsequentViolationMaximumPenalty" type="text" class="form-control" [(ngModel)]="fdnyPenalty.secondSubsequentViolationMaximumPenalty"
+            #secondSubsequentViolationMaximumPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!fdnyPenaltyForm.form.valid" (click)="saveFdnyPenalty()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  
+  </form>
+</div>

@@ -1,0 +1,119 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-12 pt15">
+      <div class="component-body">
+        <h4 class="component-title pull-left mr-2">Violations</h4>
+        <ng-select class="pull-left mr-2" [(ngModel)]="violationType" bindValue="id" bindLabel="label"
+          [clearable]="false" style="width: 250px;" (change)="onSelectViolationType()" [items]="violationOptions"
+          placeholder="Select Violation">
+        </ng-select>
+        <ng-container *ngIf="violationType === 'AOTH Violation'">
+          <div class="search-area">
+            <div class="search middle pull-left">
+              <div class="inner-addon left-addon">
+                <i class="icon fa fa-search"></i>
+                <input type="text" class="form-control" placeholder="Search Violation" [(ngModel)]="search"
+                  (ngModelChange)="searchStates(search)" />
+              </div>
+            </div>
+            <ng-container *ngIf="btnShowHide=='show' && !isCustomerLoggedIn">
+              <button type="button" class="btn btn-panel pull-right middle {{showAddJobViolation}}"
+                (click)="openModalForm(formAddViolation,'',true)">Add Violation</button>
+              <button type="button" class="btn btn-panel pull-right middle {{showAddJobViolation}}"
+                (click)="fetchViolation()">Fetch
+                Violations</button>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="violationType == 'DOB Violation'">
+          <div class="search-area">
+            <div class="search middle pull-left">
+              <div class="inner-addon left-addon">
+                <i class="icon fa fa-search"></i>
+                <input type="text" class="form-control" placeholder="Search Violation" [(ngModel)]="search"
+                  (ngModelChange)="searchStates(search)" />
+              </div>
+            </div>
+            <ng-container *ngIf="btnShowHide=='show' && !isCustomerLoggedIn">
+              <button type="button" class="btn btn-panel pull-right middle {{showAddDOBJobViolation}}"
+                (click)="openModalForm(formAddDobViolation,'',true)">Add Violation</button>
+              <button type="button" *ngIf="!isCustomerLoggedIn"
+                class="btn btn-panel pull-right middle {{showAddDOBJobViolation}}" (click)="fetchViolation()">Fetch
+                Violations</button>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="violationType == 'DOB Safety Violation'">
+          <div class="search-area">
+            <div class="search middle pull-left">
+              <div class="inner-addon left-addon">
+                <i class="icon fa fa-search"></i>
+                <input type="text" class="form-control" placeholder="Search Violation" [(ngModel)]="search"
+                  (ngModelChange)="searchStates(search)" />
+              </div>
+            </div>
+            <ng-container *ngIf="btnShowHide=='show' && !isCustomerLoggedIn">
+              <button type="button" class="btn btn-panel pull-right middle {{showAddDOBSafetyJobViolation}}"
+                (click)="openModalForm(formAddDobSafetyViolation,'',true)">Add Violation</button>
+              <button type="button" *ngIf="!isCustomerLoggedIn"
+                class="btn btn-panel pull-right middle {{showAddDOBSafetyJobViolation}}" (click)="fetchViolation()">Fetch
+                Violations</button>
+            </ng-container>
+          </div>
+        </ng-container>
+        <div class="violation">
+          <!-- <ng-container *ngIf="violationType === 'AOTH Violation'">
+          </ng-container> -->
+          <table id="dt-company-types" class="display" style="width:100%"></table>
+        </div>
+      </div>
+      <!-- Add Edit Aoth Violation Form -->
+      <ng-template #formAddViolation>
+        <div add-violation [modalRef]="modalRef" [reload]="reload" [isNew]="isNew" [idViolation]="idViolation"
+          [idJob]="idJob"></div>
+      </ng-template>
+
+      <!-- Add Edit Dob Violation Form -->
+      <ng-template #formAddDobViolation>
+        <div add-dob-violation [modalRef]="modalRef" [reload]="reload" [isNew]="isNew" [idViolation]="idViolation"
+          [idJob]="idJob"></div>
+      </ng-template>
+
+      <!-- Add Edit Dob Safety Violation Form -->
+      <ng-template #formAddDobSafetyViolation>
+        <div add-dob-safety-violation [modalRef]="modalRef" [reload]="reload" [isNew]="isNew" [idViolation]="idViolation"
+          [idJob]="idJob"></div>
+      </ng-template>
+      <!-- Add Time Note -->
+      <ng-template #addTimeNote>
+        <div add-time-notes [modalRef]="modalRef" [idJob]="idJob"></div>
+      </ng-template>
+      <!-- Add Transmittal -->
+      <ng-template #addtransmittal>
+        <div add-transmittal [modalRef]="modalRef" [idJob]="idJob" [jobObj]="jobDetail"></div>
+      </ng-template>
+    </div>
+  </div>
+
+</div>
+<ng-template #explainationCharges>
+  <add-charges [violation]="violationData" [modalRef]="modalRefJob" [isFromDetail]="true"></add-charges>
+</ng-template>
+<ng-template #progressionnote>
+  <div add-progression-note [progressionNote]="progressionNote" [modalRef]="modalRef" [idViolation]="idViolation"
+    [reload]="reload"></div>
+</ng-template>
+<ng-template #viewViolation>
+  <div view-violation [modalRef]="modalRef" [id]="idViolation" [idJob]="idJob" [violationType]="violationType"></div>
+</ng-template>
+<ng-template #viewEcbFromDobViolation>
+  <div view-violation [modalRef]="modalRef" [id]="idViolation" [idJob]="idJob" [isGetBySummonsNumber]="true"
+    [violationType]="'AOTH Violation'"></div>
+</ng-template>
+
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

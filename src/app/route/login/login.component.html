@@ -1,0 +1,60 @@
+<div class="rpo-login">
+  <div class="container-box">
+    <div class="container">
+      <div class="row ">
+        <div class="col-sm-5 welcome-txt">
+          <div>
+            <img class="logo" src="../../assets/snap_cor_logo_white.svg">
+            <h2>Welcome to <br>SnapCor</h2>
+            <p>Log in to your SnapCor account here to start managing your projects.</p>
+          </div>
+        </div>
+        <div class="col-sm-7 mx-auto login-box">
+          <div class="form-container">
+            <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" ngNativeValidate>
+              <div class="login-title">
+                <span>Login</span>
+              </div>
+
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <label>Email ID</label>
+                    <input type="email" name="username" autocomplete="new-password" placeholder="Enter your email ID "
+                      class="form-control" [(ngModel)]="model.username" #username="ngModel" required />
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <label>Password</label>
+                    <input [type]="showPassword ? 'text' : 'password'" autocomplete="new-password" placeholder="Enter your Password"
+                      class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required />
+                    <span class="material-symbols-outlined" (click)="toggleShowPassword()">
+                      {{showPassword ? "visibility" : "visibility_off"}}
+                    </span>
+                    <p class="mt15 text-right" *ngIf="isCustomer">
+                      <a [routerLink]="['/forgot-password']" class="upload-link">Forgot password?</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" name="go" class="btn btn-blue">Log in</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="copyRight">&copy; 2023 SnapCor<span class="trademark">®</span> Inc. All Rights Reserved.</div>
+</div>
+
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

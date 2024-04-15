@@ -1,0 +1,190 @@
+<div class="modal-custom-content" cdkDrag>
+  <form (submit)="save()" ngNativeValidate>
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">Advanced Search</h4>
+      <a href="javascript:void(0)" class="clear-search link-blue" (click)="searchJobs(true)">Clear Filter</a>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="form-advance-search">
+        <div class="row">
+          <div class="col-sm-12">
+            <form>
+              <div class="row form-group">
+                <div class="col-sm-3">
+                  <label for="borough">Borough</label>                  
+                  <ng-select name="borough" [items]="boroughs" bindLabel="description" bindValue="id" placeholder="Borough"
+                    [(ngModel)]="filter.borough" #borough="ngModel">
+                  </ng-select>
+                  <!-- <select class="form-control select" [(ngModel)]="filter.borough" name="borough">
+                    <option [value]="selectUndefinedOptionValue" selected>All</option>
+                    <option *ngFor="let borough of boroughs" [value]="borough.id">{{borough.description}}</option>
+                  </select> -->
+                </div>
+                <div class="col-sm-2">
+                  <label for="house">House#</label>
+                  <input type="text" placeholder="House#" [(ngModel)]="filter.houseNumber" name="houseNumber" class="form-control" />
+                </div>
+                <div class="col-sm-4">
+                  <label for="house">Street</label>
+                  <input type="text" placeholder="Street" [(ngModel)]="filter.street" name="street" class="form-control" />
+                </div>
+                <div class="col-sm-3" *ngIf="agencies?.length > 0">
+                    <label>Agency</label>
+                    <angular2-multiselect [data]="agencies" name="agencies" [(ngModel)]="filter.agencies" [settings]="agencyDDSettings"
+                    (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event)">
+                    </angular2-multiselect>
+                </div>
+              </div>
+  
+              <div class="row form-group">
+                <div class="col-sm-4">
+                  <label for="place">Special Place Name</label>
+                  <input type="text" placeholder="Special Place Name" [(ngModel)]="filter.specialPlaceName" name="specialPlaceName" class="form-control"
+                  />
+                </div>
+                <div class="col-sm-4">
+                  <label for="floor">Floor</label>
+                  <input type="text" placeholder="Floor" [(ngModel)]="filter.floor" name="floor" class="form-control" />
+                </div>
+                <div class="col-sm-4">
+                  <label for="apt">Apt</label>
+                  <input type="text" placeholder="Apt" [(ngModel)]="filter.apt" name="apt" class="form-control" />
+                </div>
+              </div>
+  
+              <div class="row form-group">
+  
+                <div class="col-sm-4">
+                  <label for="">Project Manager</label>
+                  <ng-select name="projectManager" [items]="employeeList" bindLabel="description" bindValue="id" placeholder="Project Manager"
+                    [(ngModel)]="filter.projectManager" #projectManager="ngModel">
+                  </ng-select>
+                </div>
+  
+                <div class="col-sm-4">
+                  <label for="">Project Team (all application)</label>
+                  <ng-select name="projectCoordinator" [items]="employeeList" bindLabel="description" bindValue="id" placeholder="Project Team (all application)"
+                    [(ngModel)]="filter.otherTeamMember" #projectCoordinator="ngModel">
+                  </ng-select>
+                </div>
+  
+                <div class="col-sm-4">
+                  <label for="">Project Status</label>
+                  <ng-select name="jobStatus" [items]="projectStatusList" bindLabel="description" bindValue="id" placeholder="Select Project Status"
+                    [(ngModel)]="filter.jobStatus" #jobStatus="ngModel">
+                  </ng-select>
+                  <!-- <select name="jobStatus" [(ngModel)]="filter.jobStatus" class="form-control">
+                    <option  [value]="selectUndefinedOptionValue">All</option>
+                    <option value="1">In Progress</option>
+                    <option value="2">On Hold</option>
+                    <option value="3">Completed</option>
+                  </select> -->
+                </div>
+              </div>
+  
+              <div class="row form-group">
+                
+  
+                <div class="col-sm-4">
+                  <label for="">Project Start Date</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="startDate" type="text" name="jobStartDate" [(ngModel)]="filter.jobStartDate" class="form-control" />
+                  </div>
+                </div>
+  
+                <div class="col-sm-4">
+                  <label for="">Project End Date</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="endDate" [(ngModel)]="filter.jobEndDate" type="text" name="jobEndDate" class="form-control"  />
+                  </div>
+                </div>
+  
+                <div class="col-sm-4">
+                  <label for="">Company</label>
+                  <ng-select name="idCompany"  [dropdownPosition]="'top'" [items]="companies" bindLabel="name" bindValue="id" placeholder="Company" [(ngModel)]="filter.idCompany"
+                    #idCompany="ngModel">
+                  </ng-select>
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col-sm-4">
+                  <label for="">Little E</label>
+                  <ng-select name="littleE" [items]="littleEList" bindLabel="description" bindValue="id" placeholder="Little E"
+                    [(ngModel)]="filter.littleE" #littleE="ngModel">
+                  </ng-select>
+                  <!-- <select name="littleE" [(ngModel)]="filter.littleE" class="form-control">
+                    <option [value]="selectUndefinedOptionValue">All</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select> -->
+                </div>
+  
+                <div class="col-sm-4">
+                  <label for="">Holiday Embargo</label>
+                  <ng-select name="holidayEmbargo" [items]="holidayEmbargoList" bindLabel="description" bindValue="id" placeholder="Holiday Embargo"
+                    [(ngModel)]="filter.holidayEmbargo" #holidayEmbargo="ngModel">
+                  </ng-select>
+                  <!-- <select name="holidayEmbargo" [(ngModel)]="filter.holidayEmbargo" class="form-control">
+                    <option [value]="selectUndefinedOptionValue">All</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select> -->
+                </div>
+  
+                <div class="col-sm-4">
+                  <label for="">Landmark</label>
+                  <ng-select name="isLandmark" [items]="isLandmarkList" bindLabel="description" bindValue="id" placeholder="Landmark"
+                    [(ngModel)]="filter.isLandmark" #isLandmark="ngModel">
+                  </ng-select>
+                  <!-- <select name="isLandmark" [(ngModel)]="filter.isLandmark" class="form-control">
+                    <option [value]="selectUndefinedOptionValue">All</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select> -->
+                </div>
+              </div>
+                <div class="row form-group">
+                  <div class="col-sm-4 pt-3"> <h4 class="blue-title">Referred By</h4></div>
+                </div>
+                <div class="row form-group">
+                <div class="col-sm-4">
+                        <label>Company</label>
+                            <ng-select name="idReferredByCompany"  [dropdownPosition]="'top'" [items]="companies" bindLabel="name" bindValue="id"
+                            placeholder="Company" [(ngModel)]="filter.idReferredByCompany" #idReferredByCompany="ngModel"
+                            (change)="setContactsreferred('company')">
+                            </ng-select>
+                  </div>
+                  <div class="col-sm-4">
+                      <label>Contact</label>
+                          <ng-select name="idReferredByContact"  [dropdownPosition]="top" [items]="contacts" bindLabel="itemName"
+                              bindValue="id" placeholder="Contact" [(ngModel)]="filter.idReferredByContact"
+                              #idReferredByContact="ngModel">
+                          </ng-select>
+                  </div>
+                </div>
+  
+              
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRefAdvanceSearch.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" (click)="searchJobs()">Search</button>
+    </div>
+  </form>
+</div>

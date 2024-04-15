@@ -1,0 +1,354 @@
+<div class="rpo-projectDetails rpo-component">
+    <div class="row component-header rfp-status">
+        <div class="col-sm-6">
+            <ul class="breadcrumb rfp-bread">
+                <li>
+                    <small>
+                        <a class="pointer" routerLink="/rfp">Proposals</a>
+                    </small>
+                </li>
+                <li *ngIf="rfpNumber">
+                    <a>Proposal# {{rfpNumber}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <ul class="list-inline text-right rfp-md">
+                <li class="modify">
+                    <span *ngIf="createdBy">Created by {{createdBy}}</span>
+                    <span *ngIf="modifiedBy">Last modified by {{modifiedBy}}</span>
+                </li>
+                <li class="rfp-note" (click)="addGeneralNote()">
+                    <span class="material-symbols-rounded note-icon">text_snippet</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="component-body">
+        <div class="rpo-wizard">
+            <div class="wizard-head clearfix text-center">
+                <div class="wizard-head-inner">
+                    <div class="wizard-nav">
+                        <div class="stepwizard-step success" [ngClass]="(showStep1=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/editSiteInformation')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>site information</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step active">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/projectDetails')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>project detail</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep3}}" [ngClass]="(showStep3=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/scopeReview')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>SCOPE REVIEW</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep4}}" [ngClass]="(showStep4=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/proposalReview')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>PROPOSAL REVIEW</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep5}}" [ngClass]="(showStep5=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a (click)="saveOnHeader('/rfpSubmit')">
+                                <i class="fa fa-check-circle"></i>
+                                <p>SUBMIT</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-body">
+                <div class="pro-details">
+                    <div class="row form-group">
+                        <div class="col-sm-2">
+                            <label for="jobType">Project Type</label>
+                            <input type="hidden" [(ngModel)]="project.id" value="id" name="projectId">
+                            <ng-select id="jobType" name="idJobType" [(ngModel)]="project.idJobType" [items]="jobTypes" bindLabel="itemName"
+                                       bindValue="id" [disabled]="showRfpAddBtn=='hide'" placeholder="Project Type" #idJobType
+                                       (change)="setJobSubTypeCategory()">
+                            </ng-select>
+                            <div class="error-message" *ngIf="selectJobType">
+                                {{errorMsg.requireJobType}}
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>&nbsp;</label>
+                            <div>
+                                <button type="button" class="btn btn-panel"
+                                        [disabled]="showRfpAddBtn=='hide' ||  (project?.idJobType == undefined || project?.idJobType == '')"
+                                        (click)="addJobType()">Add Project
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <!-- [sortablejs]="detailArr"-->
+                        <!-- NOTE sortablejs is deprecate find new solution -->
+                        <div class="site-box" *ngFor="let item of detailArr; index as j">
+                            <input type="hidden" [(ngModel)]="item.idJobType" value="idJobType" name="idJobType">
+                            <input type="hidden" [(ngModel)]="item.id" name="id">
+                            <div class="head-area">
+                                <div class="row">
+
+                                    <a href="#panel{{j}}" class="pull-left accordion-toggle toggle-window icon window-minimize" data-toggle="collapse"
+                                       data-parent="#accordion">
+                                        <span class="material-symbols-outlined r-90">expand_circle_down</span>
+                                    </a>
+                                    <label class="job-type-label {{item.description}}">{{item.description}}</label>
+                                    <div class="col-sm-2" *ngIf="item.subTypeCategories?.length > 0">
+                                        <ng-select id="jobSubTypecategory" name="jobSubTypecategory" [(ngModel)]="item.idSubTypeCategory"
+                                                   [items]="item.subTypeCategories" [disabled]="showRfpAddBtn=='hide'" bindLabel="itemName"
+                                                   bindValue="id" placeholder="Job Type Description" #jobSubType required
+                                                   (change)="setJobSubType(item.idSubTypeCategory,item,j)">
+                                        </ng-select>
+                                    </div>
+                                    <div class="col-sm-2" *ngIf="item.jobSubTypes?.length > 0">
+                                        <ng-select id="jobSubType" name="jobSubType" [(ngModel)]="item.idJobSubType"
+                                                   [items]="item.jobSubTypes" bindLabel="itemName" [disabled]="showRfpAddBtn=='hide'"
+                                                   bindValue="id" placeholder="Job Sub Type" (change)="setWorkTypes(item.idJobSubType,item)"
+                                                   #jobSubType required>
+                                        </ng-select>
+                                    </div>
+
+                                    <div class="col-sm-4 pull-right text-right info-action {{item.description}}">
+                                        <ul class="list-inline">
+                                            <li *ngIf="showRfpAddBtn=='show'">
+                                                <a class="icon" (click)="removeProjectDetail(item.idJobType,item.id,j)">
+                                                    <i class="material-symbols-rounded">delete</i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="body-area panel-collapse collapse in" id="panel{{j}}">
+                                <div class="row" *ngIf="item.workTypeCategories?.length > 0">
+                                    <div class="col-md-12 work-type-3">
+                                        <div class="work-type-group"
+                                             *ngFor="let workTypeCategory of item.workTypeCategories; let parentIndex = index">
+                                            <div class="work-type-inner " *ngIf="workTypeCategory.workTypes?.length > 0">
+                                                <label *ngIf="workTypeCategory.workTypes?.length > 0">
+                                                    <b>{{workTypeCategory.itemName}}</b>
+                                                </label>
+                                                <div class="row wt-popup-row" *ngIf="workTypeCategory.workTypes?.length > 0">
+                                                    <div class="col-sm-3"
+                                                         *ngFor="let wt of workTypeCategory.workTypes;let childIndex = index">
+                                                        <div class="checkbox form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="hidden" [disabled]="showRfpAddBtn=='hide'"
+                                                                       [(ngModel)]="workTypeCategory.tmpWorkTypes[childIndex].id"
+                                                                       name="hidWorkTypeId{{childIndex}}">
+                                                                <input class="form-check-input" type="checkbox" [checked]="wt.selected" name="wt{{i}}{{j}}"
+                                                                       value="workType" id="{{wt.id}}"
+                                                                       [disabled]="showRfpAddBtn=='hide' || wt.disabled"
+                                                                       [(ngModel)]="workTypeCategory.tmpWorkTypes[childIndex].checked"
+                                                                       (ngModelChange)="isFieldValChange(workTypeCategory.itemName, wt ,workTypeCategory.tmpWorkTypes[childIndex].checked,
+                                                                     workTypeCategory.workTypes, workTypeCategory.tmpWorkTypes , j)">
+                                                                <i class="input-helper"></i>
+                                                                {{wt.itemName}}
+                                                            </label>
+                                                            <div class="note-box row">
+                                                                <input class="form-control qty" [disabled]="showRfpAddBtn=='hide'"
+                                                                       type="text" name="quantity"
+                                                                       *ngIf="wt.costType == 2 || wt.costType == 3 || wt.costType == 4 || wt.costType == 6"
+                                                                       [(ngModel)]="workTypeCategory.tmpWorkTypes[childIndex].quantity"
+                                                                       (keypress)="isNumber(event)" placeholder="Quantity">
+                                                                <input class="form-control qty" type="text" name="quantity"
+                                                                       [disabled]="showRfpAddBtn=='hide'" *ngIf="wt.costType == 7"
+                                                                       [(ngModel)]="workTypeCategory.tmpWorkTypes[childIndex].quantity"
+                                                                       (keypress)="isDecimal($event)" placeholder="Hours">
+                                                                <input class="form-control" type="text" name="description"
+                                                                       [disabled]="showRfpAddBtn=='hide'" *ngIf="wt.customServiceDescription"
+                                                                       [(ngModel)]="workTypeCategory.tmpWorkTypes[childIndex].description"
+                                                                       placeholder="Description">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Direct Step 5 level -->
+                                <div class="row filling-section" *ngIf="item.serviceWorkTypes?.length > 0">
+                                    <div class="col-md-12 work-type-3">
+                                        <div class="work-type-group">
+                                            <div class="work-type-inner">
+                                                <label>
+                                                    <b>Services</b>
+                                                </label>
+                                                <div class="row">
+                                                    <div class="col-sm-3" *ngFor="let wt of item.serviceWorkTypes;let serviceIndex = index">
+                                                        <div class="checkbox form-check">
+                                                            <label class="form-check-label">
+                                                                <input type="hidden" class="form-check-input" [(ngModel)]="item.tmpServiceWorkTypes[serviceIndex].id"
+                                                                       [disabled]="showRfpAddBtn=='hide'"
+                                                                       name="hidServiceWorkTypeId{{childIndex}}">
+                                                                <input type="checkbox" class="form-check-input" [disabled]="showRfpAddBtn=='hide' || wt.disabled"
+                                                                       [checked]="wt.selected" name="wt{{serviceIndex}}" value="workType"
+                                                                       [(ngModel)]="item.tmpServiceWorkTypes[serviceIndex].checked"
+                                                                       id="{{wt.id}}" (ngModelChange)="isFieldValChange('Services', wt ,item.tmpServiceWorkTypes[serviceIndex].checked,
+                                                                    item.serviceWorkTypes, item.tmpServiceWorkTypes , j)">
+                                                                <i class="input-helper"></i>
+                                                                {{wt.itemName}}
+
+                                                            </label>
+                                                            <div class="note-box row">
+                                                                <input class="form-control qty" type="text" name="quantity"
+                                                                       *ngIf="wt.costType == 2 || wt.costType == 3 || wt.costType == 4 || wt.costType == 6"
+                                                                       [(ngModel)]="item.tmpServiceWorkTypes[serviceIndex].quantity"
+                                                                       [disabled]="showRfpAddBtn=='hide'" (keypress)="isNumber(event)"
+                                                                       placeholder="Quantity">
+                                                                <input class="form-control qty" type="text" name="quantity"
+                                                                       *ngIf="wt.costType == 7" [disabled]="showRfpAddBtn=='hide'"
+                                                                       [(ngModel)]="item.tmpServiceWorkTypes[serviceIndex].quantity"
+                                                                       (keypress)="isDecimal($event)" placeholder="Hours">
+                                                                <input class="form-control" type="text" [disabled]="showRfpAddBtn=='hide'"
+                                                                       name="description" *ngIf="wt.customServiceDescription"
+                                                                       [(ngModel)]="item.tmpServiceWorkTypes[serviceIndex].description"
+                                                                       placeholder="Description">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row filling-section" *ngIf="item.isCurrentStatusOfFiling">
+                                    <div class="col-md-12 status-filing work-type-group">
+                                        <label for="jobType">Current Status of Filing(s)</label>
+                                        <ul class="work-type-inner">
+                                            <li>
+                                                <div class="checkbox form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" [disabled]="showRfpAddBtn=='hide'"
+                                                               [(ngModel)]="item.arePlansNotPrepared" (ngModelChange)="isFieldValChange()"
+                                                               value="" name="arePlansNotPrepared{{j}}">
+                                                        <i class="input-helper"></i> Plans not prepared
+                                                    </label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="checkbox form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" [disabled]="showRfpAddBtn=='hide'"
+                                                               [(ngModel)]="item.arePlansCompleted" (ngModelChange)="isFieldValChange()"
+                                                               value="" name="arePlansCompleted{{j}}">
+                                                        <i class="input-helper"></i>
+                                                        Plans completed
+                                                    </label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="checkbox form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" [disabled]="showRfpAddBtn=='hide'"
+                                                               [(ngModel)]="item.isApproved" (ngModelChange)="isFieldValChange()" value=""
+                                                               name="isApproved{{j}}">
+                                                        <i class="input-helper"></i>
+                                                        Approved
+                                                    </label>
+                                                    <div class="note-box row">
+                                                        <input type="text" [disabled]="showRfpAddBtn=='hide'" class="form-control"
+                                                               [(ngModel)]="item.approvedJobNumber" (ngModelChange)="isFieldValChange()"
+                                                               value="" name="approvedJobNumber{{j}}" placeholder="Project#" maxlength="9">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="checkbox form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" [disabled]="showRfpAddBtn=='hide'"
+                                                               [(ngModel)]="item.isDisaproved" (ngModelChange)="isFieldValChange()" value=""
+                                                               name="isDisaproved{{j}}">
+                                                        <i class="input-helper"></i>
+                                                        Disapproved
+                                                    </label>
+                                                    <div class="note-box row">
+                                                        <input type="text" class="form-control" [disabled]="showRfpAddBtn=='hide'"
+                                                               [(ngModel)]="item.disApprovedJobNumber" (ngModelChange)="isFieldValChange()"
+                                                               value="" name="disApprovedJobNumber{{j}}" placeholder="Project#" maxlength="9">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="checkbox form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" [(ngModel)]="item.isPermitted"
+                                                               (ngModelChange)="isFieldValChange()" value="" [disabled]="showRfpAddBtn=='hide'"
+                                                               name="isPermitted{{j}}">
+                                                        <i class="input-helper"></i>
+                                                        Permitted
+                                                    </label>
+                                                    <div class="note-box row">
+                                                        <input type="text" class="form-control" [disabled]="showRfpAddBtn=='hide'"
+                                                               [(ngModel)]="item.permittedJobNumber" (ngModelChange)="isFieldValChange()"
+                                                               value="" name="permittedJobNumber{{j}}" placeholder="Project#" maxlength="9">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group mt15" *ngIf="detailArr?.length > 0">
+                        <div class="col-sm-2">
+                            <label for="jobType">Project Type</label>
+                            <input type="hidden" [(ngModel)]="project.id" value="id" name="projectId">
+                            <ng-select id="jobType" name="idJobType" [(ngModel)]="project.idJobType" [items]="jobTypes" bindLabel="itemName"
+                                       bindValue="id" [disabled]="showRfpAddBtn=='hide'" placeholder="Project Type" #idJobType
+                                       (change)="setJobSubTypeCategory()">
+                            </ng-select>
+                            <div class="error-message" *ngIf="selectJobType">
+                                {{errorMsg.requireJobType}}
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>&nbsp;</label>
+                            <div>
+                                <button type="button" class="btn btn-panel"
+                                        [disabled]="showRfpAddBtn=='hide' ||  (project?.idJobType == undefined || project?.idJobType == '')"
+                                        (click)="addJobType()">Add Project
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="footer-area text-right">
+                        <input type="button" class="btn btn-panel-bordered small" (click)="saveProjectDetail(true,'')"
+                               [disabled]="detailArr.length == 0 || showRfpAddBtn=='hide'" value="Save & Exit"/>
+                        <input type="button" class="btn btn-panel small" (click)="saveProjectDetail(false,'')"
+                               [disabled]="detailArr.length == 0 || showRfpAddBtn=='hide'" value="Save & Next"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #rfpprogressionnote>
+    <div add-rfp-progression-note [idRfp]="rfpDetail.id" [modalRef]="modalRef"></div>
+</ng-template>
+
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

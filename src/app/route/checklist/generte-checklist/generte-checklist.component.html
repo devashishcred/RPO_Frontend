@@ -1,0 +1,247 @@
+<div class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left"> {{idChecklist? 'Edit': 'Create'}} Checklist </h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+        <div class="row">
+            <div class="col-md-12 mb20">
+                <div class="form-check radio-inline">
+                    <label class="input-inline form-check-label">
+                        <input type="radio" class="form-check-input" (click)="onSelectChecklistType('General')"
+                            [checked]="checklistType == 'General'" [disabled]="idChecklist">General Checklist
+                        <i class="input-helper"></i>
+                    </label>
+                    <label class="input-inline form-check-label">
+                        <input type="radio" class="form-check-input" (click)="onSelectChecklistType('Composite')"
+                            [checked]="checklistType == 'Composite'" [disabled]="idChecklist">Composite Checklist
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            </div>
+            <ng-container *ngIf="checklistType == 'General'">
+                <form [formGroup]="generalChecklistFormData">
+                    <div>
+                        <div class="col-md-6 pl0 pr30">
+                            <div class="col-md-12 mb20">
+                                <label style="font-size: 14px; font-weight: 700;">Select Application*</label>
+                                <ng-container *ngIf="idChecklist">
+                                    <input class="form-control" [value]="checklistByIdData?.applicationTypeNumber" type="text" disabled>
+                                </ng-container>
+                                <ng-container *ngIf="!idChecklist">
+                                    <ng-select id="idApplicationType" formControlName="IdJobapplication"
+                                        (change)="selectApplication($event)" [items]="applications" bindLabel="value"
+                                        bindValue="id" placeholder="Select Application">
+                                    </ng-select>
+                                </ng-container>
+                                <div class="error-message pl0">
+                                    <!-- <div
+                                            *ngIf="idApplicationType.errors && (idApplicationType.dirty || idApplicationType.touched)">
+                                            Application Type is required
+                                        </div> -->
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb20">
+                                <label style="font-size: 14px; font-weight: 700;">Select Work Permit/Type*</label>
+                                <angular2-multiselect [data]="workPermit"
+                                    formControlName="JobApplicationWorkPermitTypes"
+                                    (onSelect)="onItemSelectPermit()" (onDeSelect)="OnItemDeSelectPermit($event)"
+                                    (onDeSelectAll)="onDeSelectAllPermit($event)"
+                                    (onSelectAll)="onSelectAllPermit($event)"
+                                    [settings]="dropdownSettingsFroWorkPermits" id="idworkPermitType" required>
+                                </angular2-multiselect>
+                                <div class="error-message pl0">
+                                    <!-- <div
+                                            *ngIf="idworkPermitType.errors && (idworkPermitType.dirty || idworkPermitType.touched)">
+                                            Work Permit Type is required
+                                        </div> -->
+                                </div>
+
+                            </div>
+                            <div class="col-md-12 mb20">
+                                <label style="font-size: 14px; font-weight: 700;">Select CheckList Group*</label>
+                                
+
+                                <angular2-multiselect [data]="checklistGroups" formControlName="CheckListGroups"
+                                    [settings]="dropdownSettingsForGroup" id="idGroupType"
+                                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                                    (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)"
+                                    required>
+                                </angular2-multiselect>
+                                <div class="error-message pl0">
+                                    <!-- <div *ngIf="idGroupType.errors && (idGroupType.dirty || idGroupType.touched)">
+                                            CheckList Group is required
+                                        </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <ng-container *ngIf="isFloor">
+                            <div class="col-md-6 pl30">
+                                <div class="row plumbing mb20 pb5">
+                                    <div class="col-md-3">
+                                        <label>Floor*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label>Inspection Type</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input class="form-control" #floorValue formControlName="typedFloor"
+                                            placeholder="Floor#" type="text" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-9" style="display: flex; gap: 10px;">
+                                        <angular2-multiselect [settings]="dropdownSettingsForFloors"
+                                            [data]="allInspections" (onSelect)="onItemSelectInspection($event)"
+                                            (onDeSelect)="OnItemDeSelectInspection($event)"
+                                            (onDeSelectAll)="onDeSelectAllInspection($event)"
+                                            (onSelectAll)="onSelectAllInspection($event)"
+                                            formControlName="selectedInspection" #inspectionValue>
+                                        </angular2-multiselect>
+
+                                        <!-- <angular2-multiselect [data]="workPermit"
+                                            formControlName="JobApplicationWorkPermitTypes"
+                                            (onSelect)="onItemSelectPermit($event)"
+                                            (onDeSelect)="OnItemDeSelectPermit($event)"
+                                            (onDeSelectAll)="onDeSelectAllPermit($event)"
+                                            (onSelectAll)="onSelectAllPermit($event)"
+                                            [settings]="dropdownSettingsFroWorkPermits" id="idworkPermitType" required>
+                                        </angular2-multiselect> -->
+                                        <button class="btn btn-white" type="button" [disabled]="!floorValue.value"
+                                            (click)="onAddJobPlumbingCheckListFloor()">Add</button>
+                                        <!-- <button class="btn btn-white" type="button" [disabled]="!floorValue.value || (!selectedInspection.value || selectedInspection.value?.length == 0)"
+                                            (click)="onAddJobPlumbingCheckListFloor()">Add</button> -->
+                                    </div>
+                                </div>
+                                <ng-container *ngIf="JobPlumbingCheckListFloors?.controls?.length>0">
+                                    <div cdkDropList (cdkDropListDropped)="dropFloor($event)">
+                                        <div class="plumbing mb20" formArrayName="JobPlumbingCheckListFloors" cdkDrag
+                                            *ngFor="let jobPlumbingCheckList of JobPlumbingCheckListFloors?.controls; let index = index;">
+                                            <div class="row" [formGroupName]="index">
+                                                <div class="col-md-3 addPlumbingList">
+                                                    <span class="material-symbols-rounded"
+                                                        cdkDragHandle>drag_indicator</span>
+                                                    <input class="form-control" formControlName="FloonNumber"
+                                                        placeholder="Floor#" type="text" autocomplete="off">
+                                                </div>
+                                                <div class="col-md-9" style="display: flex; gap: 10px;">
+                                                    <angular2-multiselect [data]="allInspections"
+                                                        (onSelect)="onItemSelectInspection($event)"
+                                                        (onDeSelect)="OnItemDeSelectInspection($event)"
+                                                        (onDeSelectAll)="onDeSelectAllInspection($event)"
+                                                        (onSelectAll)="onSelectAllInspection($event)"
+                                                        [settings]="dropdownSettingsForFloors"
+                                                        formControlName="InspectionType">
+                                                    </angular2-multiselect>
+                                                    <button class="btn btn-white">
+                                                        <span class="material-symbols-rounded"
+                                                            (click)="onDeleteJobPlumbingCheckListFloor(index)">delete</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                </form>
+            </ng-container>
+
+
+            <div class="compositeChecklist" *ngIf="checklistType == 'Composite'">
+                <form [formGroup]="compositeChecklistFormData">
+                    <div class="col-md-12 mb20 flex-center">
+                        <span class="lable-ccl">CO Project?</span>
+                        <div class="button-switch mr-2">
+                            <input type="checkbox" formControlName="IsCOProject" class="switch" />
+                            <label for="CO-Project-switch" class="lbl-off"></label>
+                            <label for="CO-Project-switch" class="lbl-on"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="lable-ccl">Parent Checklist*</label>
+                        <ng-container *ngIf="idChecklist">
+                            <!-- <ng-select (change)="selectParentChecklist($event)" disabled [clearable]="false"
+                                [searchable]="false" [items]="checkListSwitcherData"
+                                formControlName="ParentChecklistheaderId" bindLabel="checklistName"
+                                bindValue="id" placeholder="Select Parent Checklist" required>
+                            </ng-select> -->
+                            <input class="form-control" [value]="compositeParentCheckListName" type="text" disabled>
+                        </ng-container>
+                        <ng-container *ngIf="!idChecklist">
+                            <ng-select (change)="selectParentChecklist($event)"
+                                [items]="checkListSwitcherData" formControlName="ParentChecklistheaderId"
+                                bindLabel="checklistName" bindValue="id"
+                                placeholder="Select Parent Checklist" required>
+                            </ng-select>
+                        </ng-container>
+                    </div>
+                    <div class="col-md-12">
+                        <ng-container *ngFor="let jobs of mainChecklistArray;let jobIndex = index">
+                            <h4 class="mt-3">Project {{jobs.idJob}}</h4>
+                            <ng-container
+                                *ngFor="let checklist of jobs.listofGeneralChecklist;let checklistIndex = index">
+                                <div class="checkbox form-check">
+                                    <label class="mr5 form-check-label input-inline">
+                                        <input type="checkbox" formControlName="headerIds"
+                                            (click)="onSelectCheckList(jobIndex,checklistIndex)"
+                                            [checked]="checklist.isSelected"
+                                            class="form-check-input" />{{checklist.checklistName}}
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" (click)="toModelClose()">Cancel</button>
+        <ng-container *ngIf="checklistType == 'General';else notGeneral">
+            <ng-container *ngIf="isFloor">
+                <button type="button"
+                    [disabled]="generalChecklistFormData.invalid || allJobPlumbingCheckListFloors.value.length == 0"
+                    class="btn btn-blue" (click)="onSubmitGeneralChecklist()">Save</button>
+            </ng-container>
+            <ng-container *ngIf="!isFloor">
+                <button type="button" [disabled]="generalChecklistFormData.invalid" class="btn btn-blue"
+                    (click)="onSubmitGeneralChecklist()">Save</button>
+            </ng-container>
+        </ng-container>
+        <ng-template #notGeneral>
+            <button type="button" class="btn btn-blue" [disabled]="compositeChecklistFormData.invalid"
+                (click)="onSubmitCompositeChecklist()">Save</button>
+        </ng-template>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+
+<ng-template #removeAllFloorConfirmation>
+    <div class="modal-custom-content" cdkDrag>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">All Floors will deleted</h4>
+        </div>
+
+        <div class="modal-body">
+            <label>Are you sure you want to delete the all floors ? </label>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-blue pull-right" (click)="removeAllFloors()">Yes</button>
+            <button type="button" class="btn btn-white pull-right" (click)="deniedToDeleteFloors()">No</button>
+        </div>
+    </div>
+</ng-template>

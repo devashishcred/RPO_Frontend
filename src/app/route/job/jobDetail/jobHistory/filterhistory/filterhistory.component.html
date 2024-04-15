@@ -1,0 +1,61 @@
+<div class="modal-custom-content" cdkDrag>
+    <form>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <a href="javascript:void(0)" class="clear-search link-blue" (click)="clearsearch()">
+                Clear Filter
+            </a>
+            <h4 class="modal-title pull-left">Filter History</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+                <div #filterDropdown>
+                    <div class="row form-group">
+                        <div class="col-sm-12">
+                        <label for="idFilterType" class="normal-font-weight">Filter by Type</label>
+                        <angular2-multiselect [data]="dropdownList" name="selectType" [(ngModel)]="selectType" [settings]="dropdownSettings"
+                        (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                        (onSelectAll)="onSelectAll($event)">
+                        </angular2-multiselect>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-12">                    
+                        <label for="idFilterEmp" class="normal-font-weight">Filter by User</label>
+                        <ng-select *ngIf="employeedropdownList?.length > 0" name="selectEmployee" [items]="employeedropdownList" bindLabel="itemName" bindValue="id" placeholder="Filter by User
+                            " 
+                            [(ngModel)]="selectEmployee"  >
+                        </ng-select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                        <label for="filterStartDate" class="normal-font-weight">Filter by Date</label>
+                        <div datetime-picker class="inner-addon right-addon input-group">
+                            <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                            <input placeholder="Start date" id="filterStartDate" type="text" name="filterStartDate" [(ngModel)]="filterStartDate" class="form-control" />
+                        </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="filterEndDate" class="normal-font-weight">&nbsp;</label>
+                            <div datetime-picker class="inner-addon right-addon input-group">
+                            <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                            <input placeholder="End date" id="filterEndDate" type="text" name="filterEndDate" [(ngModel)]="filterEndDate" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" (click)="searchHistory()">Filter</button>
+        </div>
+    </form>
+</div>
+<div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>

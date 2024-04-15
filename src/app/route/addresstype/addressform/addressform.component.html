@@ -1,0 +1,49 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #addressTypeForm="ngForm">
+  <div class="modal-header" cdkDragHandle>
+    <button type="button" class="close close-icn mr-2" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+    </button>
+    <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Address Type</h4>
+  </div>
+  <div class="modal-body pb0 pt15">
+    <div class="row form-group">
+      <div class="col-sm-12">
+        <label for="task">Address Type*</label>
+        <input id="name" name="name" type="text" class="form-control" [(ngModel)]="addresstype.name" #name="ngModel" required/>
+        <div class="error-message pl0">
+          <div *ngIf="name.errors && (name.dirty || name.touched)">
+            {{errorMsg.requiredAddressTypeName}}
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <label for="task">Priority Order*</label>
+        <input id="displayOrder" name="displayOrder" type="text" class="form-control" [(ngModel)]="addresstype.displayOrder"
+          #displayOrder="ngModel"  pattern="^$|^[0-9]+" maxlength="3"  required/>
+        <div class="error-message pl0">
+          <div *ngIf="displayOrder.errors?.required && (displayOrder.dirty || displayOrder.touched)">
+            {{errorMsg.requiredAddressTypePriorityOrder}}
+          </div>
+          <div *ngIf="displayOrder.errors?.pattern  && (displayOrder.dirty || displayOrder.touched)">
+              {{errorMsg.addressTypePriorityOrderIsNumeric}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+    <button type="button" class="btn btn-blue" [disabled]="!addressTypeForm.form.valid" (click)="saveAddressType()">Save</button>
+  </div>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</form>
+</div>

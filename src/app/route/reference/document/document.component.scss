@@ -1,0 +1,20 @@
+.rpo-Company {
+  button.middle {
+    margin-top: 12px;
+  }
+}
+
+.search {
+  width: 294px;
+  margin-right: 20px;
+  &.middle {
+    margin-top: 15px;
+  }
+  .select-company{
+    width: 50%;
+  }
+  .inner-addon{
+    float: right;
+  }
+}
+

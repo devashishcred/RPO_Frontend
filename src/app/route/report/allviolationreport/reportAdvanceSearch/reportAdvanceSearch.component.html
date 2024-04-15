@@ -1,0 +1,122 @@
+<div class="modal-custom-content" cdkDrag>
+  <form (submit)="save()" ngNativeValidate>
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">Advanced Search</h4>
+      <a href="javascript:void(0)" class="clear-search link-blue" (click)="clearSearch()">Clear Filter</a>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="form-advance-search">
+        <div class="row">
+          <div class="col-sm-12">
+            <form>
+              <div class="row form-group">
+                <!-- <div class="col-sm-6" *ngIf="jobList?.length>0"> -->
+                <div class="col-sm-6">
+                  <label for="">Project#</label>
+                  <angular2-multiselect [data]="jobList" name="jobId" [(ngModel)]="filter.jobId"
+                    [settings]="dropdownJobListSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'job')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'')" #jobId="ngModel">
+                  </angular2-multiselect>
+                </div>
+                <div class="col-sm-6">
+                  <!-- <div class="col-sm-6" *ngIf="companies?.length>0"> -->
+                  <label for="">Company</label>
+                  <ng-select name="idCompany" [items]="companies" bindLabel="name" bindValue="id" placeholder="Company"
+                             [(ngModel)]="filter.idCompany" (change)="setContacts()" #idCompany="ngModel">
+                  </ng-select>
+                </div>
+
+              </div>
+
+              <div class="row form-group">
+                <div class="col-md-6">
+                  <!-- <div class="col-md-6" *ngIf="contacts?.length>0"> -->
+                  <label>Contact</label>
+                  <angular2-multiselect [data]="contacts" name="contact" [(ngModel)]="filter.contact"
+                    [settings]="dropdownContactListSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'contact')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'contact')" #contact="ngModel">
+                  </angular2-multiselect>
+                </div>
+                <div class="col-sm-6 m10">
+                  <label> Fully Resolved </label>
+                  <select name="holidayEmbargo" [(ngModel)]="filter.isFullyResolved" class="form-control">
+                    <option [value]="null">All</option>
+                    <option value='true'>Yes</option>
+                    <option value='false'>No</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Hearing Date From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="HearingDateTo"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="hearingDateFrom" type="text" name="hearingDateFrom" [(ngModel)]="filter.hearingDateFrom"
+                      class="form-control" />
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="">Hearing Date To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="HearingDateTo"
+                    [customMinDate]="filter.hearingDateFrom" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="hearingDateTo" [(ngModel)]="filter.hearingDateTo" type="text" name="hearingDateTo"
+                      class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <!-- <div class="col-sm-6" *ngIf="violationStatusList?.length>0"> -->
+                <div class="col-sm-6">
+                  <label for="">Violation Status</label>
+                  <angular2-multiselect [data]="violationStatusList" name="status" [(ngModel)]="filter.status"
+                    [settings]="dropdownViolationStatusSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'violationStatus')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'violationStatus')" #status="ngModel">
+                  </angular2-multiselect>
+                </div>
+                <!-- <div class="col-sm-6" *ngIf="certificationStatusList?.length>0"> -->
+                <div class="col-sm-6">
+                  <label for="">Certification Status</label>
+                  <angular2-multiselect [data]="certificationStatusList" name="cocStatus" [(ngModel)]="filter.cocStatus"
+                    [settings]="dropdownCertificationStatusSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'certificationStatus')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'violationStatus')" #cocStatus="ngModel">
+                  </angular2-multiselect>
+                </div>
+              </div>
+              <div class="row form-group">
+                <!-- <div class="col-sm-6" *ngIf="hearingResultList?.length>0"> -->
+                <div class="col-sm-6">
+                  <label for="">Hearing Result</label>
+                  <angular2-multiselect [data]="hearingResultList" name="result" [(ngModel)]="filter.result"
+                    [settings]="dropdownHearingResultSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'hearingResult')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'hearingResult')" #status="ngModel">
+                  </angular2-multiselect>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRefAdvanceSearch.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" (click)="searchJobs()">Search</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,38 @@
+.rpo-proposalReview {
+    button.middle {
+      margin-top: 12px;
+    }
+    .small{
+      padding: 10px 12px;
+    }
+    .cost{
+      height: 48px;
+      font-size: 22px;
+      color: #333;
+      font-weight: 600;
+    }
+    .add-milestone{
+      input{
+        &.form-control{
+          height: 41px;
+        }
+      }
+      select{
+        &.form-control{
+          height: 41px;
+        }
+      }
+    }
+    .footer-area{
+      border-top: 1px solid #ddd;
+      margin-top: 15px;
+    }
+  }
+  
+  .search {
+    width: 294px;
+    margin-right: 20px;
+    &.middle {
+      margin-top: 15px;
+    }
+  }

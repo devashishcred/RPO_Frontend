@@ -1,0 +1,157 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #depPenaltyForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} DEP Noise Code Penalty Schedule</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Section of Law*</label>
+          <input id="sectionOfLaw" name="sectionOfLaw" type="text" class="form-control" [(ngModel)]="depPenalty.sectionOfLaw" #sectionOfLaw="ngModel"
+          required/>
+          <div class="error-message pl0">
+            <div *ngIf="sectionOfLaw.errors && (sectionOfLaw.dirty || sectionOfLaw.touched)">
+              {{errorMsg.requireSectionOfLaw}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Compliance</label>
+          <input id="compliance" name="compliance" type="text" class="form-control" [(ngModel)]="depPenalty.compliance" #compliance="ngModel"
+          />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Violation Description</label>
+          <input id="violationDescription" name="violationDescription" type="text" class="form-control" [(ngModel)]="depPenalty.violationDescription"
+            #violationDescription="ngModel" />
+        </div>
+      </div>
+      <div class="row form-group">
+        
+          <div class="col-sm-3">
+            <label for="task">Offense 1</label>
+            <input id="offense1" name="offense1" type="text" class="form-control" [(ngModel)]="depPenalty.offense_1" #offense1="ngModel"
+            />
+          </div>
+          <div class="col-sm-3">
+            <label for="task">Penalty 1 ($)</label>
+            <input id="penalty1" name="penalty1" type="text" class="form-control" [(ngModel)]="depPenalty.penalty_1" #penalty1="ngModel"
+              (keypress)="isDecimal($event)" />
+          </div>
+          <div class="col-sm-3">
+            <label for="task">Default Penalty 1 ($)</label>
+            <input id="defaultPenalty1" name="defaultPenalty1" type="text" class="form-control" [(ngModel)]="depPenalty.defaultPenalty_1"
+              #defaultPenalty1="ngModel" (keypress)="isDecimal($event)" />
+          </div>
+          <div class="col-sm-3">
+              <label class="form-check-label-block">Stipulation 1</label>
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input id="stipulation1" name="stipulation1" type="checkbox" [(ngModel)]="depPenalty.stipulation_1" #stipulation1="ngModel" class="customCheck form-check-input" />
+                    <i class="input-helper"></i>
+                </label>
+              </div>
+                
+          </div>
+      </div>
+      <div class="row form-group">
+        
+          <div class="col-sm-3">
+            <label for="task">Offense 2</label>
+            <input id="offense2" name="offense2" type="text" class="form-control" [(ngModel)]="depPenalty.offense_2" #offense2="ngModel"
+            />
+          </div>
+          <div class="col-sm-3">
+            <label for="task">Penalty 2 ($)</label>
+            <input id="penalty2" name="penalty2" type="text" class="form-control" [(ngModel)]="depPenalty.penalty_2" #penalty2="ngModel"
+              (keypress)="isDecimal($event)" />
+          </div>
+          <div class="col-sm-3">
+            <label for="task">Default Penalty 2 ($)</label>
+            <input id="defaultPenalty2" name="defaultPenalty2" type="text" class="form-control" [(ngModel)]="depPenalty.defaultPenalty_2"
+              #defaultPenalty2="ngModel" (keypress)="isDecimal($event)" />
+          </div>
+          <div class="col-sm-3">
+            <label class="form-check-label-block">Stipulation 2</label>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="stipulation2" name="stipulation2" type="checkbox" [(ngModel)]="depPenalty.stipulation_2" #stipulation2="ngModel" class="customCheck" />
+                  <i class="input-helper"></i>
+              </label>
+            </div>
+              
+          </div>
+      </div>
+      <div class="row form-group">
+          <div class="col-sm-3">
+            <label for="task">Offense 3</label>
+            <input id="offense3" name="offense3" type="text" class="form-control" [(ngModel)]="depPenalty.offense_3" #offense3="ngModel"
+            />
+          </div>
+          <div class="col-sm-3">
+            <label for="task">Penalty 3 ($)</label>
+            <input id="penalty3" name="penalty3" type="text" class="form-control" [(ngModel)]="depPenalty.penalty_3" #penalty3="ngModel"
+              (keypress)="isDecimal($event)" />
+          </div>
+          <div class="col-sm-3">
+            <label for="task">Default Penalty 3 ($)</label>
+            <input id="defaultPenalty3" name="defaultPenalty3" type="text" class="form-control" [(ngModel)]="depPenalty.defaultPenalty_3"
+              #defaultPenalty3="ngModel" (keypress)="isDecimal($event)" />
+          </div>
+          <div class="col-sm-3">
+            <label class="form-check-label-block">Stipulation 3</label>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="stipulation3" name="stipulation3" type="checkbox" [(ngModel)]="depPenalty.stipulation_3" #stipulation3="ngModel" class="customCheck" />
+              <i class="input-helper"></i>
+              </label>
+            </div>
+              
+          </div>
+      </div>
+      <div class="row form-group">
+          <div class="col-sm-3">
+            <label for="task">Offense 4</label>
+            <input id="offense4" name="offense4" type="text" class="form-control" [(ngModel)]="depPenalty.offense_4" #offense4="ngModel"
+            />
+          </div>
+          <div class="col-sm-3">
+            <label for="task">Penalty 4 ($)</label>
+            <input id="penalty4" name="penalty4" type="text" class="form-control" [(ngModel)]="depPenalty.penalty_4" #penalty4="ngModel"
+              (keypress)="isDecimal($event)" />
+          </div>
+          <div class="col-sm-3">
+            <label for="task">Default Penalty 4 ($)</label>
+            <input id="defaultPenalty4" name="defaultPenalty4" type="text" class="form-control" [(ngModel)]="depPenalty.defaultPenalty_4"
+              #defaultPenalty4="ngModel" (keypress)="isDecimal($event)" />
+          </div>
+          <div class="col-sm-3">
+            <label class="form-check-label-block">Stipulation 4</label>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="stipulation4" name="stipulation4" type="checkbox" [(ngModel)]="depPenalty.stipulation_4" #stipulation4="ngModel" class="customCheck" />
+              <i class="input-helper"></i>
+              </label>
+            </div>
+              
+          </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!depPenaltyForm.form.valid" (click)="saveDepPenalty()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  
+  </form>
+</div>

@@ -1,0 +1,103 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #emailTypeForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Transmittal Type</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Name*</label>
+          <input id="name" name="name" type="text" class="form-control" [(ngModel)]="emailType.name" #name="ngModel" placeholder="Name" required/>
+          <div class="error-message pl0">
+            <div *ngIf="name.errors && (name.dirty || name.touched)">
+              {{errorMsg.requiredEmailName}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Available in (Modules)</label>
+          <div class="checkbox form-check">
+            <label class="form-check-label input-inline">
+              <input type="checkbox" class="form-check-input" name="isCompany" [(ngModel)]="emailType.isCompany" (focusout)="checkEmailType($event)" (change)="checkEmailType($event)" />Company
+              <i class="input-helper"></i>
+            </label>
+            <label class="form-check-label input-inline">
+              <input type="checkbox" class="form-check-input" name="isContact" [(ngModel)]="emailType.isContact" (focusout)="checkEmailType($event)" (change)="checkEmailType($event)"/>Contact
+              <i class="input-helper"></i>
+            </label>
+            <label class="form-check-label input-inline">
+              <input type="checkbox" class="form-check-input" name="isRfp" [(ngModel)]="emailType.isRfp" (focusout)="checkEmailType($event)" (change)="checkEmailType($event)"/> Proposal
+              <i class="input-helper"></i>
+            </label>
+            <label class="form-check-label input-inline">
+              <input type="checkbox" class="form-check-input" name="isJob" [(ngModel)]="emailType.isJob" (focusout)="checkEmailType($event)" (change)="checkEmailType($event)"/>Project
+              <i class="input-helper"></i>
+            </label>
+            <div class="error-message pl0">
+              <div *ngIf="showEmailType">
+                {{errorMsg.requiredEmailType}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12 modify">
+            Add following keywords in Message to have dynamic data inserted : ##company##,##firstname##, ##lastname##, ##Proposal##, ##project##, ##address##
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Subject*</label>
+          <input id="subject" name="subject" type="text" class="form-control" [(ngModel)]="emailType.subject" #subject="ngModel" placeholder="Subject" required/>
+          <div class="error-message pl0">
+            <div *ngIf="subject.errors && (subject.dirty || subject.touched)">
+              {{errorMsg.requiredEmailSubject}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Message*</label>
+          <ck-editor [(ngModel)]="emailType.emailBody" name="emailBody" 
+          [config]="configuration" debounce="100 " #emailBody="ngModel" required></ck-editor>
+          <div class="error-message pl0">
+            <div *ngIf="emailType.emailBody?.length < 1">
+              {{errorMsg.requiredEmailBody}}
+            </div>
+          </div>
+        </div>
+      </div>
+  
+  
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Auto CC</label> 
+          <angular2-multiselect [data]="employees" name="defaultCC" [(ngModel)]="selectedDefaultCC" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)"
+            (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+          </angular2-multiselect>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <label for="task">Description</label>
+          <textarea class="form-control" [(ngModel)]="emailType.description" id="description" name="description" rows="3" cols="100" placeholder="Description"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!emailTypeForm.form.valid" (click)="saveEmailType()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

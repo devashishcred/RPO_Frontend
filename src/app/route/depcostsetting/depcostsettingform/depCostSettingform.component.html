@@ -1,0 +1,65 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #depCostSetttingform="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} DEP Cost </h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Name*</label>
+          <input id="name" name="name" type="text" class="form-control" [(ngModel)]="DepCostSetting.name" #name="ngModel" placeholder="Name"
+            required [disabled]="DepCostSetting.id"/>
+          <div class="error-message pl0">
+            <div *ngIf="name.errors && (name.dirty || name.touched)">
+              {{errorMsg.requirename}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Days*</label>
+          <input id="ndays" name="ndays" type="text" class="form-control" [(ngModel)]="DepCostSetting.numberOfDays" #ndays="ngModel" (keypress)="isNumber($event)" 
+            placeholder="Number Of Days" required/>
+          <div class="error-message pl0">
+            <div *ngIf="ndays.errors && (ndays.dirty || ndays.touched)">
+              {{errorMsg.requireDays}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Price*</label>
+          <input id="price" name="price" type="text" class="form-control" [(ngModel)]="DepCostSetting.price" #price="ngModel" (keypress)="isDecimal($event)" 
+            placeholder="Price" required/>
+          <div class="error-message pl0">
+            <div *ngIf="price.errors && (price.dirty || price.touched)">
+              {{errorMsg.requirePrice}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Description</label>
+          <input id="description" name="description" type="text" class="form-control" [(ngModel)]="DepCostSetting.description" #description="ngModel"
+            placeholder="Description"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!depCostSetttingform.form.valid" (click)="saveDEPCost()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,48 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-12 pt15">
+      <div class="component-body">
+        <h4 class="component-title pull-left mr-2">Project Contacts</h4>
+        <div class="search-area">
+          <div class="search middle pull-left">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input class="form-control" type="text" placeholder="Search Project Contact" [(ngModel)]="srch" (ngModelChange)="search(srch)">
+            </div>
+          </div>
+          <button class="btn btn-panel pull-right no-padding mr5 {{showBtnStatus}}" (click)="openModalAddJobContact(addJobContact,jobId)" *ngIf="!isCustomerLoggedIn">Add Project Contact</button>
+          <button class="btn btn-panel pull-right no-padding {{showBtnStatus}}" *ngIf="jobDetail?.status == 1 && !isCustomerLoggedIn" (click)="openModalManageGroup(addGroup,jobId)">Manage Group</button>
+          <div class="work-status permit-status pull-right" *ngIf="!isCustomerLoggedIn">
+            <label>
+              <span class="red"></span>Main Client
+            </label>
+            <label>
+              <span class="green"></span>Billing Client
+            </label>
+            <label>
+              <span class="grey"></span>Inactive
+            </label>
+          </div>
+        </div>
+        <div class="">
+          <table id="dt-Jobcontact" class="display"  style="width:100%"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #addGroup>
+  <div add-group [modalRef]="modalRef" [idJob]="idJob"  [isNew]="isNew"  [reload]="reload"></div>
+</ng-template>
+<ng-template #addJobContact>
+  <div add-job-contact [modalRef]="modalRef" [idJob]="idJob" [idJobContact]="idJobContact" [isNew]="isNew" [onSave]="onSave" [reload]="reload" [loadagain] ="loadagain"></div>
+</ng-template>
+
+<ng-template #editJobContact>
+  <div edit-job-contact [modalRef]="modalRef" [idJob]="idJob" [onSave]="onSave" [reload]="reload" [jobContact]="rec"></div>
+</ng-template>
+
+<ng-template #addtask>
+  <div add-task [addtask]="addtask" [modalRef]="modalRef" [idJob]="idJob" [isNew]="isNew" [frommodeule]="frommodeule" [reload]="reload"></div>
+</ng-template>
+

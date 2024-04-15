@@ -1,0 +1,587 @@
+<style>
+    .valid-drag {
+        background: #F0FFFF;
+    }
+
+    .document-upload {
+        cursor: pointer
+    }
+</style>
+<div class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">{{DocumentId == null ? 'Add': isClone ? 'Clone':'Edit'}} Project Document</h4>
+    </div>
+    <div class="modal-body pt15">
+        <div class="row doc-row">
+            <div class="col-sm-10">
+                <div class="doc-list">
+                    <label>Documents</label>
+                    <ng-select id="document" name="document" [items]="ListOfDocuments" bindLabel="itemName" bindValue="id" placeholder="Select Document"
+                        [(ngModel)]="selectedDocument" #document="ngModel" [clearable]="true" (change)="getDocumentFields(selectedDocument)"
+                        required [disabled]="DocumentId != null">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-sm-2 doc-code" *ngIf="selectedDocument != constantValues.PW517DOCUMENTID">
+                <label>{{ListOfFields !='' ? 'Code' : ''}}</label>
+                <div class="code">{{ListOfFields !='' ? ListOfFields[0].code : ''}}</div>
+            </div>
+            <div class="col-sm-2 doc-code" *ngIf="selectedDocument == constantValues.PW517DOCUMENTID">
+                <label>Code</label>
+                <div class="code">{{pwDoc.code}}</div>
+            </div>
+        </div>
+        <form #JobDocumentForm="ngForm" *ngIf="selectedDocument != constantValues.PW517DOCUMENTID">
+            <div class="form-group row mb0 doc-inputs" *ngIf="showFieldValues">
+                <ng-container *ngFor="let field of ListOfFields; let in=index">
+                    <div class="" [ngClass]="{'col-sm-4': field.controlType!= 0, 'col-sm-12': field.controlType == 0}" *ngIf="field.field.isDisplayInFrontend">
+                        <div class="" *ngIf="field.controlType == 1 && field.field.isDisplayInFrontend && field.showField">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <input  [pattern]="field.pattern" minlength="{{field.wordLength}}" [attr.length]="field.maxLength" type="text" [(ngModel)]="field.value" name="{{field.displayFieldName}}{{in}}"
+                                class="form-control" [id]="field.fieldName" #name="ngModel" required="{{field.isRequired}}" (keypress)="(field.wordLength == 9) ? isNumber($event): '' "
+                                [disabled]="field.disabled" (blur)="enableAmmendmentsforCOO(field.value , field.controlType)" />
+                            <div *ngIf="name.errors && (name.dirty || name.touched)" class="error-message pl0">
+                                <div [hidden]="!name.errors.required">
+                                    {{field.displayFieldName}} is required
+                                </div>
+                                <div [hidden]="!name.errors.minlength">
+                                    {{field.displayFieldName}} must be 9 Characters length
+                                </div>
+                                <div [hidden]="!name.errors.pattern">
+                                    Enter only Numbers
+                                </div>
+                            </div>
+                            <div *ngIf="AllSelectedDays?.length > 14" class="error-message pl0">
+                                You can select maximum 14 dates
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="field.controlType == 0 && field.field.isDisplayInFrontend && field.showField">
+                            <div class="col-sm-12">
+                              <label for="totalDays" class="text-uppercase" style="width:80px">{{field.displayFieldName}}</label>
+                              <span>$  {{field.value}}</span>
+                            </div>
+                          </div>
+                        <div class="" *ngIf="field.controlType == 2 && field.field.isDisplayInFrontend &&  field.showField">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <textarea [(ngModel)]="field.value" name="{{field.displayFieldName}}{{in}}" rows="5" class="form-control" #name="ngModel"
+                                required="{{field.isRequired}}" [disabled]="field.disabled" [id]="field.fieldName" [attr.maxLength]="field.length"></textarea>
+                            <div *ngIf="name.errors && (name.dirty || name.touched)" class="error-message pl0">
+                                <div [hidden]="!name.errors.required">
+                                    {{field.displayFieldName}} is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="" *ngIf="field.controlType == 14 && field.field.isDisplayInFrontend">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <textarea [(ngModel)]="field.value" name="{{field.displayFieldName}}{{in}}" rows="1" class="form-control" #name="ngModel"
+                                required="{{field.isRequired}}" [disabled]="field.disabled" [id]="field.fieldName" [attr.maxLength]="field.length"></textarea>
+                            <div *ngIf="name.errors && (name.dirty || name.touched)" class="error-message pl0">
+                                <div [hidden]="!name.errors.required">
+                                    {{field.displayFieldName}} is required
+                                </div>
+                            </div>
+                        </div>
+                        <!--  && !field.hideField -->
+                        <div class="" *ngIf="field.controlType == 3 && field.field.isDisplayInFrontend && field.showField">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <ng-select id="{{field.displayFieldName}}{{in}}" name="{{field.displayFieldName}}{{in}}" [(ngModel)]="field.value" [items]="field.dropDownValue"
+                                bindLabel="itemName" bindValue="id" placeholder="{{field.displayFieldName}}" (change)="getTheRelatedMutiDropDown(field ,field.value ,field.dropDownValue)"
+                                #name="ngModel" required="{{field.isRequired}}" [disabled] ="field.disabled">
+                            </ng-select>
+                            <div *ngIf="name.errors && (name.dirty || name.touched)" class="error-message pl0">
+                                <div [hidden]="!name.errors.required">
+                                    {{field.displayFieldName}} is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="" *ngIf="field.controlType == 6 && field.field.isDisplayInFrontend">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <angular2-multiselect [data]="field.dropDownValue" id="{{field.displayFieldName}}{{in}}" name="{{field.displayFieldName}}{{in}}"
+                                [(ngModel)]="field.value" (onSelect)="onItemSelect($event,field.value , field.displayFieldName)" (onDeSelect)="onItemSelect($event,field.value , field.displayFieldName)" (onSelectAll)="onItemSelect($event, field.value, field.displayFieldName)"
+                                (onDeSelectAll)="onItemSelect($event,field.value, field.displayFieldName)"
+                                 [settings]="field.dropdownSettingsFields" #name="ngModel" required="{{field.isRequired}}">
+                            </angular2-multiselect>
+                            <div *ngIf="name.errors && (name.dirty || name.touched)" class="error-message pl0">
+                                <div [hidden]="!name.errors.required">
+                                    {{field.displayFieldName}} is required 
+                                </div>
+                            </div>
+                            <div *ngIf="maxRecords && selectedDocument == 37" class="error-message pl0">
+                                Max. 10 {{field.displayFieldName}} Only
+                             </div>
+                            <div *ngIf="maxRecords && selectedDocument == 68 && field.displayFieldName == 'Dot Location(Section G)'" class="error-message pl0">
+                                Max. 5 {{field.displayFieldName}} Only
+                             </div>
+                        </div>
+                        <div class="checkbox form-check" *ngIf="field.controlType == 7 && field.field.isDisplayInFrontend && field.showField ">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="{{field.displayFieldName}}{{in}}" [(ngModel)]="field.value" #name="ngModel" required="{{field.isRequired}}"
+                                    (change)="callRequiredFunction(field ,field.value, field.controlType)" [disabled]="field.disabled"
+                                />{{field.displayFieldName}}{{field.isRequired ? '*':''}}
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                        <div class="" *ngIf="field.controlType == 8 && field.field.isDisplayInFrontend && field.showField">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <div datetime-picker class="inner-addon right-addon input-group">
+                                <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                <input id="{{field.displayFieldName}}{{in}}" name="{{field.displayFieldName}}{{in}}" class="form-control" [(ngModel)]="field.value"
+                                    placeholder="{{field.displayFieldName}}" #name="ngModel" required="{{field.isRequired}}" (ngModelChange)="onDEPDatesChange($event , field)"
+                                />
+                            </div>
+                            <div *ngIf="name.errors && (name.dirty || name.touched)" class="error-message pl0">
+                                <div [hidden]="!name.errors.required">
+                                    {{field.displayFieldName}} is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="document-upload" *ngIf="field.controlType == 9 && field.field.isDisplayInFrontend ">
+                            <div ngfDrop multiple="" selectable="1" [(validDrag)]="validComboDrag" [(files)]="files" accept=".pdf,.docx, .doc, .txt, .xls, .xlxs, .xlsx,.ppt, .pptx" [(lastInvalids)]="lastInvalids"
+                                [(dragFiles)]="dragFiles" class="well my-drop-zone mb0" [class.invalid-drag]="validComboDrag===false"
+                                [class.valid-drag]="validComboDrag" (filesChange)="filesChange(files)">
+                                Click to <span> browse</span> to upload your files.
+                            </div>
+                            <div class="rpo-file-upload" *ngFor="let document of documents">
+                                <span class="doc-name" style="vertical-align: top;" *ngIf="!document.id" tooltip="{{document.name}}" placement="top">{{document.name}}</span>
+                                <a target="" class="remove" tooltip="Delete" placement="right" (click)="deleteDocument(document)">
+                                    <i class="material-symbols-rounded">delete</i>
+                                </a>
+                            </div>
+                            <a *ngIf="field.attachmentPath  && field.attachmentPath !=''" href="{{field.attachmentPath}}" class="pointer doc-name link-blue" style="vertical-align: top;"
+                                target="_blank" tooltip="{{document.name}}" placement="top">{{field.value}}</a>
+                        </div>
+                        <div class="" *ngIf="field.controlType == 10 && field.field.isDisplayInFrontend ">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group">
+                                <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                <input id="{{field.displayFieldName}}{{in}}" name="{{field.displayFieldName}}{{in}}" class="form-control" [(ngModel)]="field.value"
+                                    placeholder="{{field.displayFieldName}}" #name="ngModel" [id]="field.fieldName" required="{{field.isRequired}}"
+                                />
+                            </div>
+                        </div>
+                        <div class="" *ngIf="field.controlType == 11 && field.field.isDisplayInFrontend ">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <div datetime-picker keepOpen="true" startDateForPWDoc="" pastOrFuture="2daysaftertoday" customFormat="true" class="inner-addon right-addon input-group">
+                                <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                <input id="{{field.displayFieldName}}{{in}}" name="{{field.displayFieldName}}{{in}}" class="form-control" [(ngModel)]="field.value"
+                                    placeholder="{{field.displayFieldName}}" #name="ngModel" required="{{field.isRequired}}" (ngModelChange)="setPWDates(field.value)"
+                                />
+                            </div>
+                            <div *ngIf="name.errors && (name.dirty || name.touched)" class="error-message pl0">
+                                <div [hidden]="!name.errors.required">
+                                    {{field.displayFieldName}} is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="" *ngIf="field.controlType == 12 && field.field.isDisplayInFrontend">
+                            <!-- <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label> -->
+                            <button class="btn btn-panel no-padding" [id]="field.fieldName" (click)="setSameTime(field.fieldName)" #name="ngModel" [(ngModel)]="field.value"
+                                name="{{field.displayFieldName}}{{in}}" ngDefaultControl> {{field.displayFieldName}} </button>
+                        </div>
+                        <div class="" *ngIf="field.controlType == 13 && field.field.isDisplayInFrontend">
+                            <label>{{field.displayFieldName}}{{field.isRequired ? '*':''}}</label>
+                            <input type="text" [(ngModel)]="field.value" name="{{field.displayFieldName}}{{in}}" class="form-control" [id]="field.fieldName"
+                                #name="ngModel" required="{{field.isRequired}}" (blur)="resetDates(field.value,field.fieldName)"
+                            />
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="sia-message" *ngIf="noSiaNumber">
+                    No Special Inspection Agency # Entered for this Applicant
+                </div>
+            </div>
+            <div class="modal-footer text-right pr0 pb0 pl0">
+                <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+                <button class="btn btn-blue" [disabled]="!JobDocumentForm.form.valid || maxRecords" (click)="saveDocument()">Save</button>
+            </div>
+        </form>
+        <!-- PW 517 DOCUMENT STARTS HERE  -->
+        <form #PW517JobDocumentForm="ngForm" *ngIf="selectedDocument == constantValues.PW517DOCUMENTID">
+            <ng-container>
+                <div class="form-group row mb0 doc-inputs">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Type*</label>
+                                <ng-select placeholder="Type" [items]='pw517FillingTypeList' bindLabel="itemName" bindValue="id" name="idJobDocumentType"
+                                    [(ngModel)]="pwDoc.idJobDocumentType" required #idJobDocumentType="ngModel" (change)="setAHVRefNoRequired()">
+                                </ng-select>
+                                <div class="error-message pl0">
+                                    <div *ngIf="idJobDocumentType.errors && (idJobDocumentType.dirty || idJobDocumentType.touched)">
+                                        {{errorMsg.requireJobApplicationTypeForDob}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+    
+                                <label>Application*</label>
+                                <ng-select placeholder="Application" [items]='pw517ApplicationList' bindLabel="itemName" bindValue="id" name="application"
+                                    [(ngModel)]="pwDoc.application" (change)="getPW517AppWorkPermit()" required #application="ngModel">
+                                </ng-select>
+                                <div class="error-message pl0">
+                                    <div *ngIf="application.errors && (application.dirty || application.touched)">
+                                        {{errorMsg.requireApplication}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Work Permits*</label>
+                                <ng-select placeholder="Work Permits" [items]='workPermitForPW517App' bindLabel="itemName" bindValue="id" name="workPermit"
+                                    [(ngModel)]="pwDoc.idWorkPermit" required #workPermit="ngModel">
+                                </ng-select>
+                                <div class="error-message pl0">
+                                    <div *ngIf="workPermit.errors && (workPermit.dirty || workPermit.touched)">
+                                        {{errorMsg.requireWorkPermit}}
+                                    </div>
+                                </div>
+                                <!-- <input type="text" name="for" [(ngModel)]="pwDoc.forDescription" class="form-control" placeholder="For" disabled="disabled" -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Applicant*</label>
+                                <ng-select placeholder="Applicant" [items]='pw517ApplicantList' bindLabel="itemName" bindValue="id" name="applicant" [(ngModel)]="pwDoc.applicant"
+                                    required #applicant="ngModel"></ng-select>
+                                <div class="error-message pl0">
+                                    <div *ngIf="applicant.errors && (applicant.dirty || applicant.touched)">
+                                        {{errorMsg.requireApplicant}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Main AHV Work Contact*</label>
+                                <ng-select placeholder="Main AHV Work Contact" [items]='pw517ApplicantList' bindLabel="itemName" bindValue="id" name="mainAHVWorkContact"
+                                    [(ngModel)]="pwDoc.mainAHVWorkContact" required #mainAHVWorkContact="ngModel">
+                                </ng-select>
+                                <div class="error-message pl0">
+                                    <div *ngIf="mainAHVWorkContact.errors && (mainAHVWorkContact.dirty || mainAHVWorkContact.touched)">
+                                        {{errorMsg.requireMainAHVWorkContact}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Reason for Variance*</label>
+                                <ng-select placeholder="Reason for Variance" [items]='pw517VarianceList' bindLabel="itemName" bindValue="id" name="reasonForVariance"
+                                    [(ngModel)]="pwDoc.reasonForVariance" required #reasonForVariance="ngModel"></ng-select>
+                                <div class="error-message pl0">
+                                    <div *ngIf="reasonForVariance.errors && (reasonForVariance.dirty || reasonForVariance.touched)">
+                                        {{errorMsg.requireReasonForVariance}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Project Site Contact</label>
+                                <ng-select placeholder="Project Site Contact" [items]='pw517ApplicantList' bindLabel="itemName" bindValue="id" name="idJobSiteContact"
+                                    [(ngModel)]="pwDoc.idJobSiteContact" #idJobSiteContact="ngModel"></ng-select>
+                            </div>
+                            <div class="col-sm-4">
+                                    <label>Issued Date</label>
+                                    <div datetime-picker customFormat="true" class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="#" name="issuedDate" [(ngModel)]="pwDoc.issuedDate" class="form-control" placeholder="Issued Date"
+                                             #issuedDate="ngModel" />
+                                    </div>
+                            </div>
+                            <div class="col-sm-4">
+                                    <label>Submitted Date</label>
+                                    <div datetime-picker customFormat="true" class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="#" name="submittedDate" [(ngModel)]="pwDoc.submittedDate" class="form-control" placeholder="Submitted Date"
+                                             #submittedDate="ngModel" />
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Work Description</label>
+                                <textarea rows="5" class="form-control" name="weekdayDescription" [(ngModel)]="pwDoc.weekdayDescription"></textarea>
+                                <div class="error-message pl0">
+                                    <div *ngIf="pwDoc?.weekdayDescription?.length >240">
+                                        No. of Characters in Work Description is more than 240
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-sm-4">
+                                <label>Weekend Work Description</label>
+                                <textarea rows="5" class="form-control" name="weekendDescription" [(ngModel)]="pwDoc.weekendDescription" [disabled]="pwDoc.isSameAsWeekday"></textarea>
+                                <label class="cust-checkbox checkbox">
+                                    <input type="checkbox" name="isSameAsWeekday" (change)="sameWeekdayDescription(pwDoc.isSameAsWeekday)" [(ngModel)]="pwDoc.isSameAsWeekday" value="">Same as Weekday
+                                </label>
+                            </div> -->
+                            <div class="col-sm-4">
+                                <div class="cust-checkbox checkbox form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="opg200" [(ngModel)]="pwDoc.opg200" value=""> Is a residence within 200 feet of the site?
+                                        <i class="input-helper"></i>
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="opgEnclosed" [(ngModel)]="pwDoc.opgEnclosed" value=""> Is all work being done within an enclosed building?
+                                        <i class="input-helper"></i>
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="opgDemo" [(ngModel)]="pwDoc.opgDemo" value=""> Does any of the work involve full or partial demolition?
+                                        <i class="input-helper"></i>
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="opgCrane" [(ngModel)]="pwDoc.opgCrane" value=""> Does any of the work involve crane use?
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Next Date Needed*</label>
+                                <div datetime-picker customFormat="true" class="inner-addon right-addon input-group">
+                                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                    <input id="#" name="nextDate" [(ngModel)]="pwDoc.nextDate" class="form-control" placeholder="Next Date Need"
+                                        required #nextDate="ngModel" />
+                                </div>
+                                <div class="error-message pl0">
+                                    <div *ngIf="nextDate.errors && (nextDate.dirty || nextDate.touched)">
+                                        {{errorMsg.nextDate}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Start Date*</label>
+                                <div datetime-picker customFormat="true" class="inner-addon right-addon input-group">
+                                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                    <input id="#" name="startDate" [(ngModel)]="pwDoc.startDate" class="form-control" placeholder="Start Date" (ngModelChange)="setCustomCalenderForPW517()"
+                                        required #startDate="ngModel" />
+                                    <div class="error-message pl0">
+                                        <div *ngIf="startDate.errors && (startDate.dirty || startDate.touched)">
+                                            {{errorMsg.requireStartDate}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Number of Days*</label>
+                                <input type="text" name="numberOfDays" [(ngModel)]="pwDoc.numberOfDays" class="form-control" placeholder="Number of Days"
+                                    readonly='readonly' required #numberOfDays="ngModel" />
+                                <div class="error-message pl0">
+                                    <div *ngIf="numberOfDays.errors && (numberOfDays.dirty || numberOfDays.touched)">
+                                        {{errorMsg.requireNumberOfDays}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" *ngIf="validateDate(pwDoc.startDate)">
+                                <label>Select Dates</label>
+                                <table class="table " id="calenderTable">
+                                    <thead>
+                                        <tr>
+                                            <th *ngFor="let week of weekShowArray">{{week}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody [innerHTML]="onCalender" id="pwCustomCal">
+    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="four-column">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Monday</label>
+                                    <input type="text" class="form-control" name="mondayDates" [(ngModel)]="pwDoc.mondayDates" readonly='readonly' />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Start Time (Monday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="mondayStartTime" [(ngModel)]="pwDoc.mondayStartTime" (blur)="pwDoc.mondayStartTime =$event.target.value"
+                                            placeholder="Monday Start Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>End Time (Monday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="mondayEndTime" [(ngModel)]="pwDoc.mondayEndTime" (blur)="pwDoc.mondayEndTime =$event.target.value"
+                                            placeholder="Monday End Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 custom-form-btn">
+                                    <button class="btn btn-panel no-padding" (click)="setSameTime('WeekdaySame')">Weekday Same</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Tuesday</label>
+                                    <input type="text" name="tuesdayDates" [(ngModel)]="pwDoc.tuesdayDates" class="form-control" readonly='readonly' />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Start Time (Tuesday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="tuesdayStartTime" [(ngModel)]="pwDoc.tuesdayStartTime" (blur)="pwDoc.tuesdayStartTime =$event.target.value"
+                                            placeholder="Tuesday Start Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>End Time (Tuesday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="tuesdayEndTime" [(ngModel)]="pwDoc.tuesdayEndTime" (blur)="pwDoc.tuesdayEndTime =$event.target.value"
+                                            placeholder="Tuesday End Time" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Wednesday</label>
+                                    <input type="text" class="form-control" name="wednesdayDates" [(ngModel)]="pwDoc.wednesdayDates" readonly='readonly' />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Start Time (Wednesday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="wednesdayStartTime" [(ngModel)]="pwDoc.wednesdayStartTime" (blur)="pwDoc.wednesdayStartTime =$event.target.value"
+                                            placeholder="Wednesday Start Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>End Time (Wednesday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="wednesdayEndTime" [(ngModel)]="pwDoc.wednesdayEndTime" (blur)="pwDoc.wednesdayEndTime =$event.target.value"
+                                            placeholder="Wednesday End Time" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Thursday</label>
+                                    <input type="text" name="thursdayDates" [(ngModel)]="pwDoc.thursdayDates" class="form-control" readonly='readonly' />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Start Time (Thursday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="thursdayStartTime" [(ngModel)]="pwDoc.thursdayStartTime" (blur)="pwDoc.thursdayStartTime =$event.target.value"
+                                            placeholder="Thursday Start Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>End Time (Thursday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="thursdayEndTime" [(ngModel)]="pwDoc.thursdayEndTime" (blur)="pwDoc.thursdayEndTime =$event.target.value"
+                                            placeholder="Thursday End Time" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Friday</label>
+                                    <input type="text" name="fridayDates" [(ngModel)]="pwDoc.fridayDates" class="form-control" readonly='readonly' />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Start Time (Friday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="fridayStartTime" [(ngModel)]="pwDoc.fridayStartTime" (blur)="pwDoc.fridayStartTime =$event.target.value"
+                                            placeholder="Friday Start Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>End Time (Friday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="fridayEndTime" [(ngModel)]="pwDoc.fridayEndTime" (blur)="pwDoc.fridayEndTime =$event.target.value"
+                                            placeholder="Friday End Time" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Saturday</label>
+                                    <input type="text" class="form-control" name="saturdayDates" [(ngModel)]="pwDoc.saturdayDates" readonly='readonly' />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Start Time (Saturday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="saturdayStartTime" [(ngModel)]="pwDoc.saturdayStartTime" (blur)="pwDoc.saturdayStartTime =$event.target.value"
+                                            placeholder="Saturday Start Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>End Time (Saturday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="saturdayEndTime" [(ngModel)]="pwDoc.saturdayEndTime" (blur)="pwDoc.saturdayEndTime =$event.target.value"
+                                            placeholder="Saturday End Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 custom-form-btn">
+                                    <button class="btn btn-panel no-padding" (click)="setSameTime('WeekendSame')">WeekEnd Same</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Sunday</label>
+                                    <input type="text" name="sundayDates" [(ngModel)]="pwDoc.sundayDates" class="form-control" readonly='readonly' />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Start Time (Sunday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="sundayStartTime" [(ngModel)]="pwDoc.sundayStartTime" (blur)="pwDoc.sundayStartTime =$event.target.value"
+                                            placeholder="Sunday Start Time" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>End Time (Sunday)</label>
+                                    <div datetime-picker isTime='true' isTimeWithMeridian='true' class="inner-addon right-addon input-group timeCustom">
+                                        <i class="icon fa fa-clock-o clickable datepickerbutton"></i>
+                                        <input class="form-control" name="sundayEndTime" [(ngModel)]="pwDoc.sundayEndTime" (blur)="pwDoc.sundayEndTime =$event.target.value"
+                                            placeholder="Sunday End Time" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>AHV Reference# {{requireAHVRefForPW517 ? '*' : '' }}</label>
+                                    <input type="text" name="aHVReferenceNumber" [(ngModel)]="pwDoc.ahvReferenceNumber" class="form-control" [required]="requireAHVRefForPW517"
+                                        #aHVReferenceNumber="ngModel" />
+                                    <div class="error-message pl0">
+                                        <div *ngIf="aHVReferenceNumber.errors && (aHVReferenceNumber.dirty || aHVReferenceNumber.touched)">
+                                            {{errorMsg.requireAHVReferenceNumber}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Create Support Document</label>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" name="createSupportDocument" [(ngModel)]="pwDoc.createSupportDocument" class="form-check-input" />
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right pr0 pb0 pl0">
+                        <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+                        <button class="btn btn-blue" [disabled]="!PW517JobDocumentForm.form.valid" (click)="savePW517Document()">Save</button>
+                    </div>
+                </div>
+            </ng-container>
+        </form>
+    
+    </div>
+</div>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

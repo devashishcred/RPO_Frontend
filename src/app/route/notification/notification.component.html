@@ -1,0 +1,20 @@
+<div class="rpo-rfp rpo-component">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left mr-2">View Notification</h2>
+            <div class="pull-left search middle">
+                <div class="inner-addon left-addon">
+                    <i class="icon fa fa-search"></i>
+                    <input type="text" class="form-control seaech" placeholder="Search Notification" [(ngModel)]="srch" (ngModelChange)="searchNotification()" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="component-body">
+        <table id="dt-notification-list" class="display notification-table"  style="width:100%"></table>
+        <!-- <table id="dt-notification-list" data-page-length='25' class="display notification-table"  style="width:100%"></table> -->
+    </div>
+</div>
+<ng-template #viewtask>
+    <div notification-task [modalRef]="modalRef" [idTask]="idTask" [idJob] = "idJob" [redirectionURL] = "redirectionURL"></div>
+</ng-template>

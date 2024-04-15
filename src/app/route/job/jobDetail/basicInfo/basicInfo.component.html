@@ -1,0 +1,401 @@
+<ul class="list-inline details-head" *ngIf="jobRecord">
+  <li>
+    <label>START</label>
+    <p>{{jobRecord.startDate | date:'MM/dd/yyyy'}}</p>
+  </li>
+  <li class="more-width dropdown" dropdown>
+    <div *ngIf="jobRecord.rfpAddress" class="pointer inner-dropdown" dropdownToggle>
+      <label class="address">ADDRESS</label>
+      <p>{{jobRecord.rfpAddress.houseNumber}} {{jobRecord.rfpAddress.street}}, {{jobRecord.borough.description}}
+        {{jobRecord.rfpAddress.zipCode}}</p>
+    </div>
+    <div *dropdownMenu class="dropdown-menu quickinfo address" (click)="dropdownPropagation($event)">
+      <div class="column-data clearfix">
+        <p *ngIf="jobRecord.rfpAddress.borough">
+          <label>BOROUGH</label>
+          <span>{{jobRecord.rfpAddress.borough.description}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.houseNumber">
+          <label>HOUSE NUMBER</label>
+          <span>{{jobRecord.rfpAddress.houseNumber}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.street">
+          <label>STREET</label>
+          <span>{{jobRecord.rfpAddress.street}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.zipCode">
+          <label>ZIP</label>
+          <span>{{jobRecord.rfpAddress.zipCode}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.block">
+          <label>BLOCK</label>
+          <span>{{jobRecord.rfpAddress.block}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.lot">
+          <label>LOT</label>
+          <span>{{jobRecord.rfpAddress.lot}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.binNumber">
+          <label>BIN#</label>
+          <span>{{jobRecord.rfpAddress.binNumber}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.comunityBoardNumber">
+          <label>COMMUNITY BOARD#</label>
+          <span>{{jobRecord.rfpAddress.comunityBoardNumber}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.zoneDistrict">
+          <label>ZONE DISTRICT(s)</label>
+          <span>{{jobRecord.rfpAddress.zoneDistrict}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.overlay">
+          <label>OVERLAY(S)</label>
+          <span>{{jobRecord.rfpAddress.overlay}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.specialDistrict">
+          <label>SPECIAL DISTRICT(S)</label>
+          <span>{{jobRecord.rfpAddress.specialDistrict}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.map">
+          <label>MAP</label>
+          <span>{{jobRecord.rfpAddress.map}}</span>
+        </p>
+
+        <p *ngIf="jobRecord.rfpAddress.nonProfit">
+          <label>NON-PROFIT</label>
+          <span>{{jobRecord.rfpAddress.nonProfit ? "Yes" : "No"}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.addressType">
+          <label>ADDRESS TYPE</label>
+          <span>{{jobRecord.rfpAddress.addressType.name}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.company">
+          <label>COMPANY</label>
+          <span>{{jobRecord.rfpAddress.company.name}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.ownerContact">
+          <label>OWNER</label>
+          <span>
+            {{jobRecord.rfpAddress.prefix ? jobRecord.rfpAddress.ownerContact.prefix.name: ""}}
+            {{jobRecord.rfpAddress.ownerContact.firstName}}
+            {{jobRecord.rfpAddress.ownerContact.lastName}}
+          </span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.ownerType">
+          <label>OWNER TYPE</label>
+          <span>
+            {{jobRecord.rfpAddress.ownerType.name}}
+          </span>
+        </p>
+        
+
+        <p *ngIf="jobRecord.rfpAddress.secondOfficerCompany">
+          <label>2nd OFFICER COMPANY</label>  
+          <span>{{jobRecord.rfpAddress.secondOfficerCompany.name}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.secondOfficer">
+          <label>2nd OFFICER CONTACT</label>
+          <span>{{jobRecord.rfpAddress.secondOfficer.firstName ? jobRecord.rfpAddress.secondOfficer.firstName : '' }} {{jobRecord.rfpAddress.secondOfficer.lastName ?jobRecord.rfpAddress.secondOfficer.lastName : ''}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.occupancyClassification">
+          <label>OCCUPANCY CLASSIFICATION{{jobRecord.rfpAddress.isOcupancyClassification20082014 ? "(2008/2014)" : ""}}</label>
+          <span>{{jobRecord.rfpAddress.occupancyClassification.description}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.constructionClassification">
+          <label>CONSTRUCTION CLASSIFICATION{{jobRecord.rfpAddress.isConstructionClassification20082014 ? "(2008/2014)"
+            : ""}}</label>
+          <span>{{jobRecord.rfpAddress.constructionClassification.description}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.multipleDwellingClassification">
+          <label>MULTIPLE DWELLING CLASSIFICATION</label>
+          <span>{{jobRecord.rfpAddress.multipleDwellingClassification.description}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.primaryStructuralSystem">
+          <label>PRIMARY STRUCTURAL SYSTEM</label>
+          <span>{{jobRecord.rfpAddress.primaryStructuralSystem.description}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.structureOccupancyCategory">
+          <label>STRUCTURE OCCUPANCY CATEGORY</label>
+          <span>{{jobRecord.rfpAddress.structureOccupancyCategory.description}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.seismicDesignCategory">
+          <label>SEISMIC DESIGN CATEGORY</label>
+          <span>{{jobRecord.rfpAddress.seismicDesignCategory.description}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.stories">
+          <label>STORIES</label>
+          <span>{{jobRecord.rfpAddress.stories}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.height">
+          <label>HEIGHT (
+            <i>INCH</i>)</label>
+          <span>{{jobRecord.rfpAddress.height}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.feet">
+          <label>HEIGHT (
+            <i>FEET</i>)</label>
+          <span>{{jobRecord.rfpAddress.feet}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.dwellingUnits">
+          <label>DWELLING UNITS</label>
+          <span>{{jobRecord.rfpAddress.dwellingUnits}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.grossArea">
+          <label>GROSS AREA</label>
+          <span>{{jobRecord.rfpAddress.grossArea}}</span>
+        </p>
+        <p *ngIf="jobRecord.rfpAddress.streetLegalWidth">
+          <label>STREET LEGAL WIDTH</label>
+          <span>{{jobRecord.rfpAddress.streetLegalWidth}}</span>
+        </p>
+        <p>
+          <label>LANDMARK</label>
+          <span>{{jobRecord.rfpAddress.isLandmark ? "Yes" : "No"}}</span>
+        </p>
+        <p>
+          <label>ENVIRONMENTAL RESTRICTIONS</label>
+          <!-- <label>LITTLE 'E'</label> -->
+          <span>{{jobRecord.rfpAddress.isLittleE ? "Yes" : "No"}}</span>
+        </p>
+        <p>
+          <label>TIDAL WETLANDS MAP</label>
+          <span>{{jobRecord.rfpAddress.tidalWetlandsMapCheck ? "Yes" : "No"}}</span>
+        </p>
+        <p>
+          <label>COASTAL EROSION HAZARD AREA MAP</label>
+          <span>{{jobRecord.rfpAddress.coastalErosionHazardAreaMapCheck ? "Yes" : "No"}}</span>
+        </p>
+        <p>
+          <label>SPECIAL FLOOD HAZARD AREA</label>
+          <span>{{jobRecord.rfpAddress.specialFloodHazardAreaCheck ? "Yes" : "No"}}</span>
+        </p>
+        <p>
+          <label>FRESHWATER WETLANDS MAP</label>
+          <span>{{jobRecord.rfpAddress.freshwaterWetlandsMapCheck ? "Yes" : "No"}}</span>
+        </p>
+        <p>
+          <label>BSA DECISION</label>
+          <span>{{jobRecord.rfpAddress.isBSADecision ? "Yes" : "No"}}</span>
+        </p>
+      </div>
+      <div class="text-right">
+        <button class="btn btn-panel btn-panel-bordered mt0" (click)="closeDropdown()">Close</button>
+      </div>
+    </div>
+  </li>
+  <li>
+    <label>APT#</label>
+    <p>{{jobRecord.apartment}}</p>
+  </li>
+  <li>
+    <label>FLOOR#</label>
+    <p>{{jobRecord.floorNumber}}</p>
+  </li>
+  <li class="more-width">
+    <label>SPECIAL PLACE NAME</label>
+    <p>{{jobRecord.specialPlace}}</p>
+  </li>
+  <li class="more-width dropdown" dropdown>
+    <label *ngIf="redIcon && jobRecord.contact" class="red-icn" tooltip="License# is expired">
+      <svg version="1.2" preserveAspectRatio="none" viewBox="0 0 24 24" class="ng-element" data-id="16b70ceb2463d58a557eacd94afaf0aa"
+        style="fill: rgb(245, 44, 17); width: 18px; height: 18px;">
+        <g>
+          <path xmlns:default="http://www.w3.org/2000/svg" d="M18 2h-8L4.02 8 4 20c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-5 15h-2v-2h2v2zm0-4h-2V8h2v5z"
+            style="fill: rgb(245, 44, 17);"></path>
+        </g>
+      </svg>
+    </label>
+    <div class="pointer inner-dropdown" dropdownToggle *ngIf="jobRecord.contact">
+      <label class="name"> 
+        
+          {{jobRecord.contact.idPrefix!= null ? jobRecord.contact.prefix?.name : ''}}
+        
+        {{jobRecord.contact.firstName}} {{jobRecord.contact.lastName}}</label>
+      <p *ngIf="jobRecord.company">{{jobRecord.company.name}}</p>
+    </div>
+    <div  *dropdownMenu class="dropdown-menu quickinfo" [ngClass]="{'hide': !jobRecord.company}">
+      <div (click)="dropdownPropagation($event)" *ngIf="jobRecord.company">
+        <h2 *ngIf="jobRecord.company?.name">{{jobRecord.company.name}}</h2>
+  
+        <p class="mb10" *ngIf="jobRecord.company?.addresses && jobRecord.company.addresses?.length > 0">
+          <label>PHONE:</label>
+          <span>{{jobRecord.company.addresses[0].phone}}</span>
+        </p>
+  
+        <div *ngIf="jobRecord.company?.companyTypes && jobRecord.company.companyTypes?.length > 0">
+          <label>COMPANY TYPE:</label>
+          <div *ngFor="let item of jobRecord.company.companyTypes; index as j">
+            <p>
+              <span>{{item.itemName}}</span>
+            </p>
+          </div>
+        </div>
+  
+        <div *ngIf="companyType == 'GC'">
+          <p class="mb10">
+            <label>TRACKING# EXPIRE:</label>
+            <span [ngClass]="{'red-licence': redIcon}">{{jobRecord.company.trackingExpiry}}</span>
+          </p>
+          <p>
+            <label>TRACKING#:</label>
+            <span>{{jobRecord.company.trackingNumber}}</span>
+          </p>
+          <p>
+            <label>IBM#:</label>
+            <span>{{jobRecord.company.ibmNumber}}</span>
+          </p>
+          <p>
+            <label>TAX ID:</label>
+            <span>{{jobRecord.company.taxIdNumber}}</span>
+          </p>
+          <p>
+            <label>HIC#:</label>
+            <span>{{jobRecord.company.hicNumber}}</span>
+          </p>
+        </div>
+  
+        <div *ngIf="companyType == 'SI'">
+          <p class="mb10">
+            <label>specialInspectionAgency# EXPIRE:</label>
+            <span [ngClass]="{'red-licence': redIcon}">{{jobRecord.company.specialInspectionAgencyExpiry}}</span>
+          </p>
+          <p>
+            <label>specialInspectionAgency#:</label>
+            <span>{{jobRecord.company.specialInspectionAgencyNumber}}</span>
+          </p>
+        </div>
+        <div *ngIf="companyType == 'CTL'">
+          <p class="mb10">
+            <label>Concrete Test Lab# EXPIRE:</label>
+            <span [ngClass]="{'red-licence': redIcon}">{{jobRecord.company.ctExpirationDate}}</span>
+          </p>
+          <p>
+            <label>License#:</label>
+            <span>{{jobRecord.company.ctLicenseNumber}}</span>
+          </p>
+        </div>
+        <h2 *ngIf="jobRecord.company?.insuranceWorkCompensation || 
+                  jobRecord.company?.insuranceDisability ||
+                  jobRecord.company?.insuranceGeneralLiability">
+         DOB INSURANCE/EXPIRATION DATES
+        </h2>
+  
+        <div *ngIf="jobRecord.company?.insuranceWorkCompensation">
+          <p>
+            <label>WORK COMPENSATION:</label>
+            <span [ngStyle]="{'color': insuranceWorkCompenstaionExpired ? 'red' : 'black' }">{{jobRecord.company.insuranceWorkCompensation}}</span>
+          </p>
+        </div>
+  
+        <div *ngIf="jobRecord?.company && jobRecord.company?.insuranceDisability">
+          <p>
+            <label>DISABILITY:</label>
+            <span [ngStyle]="{'color': insuranceDisabilityExpired ? 'red' : 'black' }">{{jobRecord.company.insuranceDisability}}</span>
+          </p>
+        </div>
+        <div *ngIf="jobRecord.company?.insuranceGeneralLiability">
+          <p>
+            <label>GENERAL LIABILITY:</label>
+            <span [ngStyle]="{'color': insuranceGeneralLiabilityExpired ? 'red' : 'black' }">{{jobRecord.company.insuranceGeneralLiability}}</span>
+          </p>
+        </div>
+  
+        <h2 *ngIf="jobRecord.company?.dotInsuranceWorkCompensation || 
+                  jobRecord.company?.dotInsuranceGeneralLiability ||
+                  jobRecord.company.insuranceObstructionBond">
+         DOT INSURANCE/EXPIRATION DATES
+        </h2>
+        <div *ngIf="jobRecord.company?.dotInsuranceWorkCompensation">
+          <p>
+            <label>WORK COMPENSATION:</label>
+            <span [ngStyle]="{'color': dotInsuranceWorkCompensationExpired ? 'red' : 'black' }">{{jobRecord.company.dotInsuranceWorkCompensation}}</span>
+          </p>
+        </div>
+        <div *ngIf="jobRecord.company?.dotInsuranceGeneralLiability">
+          <p>
+            <label>GENERAL LIABILITY:</label>
+            <span [ngStyle]="{'color': dotInsuranceGeneralLiabilityExpired ? 'red' : 'black' }">{{jobRecord.company.dotInsuranceGeneralLiability}}</span>
+          </p>
+        </div>
+        <div *ngIf="jobRecord.company?.insuranceObstructionBond">
+          <p>
+            <label>STREET OBSTRUCTION BOND:</label>
+            <span [ngStyle]="{'color': insuranceObstructionBondExpired ? 'red' : 'black' }">{{jobRecord.company.insuranceObstructionBond}}</span>
+          </p>
+        </div>
+        <div *ngIf="jobRecord?.company">
+          <button class="btn btn-panel btn-panel-bordered" (click)="closeDropdown()">Close</button>
+        </div>
+      </div>
+    </div>
+  </li>
+  <li class="more-width dropdown" dropdown>
+    <div *ngIf="jobRecord.rfpAddress" class="pointer inner-dropdown" dropdownToggle>
+      <label class="address">PROJECT TEAM</label>
+    </div>
+    
+     <ng-container *ngIf="teamInitials && teamInitials.length > 0">
+        <ng-container *ngFor="let doBT of teamInitials; let e = index">
+          <div size="25" class="avtar-letters" [tooltip] = "doBT.fullName" >{{doBT.itemName}}</div>
+        </ng-container>
+    </ng-container> 
+    <div *dropdownMenu class="dropdown-menu quickinfo dropdown-menu-right" (click)="dropdownPropagation($event)">
+      <div class="column-data mb10 clearfix" *ngIf="pm">
+        <label>DOB Project Manager</label>
+        <div>
+          <span>{{pm}}</span>
+        </div>
+      </div>
+      <div class="column-data mb10 clearfix">
+        <div *ngIf="jobRecord.dobProjectTeam?.length > 0">
+          <label>DOB Project Team</label>
+          <div *ngFor="let doBT of jobRecord.dobProjectTeam; let e = index">
+            <span>
+              {{doBT.itemName}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="column-data mb10 clearfix">
+        <div *ngIf="jobRecord.dotProjectTeam?.length > 0">
+          <label>DOT Project Team</label>
+          <div *ngFor="let dotTeam of jobRecord.dotProjectTeam; let e = index">
+            <span>
+              {{dotTeam.itemName}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="column-data mb10 clearfix">
+        <div *ngIf="jobRecord.violationProjectTeam?.length > 0">
+          <label>Violation Project Team</label>
+          <div *ngFor="let violationTeam of jobRecord.violationProjectTeam; let e = index">
+            <span>
+              {{violationTeam.itemName}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="column-data mb10 clearfix">
+        <div *ngIf="jobRecord.depProjectTeam?.length > 0">
+          <label>DEP Project Team</label>
+          <div *ngFor="let depTeam of jobRecord.depProjectTeam; let e = index">
+            <span>
+              {{depTeam.itemName}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="text-right">
+        <button class="btn btn-panel btn-panel-bordered mt0" (click)="closeDropdown()">Close</button>
+      </div>
+    </div>
+  </li>
+  <li class="add-note-job {{showBtnStatus}}" [ngClass]="showAddTimeNote">
+    <a href="javascript:void(0)" (click)="openModalAddTimeNotes(addtimenotes)">
+      <img src="../../../../assets/images/time-icn.png" alt="time icons" />
+    </a>
+    <ng-template #addtimenotes>
+      <div add-time-notes [idJob]="idJob" [modalRef]="modalRef" [reload]="reload"></div>
+    </ng-template>
+  </li>
+</ul>

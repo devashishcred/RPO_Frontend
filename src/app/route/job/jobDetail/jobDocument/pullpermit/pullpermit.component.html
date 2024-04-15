@@ -1,0 +1,142 @@
+<div class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn"  cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left" *ngIf="documentCode != 'DOB'" >Pull Permit Information</h4>
+        <h4 class="modal-title pull-left" *ngIf="documentCode == 'DOB'" >DOB Permit Information</h4>
+    </div>
+    <div class="modal-body">
+        <table class="table mb0 comp-list" *ngIf="documentCode != 'VARPMT'">
+            <thead>
+                <tr>
+                    <th>NUMBER-DOC-TYPE</th>
+                    <th>HISTORY</th>
+                    <th>SEQ NO</th>
+                    <th>FIRST ISSUE DATE</th>
+                    <th>LAST ISSUE DATE</th>
+                    <th>STATUS</th>
+                    <th>APPLICANT</th>
+                    <th>DOWNLOAD PDF</th>
+                    <th>UPDATE</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="pullpermitData?.length == 0">
+                <tr>
+                    <td colspan="9" style="text-align: center;">No Record Found</td>
+                </tr>
+                
+            </tbody>
+            <tbody *ngIf="pullpermitData?.length > 0">
+                <tr *ngFor="let permit of pullpermitData">
+                    <td>
+                        {{permit.numberDocType}}
+                    </td>
+                    <td>
+                        {{toTitleCase(permit.history)}}
+                    </td>
+                    <td>
+                        {{permit.seqNo}}
+                    </td>
+                    <td>
+                        {{permit.firstIssueDate}}
+                    </td>
+                    <td>
+                        {{permit.lastIssueDate}}
+                    </td>
+                    <td>
+                        {{toTitleCase(permit.status)}}
+                    </td>
+                    <td>
+                        {{permit.applicant}}
+                    </td>
+                    <td *ngIf="permit.downloadLink!= null">
+                    <a href="javascript:void(0)" class="link-blue" (click)="downloadFile(permit.downloadLink)"> 
+                        PDF LINK</a>
+                    
+                    </td>
+                    <td *ngIf="permit.downloadLink == null">
+                        -
+                        
+                        </td>
+                    <td *ngIf="permit.seqNo!=''">
+                    <a href="javascript:void(0)" (click)="updateData(permit)" class="link-blue"> 
+                        UPDATE </a>
+                    
+                    </td>
+                    <td *ngIf="permit.seqNo == ''">
+                    -
+                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table mb0 comp-list" *ngIf="documentCode == 'VARPMT'">
+            <thead>
+                <tr>
+                    <th>REFERENCE#</th>
+                    <th>ENTRY DATE</th>
+                    <th>STATUS</th>
+                    <th>START DATE</th>
+                    <th>END DATE</th>
+                    <th>PERMISSIBLE DAYS FOR ERENEWAL</th>
+                    <th>APPLICANT</th>
+                    <th>INTIAL / RENEWAL</th>
+                    <th>DOWNLOAD PDF</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="pullpermitData?.length == 0">
+                No Record Found
+            </tbody>
+            <tbody *ngIf="pullpermitData?.length > 0">
+                <tr *ngFor="let permit of pullpermitData">
+                    <td>
+                        {{permit.referenceNumber}}
+                    </td>
+                    <td>
+                        {{permit.entryDate}}
+                    </td>
+                    <td>
+                        {{toTitleCase(permit?.status)}}
+                    </td>
+                    <td>
+                        {{permit.startDate}}
+                    </td>
+                    <td>
+                        {{permit.endDate}}
+                    </td>
+                    <td>
+                        {{permit.permissibleDaysforeRenewal}}
+                    </td>
+                    <td>
+                        {{permit.applicant}}
+                    </td>
+                    <td>
+                        {{toTitleCase(permit?.type)}}
+                    </td>
+                    <td *ngIf="permit.pdfLink!= ''">
+                        <a href="javascript:void(0)" class="link-blue" (click)="downloadFile(permit.pdfLink)"> 
+                            PDF LINK</a>
+                        
+                        </td>
+                        <td *ngIf="permit.pdfLink == ''">
+                            -
+                            
+                            </td>
+                </tr>
+            </tbody>            
+        </table>
+    </div>    
+    <div class="modal-footer text-right">
+        <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      </div>
+</div>
+<ng-template #viewAddressList>
+    <div view-address-list [modalRefAddress]="modalRefAddress" [permitdata]="permitdata"  (updateFormFieldsFromGetInfo)="updateFormFieldsFromGetInfo($event)"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

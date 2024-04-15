@@ -1,0 +1,30 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+
+      <h2 class="component-title pull-left mr-2">Contact License Reports</h2>
+      <a href="javascript:void(0)" tooltip="Reset" class="pull-left mt-12 material-icon" (click)="clearSort()">
+        <i class="material-symbols-rounded">cached</i>
+      </a> 
+      <a href="javascript:void(0)" tooltip="Advanced Search" class="pull-left mt-12 material-icon" (click)="openModalAdvanceSearch(licenseReportAdvanceSearch)">
+        <img src="./assets/images/filter_icon.svg" width="24px">
+      </a>
+      <div class="search middle pull-right">
+        <div class="inner-addon right-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search Contact License Expiry" [(ngModel)]="srch" (ngModelChange)="searchJob(srch)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-contactLicence-report" class="display" style="width:100%"></table>
+  </div>
+</div>
+
+<ng-template #licenseReportAdvanceSearch>
+  <div contact-license-advance-search [modalRef]="modalRef" (reloadAdvanceSearch)="reloadAdvanceSearch($event)"
+    [filledFilter]="filter"></div>
+</ng-template>

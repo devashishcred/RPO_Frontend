@@ -1,0 +1,31 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+
+      <h2 class="component-title pull-left mr-2">Contractor Insurance Reports</h2>
+      <!-- <h2 class="component-title pull-left mr-2">Contractor Insurances Expiry Report</h2> -->
+      <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search Contractor Insurances Expiry" [(ngModel)]="srch" (ngModelChange)="searchJob(srch)"
+          />
+        </div>
+      </div>
+      <a href="javascript:void(0)" tooltip="Reset" class="pull-left mt-12 material-icon" (click)="clearSort()">
+        <i class="material-symbols-rounded">cached</i>
+    </a>
+      <a href="javascript:void(0)" tooltip="Advanced Search" class="pull-left mt-12 material-icon" (click)="openModalAdvanceSearch(contractorlicenseadvancesearch)">
+        <img src="./assets/images/filter_icon.svg" width="24px">
+      </a>
+    </div>
+  </div>
+
+  <div class="component-body overflow-hidden">
+    <table id="dt-gcInsurance-report" class="display" style="width:100%"></table>
+  </div>
+</div>
+
+<ng-template #contractorlicenseadvancesearch>
+  <div contractor-license-advance-search [modalRef]="modalRef" (reloadAdvanceSearch)="reloadAdvanceSearch($event)"
+    [filledFilter]="filter"></div>
+</ng-template>

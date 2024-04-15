@@ -1,0 +1,306 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #taskForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{isNew ? 'Create Task' : 'Edit Task'}} {{isNew ? '' : '( Task # ' +
+                task.id + ')' }}</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <label for="task">Task type*</label>
+                    <ng-select name="idTaskType" [items]="taskType" bindLabel="name" bindValue="id"
+                        placeholder="Task type" [(ngModel)]="task.idTaskType" (change)="taskTypechange($event)"
+                        #idTaskType="ngModel" (click)="clicked()" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idTaskType.errors && (idTaskType.dirty || idTaskType.touched)">
+                            {{errorMsg.requiredTaskType}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="to">Assigned to*</label>
+                    <ng-select name="idAssignedTo" [items]="employees" bindLabel="employeeName" bindValue="id"
+                        placeholder="Assigned to" [(ngModel)]="task.idAssignedTo" #idAssignedTo="ngModel" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idAssignedTo.errors && (idAssignedTo.dirty || idAssignedTo.touched)">
+                            {{errorMsg.requiredTo}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="showDateTime">
+                    <label for="by">Appointment Date Time*</label>
+                    <div datetime-picker isDateTime='true' class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                        <input id="dueDate" type="text" name="dueDate" class="form-control"
+                            [(ngModel)]="task.completeBy" #dueDate="ngModel" required />
+                    </div>
+                    <div class="error-message">
+                        <div *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">
+                            {{errorMsg.requiredAppointment}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="!showDateTime">
+                    <label for="by">Due Date*</label>
+                    <div datetime-picker class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                        <input id="dueDate" type="text" name="dueDate" class="form-control"
+                            [(ngModel)]="task.completeBy" #dueDate="ngModel" required />
+                    </div>
+                    <div class="error-message pl0">
+                        <div *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">
+                            {{errorMsg.requiredComplete}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-sm-4" *ngIf="showDuration">
+                    <label>Duration</label>
+                    <div datetime-picker isTime='true' class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                        <input id="taskDuration" type="text" name="taskDuration" class="form-control"
+                            [(ngModel)]="task.taskDuration" #taskDuration="ngModel" />
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="showExaminer">
+                    <label>Contact</label>
+                    <ng-select name="idExaminer" [items]="contactList" (click)="getContacts(true)" bindLabel="itemName"
+                        bindValue="idContact" placeholder="Contact" [(ngModel)]="task.idExaminer"
+                        (change)="optionChange(task.idExaminer)" #idExaminer="ngModel">
+                    </ng-select>
+                </div>
+                <div [ngClass]="{'col-sm-4':showExaminer, 'col-sm-8':!showExaminer}">
+                    <label>Task details</label>
+                    <textarea rows="3" class="form-control" name="generalNotes" id="generalNotes"
+                        placeholder="Task details" [(ngModel)]="task.generalNotes"></textarea>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-sm-4">
+                    <label for="assigned">Assigned on*</label>
+                    <div datetime-picker class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                        <input id="assignedDate" type="text" name="assignedDate" class="form-control"
+                            [(ngModel)]="task.assignedDate" #assignedDate="ngModel" required />
+                    </div>
+                    <div class="error-message pl0">
+                        <div *ngIf="assignedDate.errors && (assignedDate.dirty || assignedDate.touched)">
+                            {{errorMsg.requiredAssignedDate}}
+                        </div>
+                        <div *ngIf="getTheDateObject(task.completeBy) < getTheDateObject(task.assignedDate)">
+                            {{errorMsg.requiredDueDateSmaller}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="to">Assigned By*</label>
+                    <ng-select class="my-select" name="idAssignedBy" [items]="employees"
+                        bindLabel="employeeName" bindValue="id" placeholder="Assigned By"
+                        [(ngModel)]="task.idAssignedBy" #idAssignedBy="ngModel" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idAssignedBy.errors && (idAssignedBy.dirty || idAssignedBy.touched)">
+                            {{errorMsg.requiredBy}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="status">Status*</label>
+                    <ng-select name="idTaskStatus" [items]="taskStatus" bindLabel="name" bindValue="id"
+                        placeholder="Status" [(ngModel)]="task.idTaskStatus" #idTaskStatus="ngModel" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idTaskStatus.errors && (idTaskStatus.dirty || idTaskStatus.touched)">
+                            {{errorMsg.requiredStatus}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="scopeDDOptions?.length > 0">
+                <hr>
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label for="selectApp">Billing Type*</label>
+                        <ng-select name="jobBillingType" [items]="scopeDDOptions" bindLabel="itemName" bindValue="value"
+                            placeholder="Billing Type" (change)="setServiceItemsDD()" #jobBillingType="ngModel"
+                            [(ngModel)]="task.jobBillingType" (ngModelChange)="resetQty();" required>
+                        </ng-select>
+                        <div class="error-message pl0">
+                            <div *ngIf="jobBillingType.errors && (jobBillingType.dirty || jobBillingType.touched)">
+                                Billing Type is Required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" *ngIf="task.jobBillingType == 1">
+                        <label for="selectApp">Service Item/Billing Point*</label>
+                        <ng-select name="idJobFeeSchedule" [items]="jobFeeScheduleItems" bindLabel="itemName"
+                            bindValue="idJobFeeSchedule" placeholder="Service Item" #idJobFeeSchedule="ngModel"
+                            [(ngModel)]="task.idJobFeeSchedule" (change)="showServiceQty('feeschedule', 'itemName')"
+                            [required]="requireServiceItem">
+                        </ng-select>
+                        <div class="error-message pl0"
+                            *ngIf="task.jobBillingType == 1 && requireServiceItem && !task.idJobFeeSchedule &&  idJobFeeSchedule.errors && (idJobFeeSchedule.dirty || idJobFeeSchedule.touched)">
+                            {{errorMsg.requireServiceItem}}
+                        </div>
+                    </div>
+                    <div class="col-sm-6" *ngIf="task.jobBillingType == 2">
+                        <label for="selectApp">Service Item/Billing Point*</label>
+                        <ng-select name="idRfpJobType" [items]="masterServiceItems" bindLabel="itemName" bindValue="id"
+                            placeholder="Service Item" #idRfpJobType="ngModel" [(ngModel)]="task.idRfpJobType"
+                            (click)="editOfServiceItems('click')" (change)="showServiceQty('all')"
+                            [required]="requireServiceItem">
+                        </ng-select>
+                        <div class="error-message pl0"
+                            *ngIf="task.jobBillingType == 2 && requireServiceItem && !task.idRfpJobType && idRfpJobType.errors && (idRfpJobType.dirty || idRfpJobType.touched)">
+                            {{errorMsg.requireServiceItem}}
+                        </div>
+                    </div>
+                    <div class="col-sm-2" *ngIf="showQtyTextbox">
+                        <label>Quantity</label>
+                        <input type="text" class="form-control" name="serviceQuantity"
+                            [(ngModel)]="task.serviceQuantity" (keypress)="isNumber($event)"
+                            (ngModelChange)="checkServiceQty()" placeholder="Service Quantity">
+                        <div class="error-message pl0">
+                            <div *ngIf="serviceQtyZero">
+                                {{errorMsg.requireServiceQty}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group" *ngIf="showHoursTextbox">
+                    <div class="col-sm-6">
+                        <label>Quantity</label>
+                        <input type="text" class="form-control" name="serviceQuantity"
+                            [(ngModel)]="task.serviceQuantity" (keypress)="isDecimal($event)"
+                            (ngModelChange)="checkServiceQty()" placeholder="Service Quantity">
+                    </div>
+                    <div class="error-message">
+                        <div *ngIf="serviceQtyZero">
+                            {{errorMsg.requireServiceQty}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="idJob">
+                <hr>
+                <div class="filter-type">
+                    <p for="type">Application Type</p>
+                    <!-- <label for="type">Application Type</label> -->
+                    <div class="form-check">
+                        <label *ngFor="let jobType of resOfJobTypes; let idx = index" class="form-check-label input-inline">
+                            <input type="radio" class="form-check-input" name="radiogroup" [checked]="jobType.id == selectedJobType"
+                                [value]="jobType.id" (change)="onJobTypeSelectionChange(jobType.id,'onAdd')" />
+                            {{jobType.description}}
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row form-group mt15" *ngIf="showThedropDownValues">
+                    <div class="col-sm-6">
+                        <label for="selectApp">{{LabelType}}</label>
+                        <ng-select *ngIf="showPermitDropDown" name="selectApp" [items]="application"
+                            bindLabel="itemName" bindValue="id" placeholder="{{LabelType}}"
+                            (change)="getWorkPermits($event,'onAdd')" #selectApp="ngModel"
+                            [(ngModel)]="task.idJobApplication">
+                        </ng-select>
+                        <ng-select name="selectApp" *ngIf="!showPermitDropDown" [items]="application"
+                            bindLabel="itemName" bindValue="id" placeholder="{{LabelType}}"
+                            (change)="getWorkPermits($event,'onAdd')" #selectApp="ngModel"
+                            [(ngModel)]="task.idJobViolation">
+                        </ng-select>
+                    </div>
+                    <div class="col-sm-6" *ngIf="showPermitDropDown">
+                        <label for="workType">Permits</label>
+                        <angular2-multiselect [data]="workpermit" name="workType" [(ngModel)]="task.idWorkPermitType"
+                            [settings]="workPermitDDSettings" #workType="ngModel">
+                        </angular2-multiselect>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row form-group" *ngIf="idJob">
+                <div class="col-sm-8">
+                    <label for='jobDocument'>Project Documents</label>
+                    <angular2-multiselect [data]="listOfDocuments" name="jobDocument" [(ngModel)]="task.idJobDocuments"
+                        [settings]="jobDocumentPermitDDSettings" #jobDocument="ngModel" id="jobDocument">
+                    </angular2-multiselect>
+                </div>
+            </div>
+            <div class="row email-attach form-group">
+                <div class="col-sm-12">
+                    <h4 class="blue-title mb5">
+                        Attachments
+                        <div class="fl-upload">
+                            <label for="task-file-upload" class="upload-link rpo-file-upload mb0">
+                                Click to <span>Browse</span> to Attach your files </label>
+                            <input id="task-file-upload" type="file" (change)="documentUpload($event)"
+                                class="rpo-file-upload" multiple [disabled]="disabled" />
+                        </div>
+                    </h4>
+                    <div>
+                        <!-- already attached files will display -->
+                        <div class="file-upload-wrap" *ngIf="taskDocuments?.length > 0">
+                            <div class="rpo-file-upload" *ngFor="let attachment of taskDocuments">
+                                <a href="{{attachment.documentPath}}" class="link-blue" target="_blank">{{attachment.name}}</a>
+                                <a target="" class="remove" *ngIf="!disabled" tooltip="Delete" placement="right"
+                                    (click)="deleteAlreadyAttchedFile(attachment)">
+                                    <i class="material-symbols-rounded">delete</i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="file-upload-wrap" *ngIf="documents?.length>0">
+                            <div class="rpo-file-upload" *ngFor="let document of documents">
+                                <span class="doc-name" *ngIf="!document.id" style="vertical-align: top;"
+                                    tooltip="{{document.name}}" placement="top">{{document.name}}</span>
+                                <a target="" class="remove" tooltip="Delete" placement="right"
+                                    (click)="deleteDocument(document)">
+                                    <i class="material-symbols-rounded">delete</i>
+                                </a>
+                                <a *ngIf="document.id" href="{{document.documentPath}}" class="pointer doc-name link-blue"
+                                    style="vertical-align: top;" target="_blank" tooltip="{{document.name}}"
+                                    placement="top">{{document.name}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-message" *ngIf="exceedFileSize">
+                        <span> The total size of attachments exceed 23MB. Please remove few files to continue sending
+                            email.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer modify-footer pt0">
+            <div class="row">
+                <div class="col-sm-7 text-left">
+
+                    <div class="modify" *ngIf="!isNew">Last modified by {{task.lastModified}} on {{task.lastModifiedDate
+                        | date :'MM/dd/yyyy, h:mm a'}}</div>
+                </div>
+                <div class="col-sm-5">
+                    <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+                    <button type="button" class="btn btn-blue"
+                        [disabled]="!taskForm.form.valid || (getTheDateObject(task.completeBy) < getTheDateObject(task.assignedDate))"
+                        (click)="saveTask()">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

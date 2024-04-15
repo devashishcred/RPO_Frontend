@@ -1,0 +1,52 @@
+<div class="job-detail">
+  <div class="filter-tabs-area">
+    <div class="tabs">
+      <ul>
+        <!-- Selected project type -->
+        <ng-container *ngIf="selectedJobType && jobDetail  && jobDetail.jobApplicationTypes?.length > 0">
+          <ng-container *ngFor="let jobType of jobDetail.jobApplicationTypes; let idx = index">
+            <ng-container *ngIf="jobType.id != 3">
+              <li [class.active]="(dobApp || depApp || dotApp) && jobType.id == selectedJobType" >
+                <a [class.active]="(dobApp || depApp || dotApp) && jobType.id == selectedJobType" (click)="onSelectionChange(jobType,idx)">
+                  {{jobType.description == 'DOB' ? 'DOB/FDNY' : jobType.description}}
+                </a>
+              </li>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+        <li *ngIf="isCustomerHavePermissionOfViolation || !this.isCustomerLoggedIn" [ngClass]="{'active' : isViolation }">
+          <a routerLink="violation">Violations</a>
+        </li>
+        <li *ngIf="isCustomerHavePermissionOfContacts" [ngClass]="{'active' : currentRoute == 'jobcontact' }">
+          <a routerLink="jobcontact">Contacts</a>
+        </li>
+        <li *ngIf="!isCustomerLoggedIn" [ngClass]="{'active' : currentRoute == 'jobdocument' }">
+          <a routerLink="jobdocument">Documents</a>
+        </li>
+        <li *ngIf="!isCustomerLoggedIn" [ngClass]="{'active' : currentRoute == 'transmittal' }">
+          <a routerLink="transmittal">Transmittals</a>
+        </li>
+        <li *ngIf="!isCustomerLoggedIn" [ngClass]="{'active' : currentRoute == 'jobtask' }">
+          <a routerLink="jobtask">Tasks</a>
+        </li>
+        <li *ngIf="isCustomerHavePermissionOfChecklist" [ngClass]="{'active' : currentRoute == 'checklist' }">
+          <a routerLink="checklist">Checklists</a>
+        </li>
+        <li *ngIf="!isCustomerLoggedIn" [ngClass]="{'active' : currentRoute == 'relatedJob' }">
+          <a routerLink="relatedJob">Related Projects</a>
+        </li>
+        <li *ngIf="!isCustomerLoggedIn" [ngClass]="{'active' : currentRoute == 'scope' }">
+          <a routerLink="scope">Scope</a>
+        </li>
+        <li *ngIf="!isCustomerLoggedIn" [ngClass]="{'active' : currentRoute == 'timenotes' }">
+          <a routerLink="timenotes">Timenotes</a>
+        </li>
+      </ul>
+    </div>
+    
+  </div>
+  <div class="job-details-area">
+    <div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>

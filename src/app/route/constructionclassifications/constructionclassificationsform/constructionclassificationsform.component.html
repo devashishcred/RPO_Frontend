@@ -1,0 +1,53 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #constructionclassificationsform="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Construction Classification</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Name*</label>
+          <input id="name" name="name" type="text" class="form-control" [(ngModel)]="ConstructionClassifications.description" #name="ngModel"
+            placeholder="Name" required/>
+          <div class="error-message pl0">
+            <div *ngIf="name.errors && (name.dirty || name.touched)">
+              {{errorMsg.requirename}}
+            </div>
+  
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Code</label>
+          <input id="code" name="code" type="text" class="form-control" [(ngModel)]="ConstructionClassifications.code" #code="ngModel"
+            placeholder="Code" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <div class="checkbox form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="is_2008_2014" [(ngModel)]="ConstructionClassifications.is_2008_2014" />Is 2008/2014
+              <i class="input-helper"></i>
+            </label>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!constructionclassificationsform.form.valid" (click)="saveConstruction()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

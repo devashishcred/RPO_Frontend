@@ -1,0 +1,242 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #groupform="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Checklist Item </h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row site-info-columns">
+        <div class="col-md-6">
+          <div class="row form-group">
+            <div class="col-sm-12">
+              <label for="checklistItemData">Checklist Item Name*</label>
+              <input id="name" name="name" type="text" class="form-control" #name="ngModel"
+                [(ngModel)]="checklistItemData.name" placeholder="Checklist Item Name" required />
+              <div class="error-message pl0">
+                <div *ngIf="name.errors && (name.dirty || name.touched)">
+                  Checklist Item Name is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm-12">
+              <label for="checklistItemData">Checklist Item Group*</label>
+              <ng-select id="idGroupType" name="idGroupType" #idGroupType="ngModel" [disabled]="id"
+                placeholder="Select Group Name" [items]="checklistGroups"
+                [(ngModel)]="checklistItemData.idCheckListGroup" bindLabel="name" bindValue="id" required>
+              </ng-select>
+              <div class="error-message pl0">
+                <div *ngIf="idGroupType.errors && (idGroupType.dirty || idGroupType.touched)">
+                  Group Type is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm-12">
+              <label for="listOfDocuments">Application Type</label>
+              <angular2-multiselect [data]="listOfDocuments" name="jobDocument" (onSelect)="onItemSelect($event)"
+                (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                (onSelectAll)="onSelectAll($event)" [(ngModel)]="checklistItemData.jobapplicationtypes"
+                [settings]="jobDocumentPermitDDSettings" #jobDocument="ngModel" id="jobDocument">
+              </angular2-multiselect>
+
+              <!-- <ng-select  id="jobDocument" name="jobDocument"   placeholder="Select Application Type"
+          [items]="listOfDocuments"
+          bindLabel="description" bindValue="id"
+          [multiple]="true" 
+          (change)="changeApplicationtType($event)"
+          [clearable]="false"
+          [searchable]="true"
+          [(ngModel)]="checklistItemData.jobapplicationtypes" #jobDocument="ngModel" required>
+  </ng-select> -->
+              <div class="error-message pl0">
+                <div *ngIf="jobDocument.errors && (jobDocument.dirty || jobDocument.touched)">
+                  Application Type is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm-12">
+              <label for="listOfWorkpermit">Work Permit Type</label>
+              <angular2-multiselect [data]="listOfWorkpermit" name="jobWorkTypes"
+                [(ngModel)]="checklistItemData.jobWorkTypes" [settings]="dropdownSettingsFroWorkPermits"
+                #jobWorkTypes="ngModel" id="jobWorkTypes">
+              </angular2-multiselect>
+              <!-- <ng-select  id="jobWorkTypes" name="jobWorkTypes"   placeholder="Select Work Permit Type"
+                            [items]="listOfWorkpermit"
+                            bindLabel="itemName" bindValue="id"
+                            [multiple]="true"
+                            [clearable]="false"
+                            [(ngModel)]="checklistItemData.jobWorkTypes" #jobWorkTypes="ngModel">
+                    </ng-select> -->
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm-12">
+              <label for="checklistItemData">Create form Document</label>
+              <ng-select id="IdCreateFormDocument" name="IdCreateFormDocument" placeholder="Select Documents"
+                #IdCreateFormDocument="ngModel" [(ngModel)]="checklistItemData.IdCreateFormDocument"
+                bindLabel="itemName" bindValue="id" [items]="createDocuments">
+              </ng-select>
+
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm-12">
+              <label for="idUploadFormDocument">Upload Document</label>
+              <ng-select id="idUploadFormDocument" name="idUploadFormDocument"
+                [(ngModel)]="checklistItemData.idUploadFormDocument" placeholder="Select Documents" bindLabel="itemName"
+                bindValue="id" [items]="uploadDocuments">
+              </ng-select>
+
+            </div>
+          </div>
+          <label style="font-size: large;">REFERENCE</label>
+          <!-- <h2 class="add-address">REFERENCE</h2> -->
+          <div class="row form-group">
+            <div class="col-sm-12">
+              <label for="internalReferenceDocuments">Internal Document Reference</label>
+              <angular2-multiselect [data]="internalReferenceDocuments" name="selectCompType"
+                [(ngModel)]="checklistItemData.referenceDocuments" [settings]="InternalDocdropdownSettings">
+              </angular2-multiselect>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm-12">
+              <label for="checklistItemData">Reference Note</label>
+              <ck-editor [(ngModel)]="checklistItemData.referenceNote" name="notes" id="notes" [config]="configuration"
+                debounce="400 " #ckeditor></ck-editor>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm-6">
+              <label for="externalReferenceLink">External Website link</label>
+              <input id="externalReferenceLink" name="externalReferenceLink" #externalReferenceLink="ngModel"
+                pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$" type="text"
+                class="form-control" [(ngModel)]="checklistItemData.externalReferenceLink"
+                placeholder="External Website link" />
+              <div class="error-message pl0">
+                <div *ngIf="externalReferenceLink.invalid">
+                  <div *ngIf="externalReferenceLink.errors.pattern">
+                    Please Enter Valid Website link
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 plus-icon">
+              <i class="material-symbols-rounded"
+                (click)="addlink(checklistItemData.externalReferenceLink,externalReferenceLink.valid)">add</i>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="file-upload-wrap">
+              <div class="rpo-file-upload" *ngFor="let document of websiteLinks">
+                <span class="doc-name" style="vertical-align: top;" tooltip="{{document}}"
+                  placement="right">{{document}}</span>
+                <a target="" class="remove" tooltip="Delete" placement="right" (click)="deletelink(document)">
+                  <span class="material-symbols-rounded">delete</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm-6">
+              <div class="checkbox form-check">
+                <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input" id="isActive" name="isActive"
+                    [(ngModel)]="checklistItemData.isActive">
+                  <!-- Set Item as Active -->
+                  Mark as Active
+                  <i class="input-helper"></i>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label style="font-size: large;">PROPERTY/BUILDING CHARACTERISTICS</label>
+          <div class="row form-group">
+            <div class="col-sm-12" *ngFor="let res of dummyAddress">
+              <ng-container *ngIf="!res.siteSafty">
+                <div *ngIf="(res.idChecklistAddressProperty !== 3 && res.idChecklistAddressProperty !== 4)">
+                  <div class="checkbox form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" class="form-check-input" id="{{res.fieldName}}" name="{{res.fieldName}}"
+                        [(ngModel)]="res.IsActive" #name="ngModel" />{{res.description}}
+                      <i class="input-helper"></i>
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="res.idChecklistAddressProperty == 3" class="mb20">
+                  <label>Owner Type</label>
+                  <ng-select id="{{res.fieldName}}" name="{{res.fieldName}}" *ngIf="res.idChecklistAddressProperty == 3"
+                    [items]="ownerTypes" bindLabel="itemName" bindValue="id" placeholder="Owner Type"
+                    [(ngModel)]="res.value">
+                  </ng-select>
+                </div>
+                <div *ngIf="res.idChecklistAddressProperty == 4" class="mb20">
+                  <label>Special District</label>
+                  <ng-select *ngIf="res.idChecklistAddressProperty == 4" id="{{res.fieldName}}" name="{{res.fieldName}}"
+                    (change)="getSpecialDistrict($event)" placeholder="Special District" [multiple]="true"
+                    bindLabel="specialDistrict" bindValue="specialDistrict" [items]="specialDistricts"
+                    [(ngModel)]="res.value">
+                  </ng-select>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <label class="mt20" style="font-size: large;">Site Safety</label>
+          <div class="row form-group">
+            <div class="col-sm-12" *ngFor="let res of dummyAddress">
+              <ng-container *ngIf="res.siteSafty">
+                <div *ngIf="(res.idChecklistAddressProperty !== 3 && res.idChecklistAddressProperty !== 4)">
+                  <div class="checkbox form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" class="form-check-input" id="{{res.fieldName}}" name="{{res.fieldName}}"
+                        [(ngModel)]="res.IsActive" #name="ngModel" />{{res.description}}
+                      <i class="input-helper"></i>
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="res.idChecklistAddressProperty == 3" class="mb20">
+                  <label>Owner Type</label>
+                  <ng-select id="{{res.fieldName}}" name="{{res.fieldName}}" *ngIf="res.idChecklistAddressProperty == 3"
+                    [items]="ownerTypes" bindLabel="itemName" bindValue="id" placeholder="Owner Type"
+                    [(ngModel)]="res.value">
+                  </ng-select>
+                </div>
+                <div *ngIf="res.idChecklistAddressProperty == 4" class="mb20">
+                  <label>Special District</label>
+                  <ng-select *ngIf="res.idChecklistAddressProperty == 4" id="{{res.fieldName}}" name="{{res.fieldName}}"
+                    (change)="getSpecialDistrict($event)" placeholder="Special District" [multiple]="true"
+                    bindLabel="specialDistrict" bindValue="specialDistrict" [items]="specialDistricts"
+                    [(ngModel)]="res.value">
+                  </ng-select>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!groupform.form.valid"
+        (click)="saveItemMaster()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

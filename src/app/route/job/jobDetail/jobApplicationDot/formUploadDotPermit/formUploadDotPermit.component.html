@@ -1,0 +1,80 @@
+<div class="modal-custom-content" cdkDrag>
+    <form ngNativeValidate name="formUploadPermit" #formUploadPermit="ngForm">
+        <div class="permit-content">
+            <div class="modal-header" cdkDragHandle>
+                <button type="button" class="close close-icn" cdkDragHandle>
+                    <span class="fa fa-arrows"></span>
+                </button>
+                <h4 class="modal-title pull-left">Upload Permit</h4>
+            </div>
+            <div class="modal-body pt15 pb0">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="fl-upload">
+                            <label for="permit-file-upload" class="upload-link rpo-file-upload mb0">Click To <span>Browse</span> To Attach Permit PDF </label>
+                            <input id="permit-file-upload" type="file" accept=".pdf" (change)="documentUpload($event)" class="rpo-file-upload" [disabled]="disabled"
+                            />
+                            <span *ngIf="fileExtensionError" class="error-message">
+                    {{fileExtensionMessage}}
+                  </span>
+                        </div>
+                        <div class="file-upload-wrap" *ngIf="pdfToRead">
+                            <div class="rpo-file-upload">
+                                <span class="doc-name" style="vertical-align: top;" tooltip="{{pdfToRead.name}}" placement="top">{{pdfToRead.name}}</span>
+                            </div>
+                        </div>
+                        <div class="fl-upload">
+                            <button type="button" class="btn btn-panel no-padding" [disabled]="!pdfToRead" (click)="readPDFFile()">Read Info</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="workPermits?.length > 0">
+                    <h4>PERMITS</h4>
+                    <div class="scroll-wrapper-popup">
+                        <table class="table table-bordered mb0">
+                            <thead>
+                            <tr>
+                                <th style="width:10%">Tracking#</th>
+                                <th style="width:10%">Street On | Street From | Street To</th>
+                                <th style="width:10%">Permit#</th>
+                                <th style="width:10%">Previous Permit#</th>
+                                <th style="width:10%">Issued On</th>
+                                <th style="width:10%">Valid From</th>
+                                <th style="width:10%">To</th>
+                                <th style="width:23%">Description</th>
+                                <th style="width:15%">Renewal Fees ($)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let permit of workPermits">
+                                <td>{{permit.trackingNumber}}</td>
+                                <td> {{permit.streetWorkingOn ? permit.streetWorkingOn : '-'}} | {{permit.streetWorkingFrom ? permit.streetWorkingFrom : '-'}} | {{ permit.streetWorkingTo ? permit.streetWorkingTo : '-'}}</td>
+                                <td>{{permit.permitNumber}}</td>
+                                <td>{{permit.previousPermitNumber}}</td>
+                                <td>{{permit.issuedDate}}</td>
+                                <td>{{permit.fromDate}}</td>
+                                <td>{{permit.expiredDate}}</td>
+                                <td>{{permit.workTypeCode}} - {{toTitleCase(permit.permitType)}}</td>
+                                <td><input placeholder="Renewal Fees" name="renewalfee" [(ngModel)]="permit.renewalFees" class="form-control"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-right">
+                <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+                <button type="submit" class="btn btn-blue" [disabled]="!(workPermits?.length)"
+                        (click)="savePermit()">Save
+                </button>
+            </div>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

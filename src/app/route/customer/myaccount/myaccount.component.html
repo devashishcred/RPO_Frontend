@@ -1,0 +1,376 @@
+<ng-container *ngIf="isCustomerLoggedIn">
+  <div class="rpo-employee rpo-component">
+    <div class="row component-header">
+      <div class="col-md-3">
+        <ul class="myAccount-left" (click)="resetTabChangeForm()">
+          <li>
+            <a (click)="onTabChange('myProfile')" [ngClass]="{ active: isActive == 'myProfile' }">
+              My Profile</a>
+          </li>
+          <li>
+            <a (click)="onTabChange('changePassword')" [ngClass]="{ active: isActive == 'changePassword' }">Change
+              Password</a>
+          </li>
+          <li>
+            <a (click)="onTabChange('notificationSetting')"
+              [ngClass]="{ active: isActive == 'notificationSetting' }">Notification Settings</a>
+          </li>
+          <li>
+            <a (click)="onTabChange('customerSupport')" [ngClass]="{ active: isActive == 'customerSupport' }">Contact
+              Customer Support</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h2 class="component-title" *ngIf="!isChangePwdSuccessfully">My Account</h2>
+        <div class="myProfile-details" [ngClass]="{ open: isActive === 'myProfile' }">
+          <div class="accountContainer">
+            <h3>My Profile</h3>
+            <form [formGroup]="profileForm" autocomplete="off">
+              <div class="row">
+                <!-- <div class="col-md-12">
+                  <div class="profile-img-box" (click)="img.click()">
+                    <span><img [src]="
+                          myAccountData?.contactImageThumbPath
+                            ? myAccountData?.contactImageThumbPath
+                            : blankAvatar
+                        " class="profile-display-image" /></span>
+                    <input type="file" class="d-none" accept=".jpg,.jpeg,.png,.gif" #img
+                      (change)="handleFileSelect($event)" />
+                  </div>
+                </div> -->
+                <div class="col-md-6">
+                  <label for="name">First Name</label>
+                  <!-- <label for="name">First Name<span class="error-span">*</span></label> -->
+                  <input class="form-control" readonly [ngClass]="{
+                      'is-invalid':
+                        profileFormControl.firstName.touched && profileFormControl.firstName.errors
+                    }" placeholder="First Name" type="text" autocomplete="off" formControlName="firstName" />
+                  <div *ngIf="profileFormControl.firstName.touched && profileFormControl.firstName.errors"
+                    class="invalid-feedback">
+                    <div *ngIf="profileFormControl.firstName.touched && profileFormControl.firstName.errors.required">
+                      {{ errorMessage.requireFirstName }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label for="name">Last Name</label>
+                  <input class="form-control" readonly placeholder="Last Name" type="text" autocomplete="off"
+                    formControlName="lastName" [ngClass]="{
+                      'is-invalid':
+                        profileFormControl.lastName.touched && profileFormControl.lastName.errors
+                    }" />
+                  <div *ngIf="
+                      profileFormControl.lastName.touched && profileFormControl.lastName.errors
+                    " class="invalid-feedback">
+                    <div *ngIf="profileFormControl.lastName.touched && profileFormControl.lastName.errors.required">
+                      {{ errorMessage.requireLastName }}
+                    </div>
+                  </div>
+                </div>
+                 <!-- <div class="col-md-12">
+                  <label for="name">Company Name</label>
+                  <ng-select name="company" [items]="companies"  autocomplete="off" bindLabel="itemName" bindValue="id"
+                    placeholder="Company" formControlName="companyName">
+                  </ng-select>
+                </div>
+                <div class="col-md-12">
+                  <label for="name">Street<span class="error-span">*</span></label>
+                  <input class="form-control" autocomplete="off" placeholder="Street" type="text"
+                    formControlName="address1" [ngClass]="{
+                      'is-invalid':
+                        profileFormControl.address1.touched && profileFormControl.address1.errors
+                    }" />
+                  <div *ngIf="profileFormControl.address1.touched && profileFormControl.address1.errors"
+                    class="invalid-feedback">
+                    <div *ngIf="profileFormControl.address1.touched && profileFormControl.address1.errors.required">
+                      {{ errorMessage.requireStreet }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label for="name">Floor/Suite</label>
+                  <input class="form-control" autocomplete="off" placeholder="Floor/Suite" type="text"
+                    formControlName="address2" />
+                </div> -->
+              </div>
+              <!-- <div class="row">
+                <div class="col-md-4">
+                  <label for="name">City<span class="error-span">*</span></label>
+                  <input class="form-control" autocomplete="off" placeholder="City" type="text" formControlName="city"
+                    [ngClass]="{
+                      'is-invalid':
+                        profileFormControl.city.touched && profileFormControl.city.errors
+                    }" />
+                  <div *ngIf="profileFormControl.city.touched && profileFormControl.city.errors"
+                    class="invalid-feedback">
+                    <div *ngIf="profileFormControl.city.touched && profileFormControl.city.errors.required">
+                      {{ errorMessage.requireCityName }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="name">State<span class="error-span">*</span></label>
+
+                  <ng-select [items]="stateList" bindLabel="name" autocomplete="off" bindValue="id" placeholder="State*"
+                    formControlName="idState" [ngClass]="{
+                      'is-invalid':
+                        profileFormControl.idState.touched && profileFormControl.idState.errors
+                    }">
+                  </ng-select>
+                  <div *ngIf="profileFormControl.idState.touched && profileFormControl.idState.errors"
+                    class="invalid-feedback">
+                    <div *ngIf="profileFormControl.idState.touched && profileFormControl.idState.errors.required">
+                      {{ errorMessage.requireAddressState }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="name">ZIP Code<span class="error-span">*</span></label>
+                  <input class="form-control" autocomplete="off" autocomplete="off" placeholder="ZIP Code" type="number"
+                    formControlName="zipCode" [ngClass]="{
+                      'is-invalid':
+                        profileFormControl.zipCode.touched && profileFormControl.zipCode.errors
+                    }" />
+                  <div *ngIf="
+                      profileFormControl.zipCode.touched && profileFormControl.zipCode.errors
+                    " class="invalid-feedback">
+                    <div *ngIf="profileFormControl.zipCode.touched && profileFormControl.zipCode.errors.required">
+                      {{ errorMessage.validZip }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+
+                <div class="col-md-6">
+                  <label>Work Phone</label>
+                  <input class="form-control" autocomplete="off" (keypress)="formatPhone()" minlength="14"
+                    maxlength="14" placeholder="Phone" type="text" formControlName="workPhone" />
+                  <div class="invalid-feedback">
+                    <div
+                      *ngIf="workPhone.errors?.minlength && !workPhone.errors?.pattern && (workPhone.dirty || workPhone.touched)">
+                      {{ errorMessage.phone }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label for="name">Cell Phone<span class="error-span">*</span></label>
+                  <input class="form-control" (keypress)="formatPhone()" minlength="14" maxlength="14"
+                    autocomplete="off" placeholder="Cell Phone" type="text" formControlName="mobilePhone" [ngClass]="{
+                      'is-invalid':
+                        profileFormControl.mobilePhone.touched && profileFormControl.mobilePhone.errors
+                    }" />
+                  <div *ngIf="
+                      profileFormControl.mobilePhone.touched && profileFormControl.mobilePhone.errors
+                    " class="invalid-feedback">
+                    <div
+                      *ngIf="profileFormControl.mobilePhone.touched && profileFormControl.mobilePhone.errors.required">
+                      {{ errorMessage.requireCellNumber }}
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="name">Email</label>
+                  <input class="form-control" readonly autocomplete="off" placeholder="Email" type="text"
+                    formControlName="email" [ngClass]="{
+                      'is-invalid':
+                        profileFormControl.email.touched && profileFormControl.email.errors
+                    }" />
+                  <div *ngIf="profileFormControl.email.touched && profileFormControl.email.errors"
+                    class="invalid-feedback">
+                    <div *ngIf="profileFormControl.email.touched && profileFormControl.email.errors.required">
+                      {{ errorMessage.requireEmail }}
+                    </div>
+                    <div *ngIf="profileFormControl.email.errors.email">
+                      {{ errorMessage.validEmail }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="row">
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-panel" (click)="profileBtnClick()">
+                    Save
+                  </button>
+                </div>
+              </div> -->
+            </form>
+          </div>
+        </div>
+        <div class="myProfile-details" [ngClass]="{ open: isActive == 'changePassword' }">
+          <div class="accountContainer" *ngIf="!isChangePwdSuccessfully">
+            <h3>Change Password</h3>
+            <form [formGroup]="changePasswordForm">
+              <div class="row">
+                <div class="col-md-12">
+                  <label for="name">Old Password<span class="error-span">*</span></label>
+                  <input class="form-control" placeholder="Old Password" type="password" formControlName="oldPwd"
+                    [ngClass]="{
+                      'is-invalid':
+                        isChangePasswordSubmitted &&
+                        changePasswordFormControl.oldPwd.errors
+                    }" autocomplete="off" />
+                  <div *ngIf="
+                      isChangePasswordSubmitted &&
+                      changePasswordFormControl.oldPwd.errors
+                    " class="invalid-feedback">
+                    <div *ngIf="changePasswordFormControl.oldPwd.errors.required">
+                      <i>{{ errorMessage.requiredOldPassword }}</i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label for="name">Create New Password<span class="error-span">*</span></label>
+                  <input class="form-control" placeholder="Create New Password" type="password" formControlName="newPwd"
+                    [ngClass]="{
+                      'is-invalid':
+                      changePasswordFormControl.newPwd.touched &&
+                        changePasswordFormControl.newPwd.errors
+                    }" autocomplete="off" />
+                  <div *ngIf="
+                  !changePasswordFormControl.newPwd.pristine &&
+                      changePasswordFormControl.newPwd.errors
+                    " class="invalid-feedback">
+                    <div
+                      *ngIf="!changePasswordFormControl.newPwd.pristine && changePasswordFormControl.newPwd.errors.required">
+                      <i>{{ errorMessage.requiredNewPassword }}</i>
+                    </div>
+                    <div *ngIf="changePasswordFormControl.newPwd.value &&
+                    changePasswordFormControl.newPwd.errors?.minlength !== null && !changePasswordFormControl.newPwd.pristine
+                  ">
+                      <i>{{ errorMessage.minLengthNewPassword }}</i>
+                    </div>
+                    <div *ngIf="
+                    changePasswordFormControl.newPwd.errors?.maxlength && !changePasswordFormControl.newPwd.errors.required
+                  ">
+                      <i>{{ errorMessage.maxLengthNewPassword }}</i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label for="name">Reenter New Password<span class="error-span">*</span></label>
+                  <input class="form-control" placeholder="Reenter New Password" type="password"
+                    formControlName="confirmNewPwd" [ngClass]="{
+                      'is-invalid':
+                        isChangePasswordSubmitted &&
+                        changePasswordFormControl.confirmNewPwd.errors
+                    }" autocomplete="off" />
+                  <div *ngIf="
+                      isChangePasswordSubmitted &&
+                      changePasswordFormControl.confirmNewPwd.errors
+                    " class="invalid-feedback">
+                    <div *ngIf="
+                        changePasswordFormControl.confirmNewPwd.errors.required
+                      ">
+                      <i>{{ errorMessage.requiredConfirmPassword }}</i>
+                    </div>
+                    <div *ngIf="
+                        changePasswordFormControl.confirmNewPwd.errors
+                          .confirmPasswordValidator
+                      ">
+                      <i>{{ errorMessage.requiredMatchConfirmPassword }}</i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-white" style="margin-right: 10px;"
+                    (click)="resetConfirmPassword()">
+                    Cancel
+                  </button>
+                  <button type="button" class="btn btn-panel" (click)="onConfirmPassword()">
+                    Create New Password
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="submit-comment" *ngIf="isChangePwdSuccessfully">
+            <h2>Success!</h2>
+            <p>Your password updated successfully. Please click login into RPO </p>
+            <p><a (click)="onLogin()">Login</a></p>
+          </div>
+        </div>
+        <div class="myProfile-details" [ngClass]="{ open: isActive == 'notificationSetting' }">
+          <div class="accountContainer">
+            <h3>Notification Settings</h3>
+
+            <div class="row">
+              <div class="col-md-12 n-settings">
+                <span for="name">Receive all notifications</span>
+                <div class="button-switch">
+                  <input class="switch" id="primary-switch" type="checkbox" [(ngModel)]="recievedNotification"
+                    [ngModelOptions]="{ standalone: true }" (change)="notificationChangeEvent(recievedNotification)"
+                    [checked]="recievedNotification" />
+                  <label class="lbl-off" for="primary-switch"></label>
+                  <label class="lbl-on" for="primary-switch"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="myProfile-details" [ngClass]="{ open: isActive == 'customerSupport' }">
+          <div class="accountContainer">
+            <h3>Contact Customer Support</h3>
+            <form #customerSupportForm="ngForm">
+              <div class="row">
+                <div class="col-md-12">
+                  <textarea class="form-control" placeholder="Write message here..." rows="5"
+                    [(ngModel)]="customerSupportModal.message" name="message" #message="ngModel" required
+                    [ngModelOptions]="{ standalone: true }" required [ngClass]="{
+                      'is-invalid':
+                        (message.touched && isCustomerSupportSubmitted) &&
+                        message.errors?.required
+                    }"></textarea>
+                  <div class="invalid-feedback" *ngIf="
+                      (message.touched && isCustomerSupportSubmitted) &&
+                      message.errors?.required
+                    ">
+                    {{ errorMessage.requiredCustomerSupportMessage }}
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-panel" (click)="customerSupportClick()">
+                    Send
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3" *ngIf="isActive === 'myProfile'">
+        <h2 class="component-title">Subscription Type <span>ACTIVE</span></h2>
+        <div class="detail">
+          <p>Plan: Hosted by RPO</p>
+          <!-- <p>Renewal Date: 12/31/2023</p>
+          <p>Price: Free Trial</p> -->
+        </div>
+        <h3 class="">Subscription Features</h3>
+        <ul class="myAccount-right">
+          <li>Track project requirements</li>
+          <li>City agency integration with automated updates</li>
+          <li>Monitor permit expirations</li>
+          <li>Log important notes to your projects</li>
+          <li>Generate project reports</li>
+          <li>Receive alerts of new violations</li>
+          <li>Interactive dashboard</li>
+          <li>Auto-import information to track violations</li>
+          <li>Request new project</li>
+          <!-- <li>Searchable industry reference library</li> -->
+          <li>Hyperlinks to City resources</li>
+          <li>And more!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</ng-container>

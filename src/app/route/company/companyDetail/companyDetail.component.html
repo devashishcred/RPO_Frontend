@@ -1,0 +1,635 @@
+<div class="rpo-Company rpo-component">
+  <div class="filter-tabs-area">
+    <div class="tabs">
+      <ul>
+        <li (click)="onSelect('Contacts')" [class]="ShowContact ? 'active' : ''">
+          <a>Contacts</a>
+        </li>
+        <li (click)="onSelect('Proposal')" [class]="ShowRFP ? 'active' : ''">
+          <a>Proposals</a>
+        </li>
+        <li (click)="onSelect('Projects')" [class]="ShowJobs ? 'active' : ''">
+          <a>Projects</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <ul class="breadcrumb rfp-bread pull-left mr-2">
+        <li>
+          <small (click)="getBack()">
+            <a rel='noreferrer' class="pointer" routerLink="/company">Company</a>
+          </small>
+        </li>
+        <li>
+          <a>Company Detail</a>
+        </li>
+      </ul>
+      <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" *ngIf="ShowContact" placeholder="Search Contact"
+            [(ngModel)]="queryString" />
+          <input type="text" class="form-control" *ngIf="ShowRFP" placeholder="Search Proposal"
+            [(ngModel)]="queryString" />
+          <input type="text" class="form-control" *ngIf="ShowJobs" placeholder="Search Project"
+            [(ngModel)]="queryString" />
+        </div>
+      </div>
+
+      <button *ngIf="ShowContact" type="button" class="btn btn-panel pull-right middle {{showContactAddBtn}}"
+        (click)="openModal(formContact)">Add Contact</button>
+      <button *ngIf="ShowRFP" type="button" class="btn btn-panel pull-right middle {{showRfpAddBtn}}"
+        (click)="tabChangeRFP()">Add Proposal</button>
+      <button *ngIf="ShowJobs" type="button" class="btn btn-panel pull-right middle {{showJobAddBtn}}"
+        (click)="openJobModal(formJob)">Add Project</button>
+
+    </div>
+  </div>
+  <!-- COMPANY CARD -->
+  <div class="component-body">
+
+    <div class="col-sm-3 company-card">
+      <div>
+        <div class="panel panel-default panel-company main-card">
+          <div class="panel-heading panel-heading-companyDetail">
+            <div class="row">
+              <div class="col-sm-12">
+                <p class="p-companyTitle">{{rec.name}}</p>
+
+                <span dropdown-widget [items]="this.companyWidgetItems"
+                  (onItemClick)="onCompanyWidgetItemClick($event)" class="company-widget"></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12" *ngIf="rec.addresses?.length > 0">
+                [ {{rec.addresses[0].addressType.name}}] {{join([rec.addresses[0].address1,
+                rec.addresses[0].address2])}}
+                <br /> {{join([rec.addresses[0].city, rec.addresses[0].state,rec.addresses[0].zipCode])}}
+                <br />{{rec.addresses[0].phone? rec.addresses[0].phone : '-'}} | {{rec.addresses[0].faxNumber?
+                rec.addresses[0].faxNumber : '-'}}
+              </div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <!-- CONTACT DETAIL BLOCK -->
+            <div class="row" *ngIf="rec.addresses?.length > 0">
+              <div class="col-sm-12">
+                <span class="label-card">Company Address</span>
+              </div>
+            </div>
+            <div class="row" *ngFor="let item of rec.addresses| slice:1; let i = index;">
+              <div class="col-sm-5">
+                <span class="span-label-card">{{item.addressType.name}}:</span>
+              </div>
+              <div class="col-sm-7" *ngIf="rec.addresses?.length > 0">
+                {{join([item.address1 , item.address2])}}<br />
+                {{join([item.city, item.state])}}
+                <br />{{item.phone? item.phone : '-'}} | {{item.faxNumber? item.faxNumber : '-'}}
+              </div>
+            </div>
+            <br />
+
+            <!-- OTHER INFORMATION BLOCK -->
+            <div class="row">
+              <div class="col-sm-12">
+                <span class="label-card"> Other Information</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-5">
+                <span class="span-label-card-other">Company Type:</span>
+              </div>
+              <div class="col-sm-7" *ngIf="rec.companyTypes">
+                <div class="span-label-card-other1" *ngFor="let type of rec.companyTypes">{{type.itemName}}</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-5">
+                <span class="span-label-card-other">Company Url:</span>
+              </div>
+              <div class="col-sm-7">
+                <!-- <a rel='noreferrer' href="{{rec.url}}" target="_blank">{{rec.url}}</a> -->
+                <a class="span-label-card-other1 link-blue" *ngIf="!websiteUrl" href="{{rec.url}}"
+                  target="_blank">{{rec.url}}</a>
+                <a class="span-label-card-other1 link-blue" *ngIf="websiteUrl" href="http://{{rec.url}}"
+                  target="_blank">{{rec.url}}</a>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-5">
+                <span class="span-label-card-other">Email Address:</span>
+              </div>
+              <div class="col-sm-7">
+                <a class="span-label-card-other1">{{rec.emailAddress}}</a>
+              </div>
+            </div>
+
+            <div class="row license-data" *ngIf="rec.companyLicenses?.length > 0">
+              <div class="col-sm-12" *ngFor="let license of rec.companyLicenses">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <span class="label-card">License</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5">
+                    <span class="span-label-card">License Type:</span>
+                  </div>
+                  <div class="col-sm-7">
+                    {{license.companyLicenseType.name}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5">
+                    <span class="span-label-card">License Number:</span>
+                  </div>
+                  <div class="col-sm-7">
+                    {{license.number}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5">
+                    <span class="span-label-card">Expiration Date:</span>
+                  </div>
+                  <div class="col-sm-7">
+                    {{license.expirationLicenseDate |date :'MM/dd/yyyy' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
+            <!-- <div class="row">
+              <div class="col-sm-5">
+                <span class="span-label-card">Password:</span>
+              </div>
+              <div class="col-sm-7">
+                <span>{{rec.responsibilityName}}</span>
+                </div>
+            </div> -->
+            <div class="row" *ngIf="rec?.responsibilityName">
+              <div class="col-sm-5">
+                <span class="span-label-card">Responsible Party:</span>
+              </div>
+              <div class="col-sm-7">
+                <span>{{rec.responsibilityName}}</span>
+              </div>
+            </div>
+            <div *ngIf="siSelected">
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">SIA# Expiration Date:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.specialInspectionAgencyExpiry}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">Special Inspector#:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.specialInspectionAgencyNumber}}
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="concreteLabSelected">
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">License#:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.ctLicenseNumber}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">CTL License# Expiry:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.ctExpirationDate |date :'MM/dd/yyyy'}}
+                </div>
+              </div>
+            </div>
+            <div *ngIf="gcSelected">
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">Tracking#:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.trackingNumber}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">Tracking# Expiry Date:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.trackingExpiry |date :'MM/dd/yyyy'}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">IBM#:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.ibmNumber}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">Tax ID#:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.taxIdNumber}}
+                </div>
+              </div>
+              <br />
+
+              <!--DOB INSURANCE EXPIRATION DATE BLOCK -->
+              <div class="row">
+                <div class="col-sm-12">
+                  <span class="label-card">DOB Insurance/Expiration Date</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">Work Compensation:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.insuranceWorkCompensation |date :'MM/dd/yyyy'}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">Disability:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.insuranceDisability |date :'MM/dd/yyyy'}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">General Liability:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.insuranceGeneralLiability |date :'MM/dd/yyyy'}}
+                </div>
+              </div>
+              <!--DOB INSURANCE EXPIRATION DATE BLOCK ENDS-->
+<br>
+              <!--DOT INSURANCE EXPIRATION DATE BLOCK -->
+              <div class="row">
+                <div class="col-sm-12">
+                  <span class="label-card">DOT Insurance/Expiration Date</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">Work Compensation:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.dotInsuranceWorkCompensation |date :'MM/dd/yyyy'}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">General Liability:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.dotInsuranceGeneralLiability |date :'MM/dd/yyyy'}}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-5">
+                  <span class="span-label-card">Street Obstruction Bond:</span>
+                </div>
+                <div class="col-sm-7">
+                  {{rec.insuranceObstructionBond |date :'MM/dd/yyyy'}}
+                </div>
+              </div>
+              <!-- DOT INSURANCE EXPIRATION DATE BLOCK ENDS-->
+            </div>
+            <br />
+
+            <!-- NOTES BLOCK -->
+            <div class="row" *ngIf="rec.notes">
+              <div class="col-sm-12">
+                <span class="label-card"> Note:</span>
+              </div>
+            </div>
+            <div class="row" *ngIf="rec.notes">
+              <div [innerHTML]='rec.notes' class="col-sm-12 notes">
+              </div>
+            </div>
+            <div class="modify" *ngIf="rec.lastModifiedByEmployeeName">Last modified by
+              {{rec.lastModifiedByEmployeeName}} on {{rec.lastModifiedDate | date:'MM/dd/yyyy h:mm a'}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="ShowContact">
+      <div class="col-sm-9 div-no-padding-right-card ">
+        <div class="clearfix company-gid" *ngIf="isContact && contacts?.length > 0">
+          <div class="col-md-4 force-col" *ngFor="let contact of contacts | FilterPipe: queryString">
+            <div class="panel panel-default panel-contacts grid-card">
+              <div class="panel-heading panel-heading-companyContactsDetail">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="user-icon" style="background-image: url('{{contact.imageAux}}');">
+                      <span class="user">
+                        <!-- <img [src]="contact.imageAux" alt=""> -->
+                      </span>
+                    </div>
+                    <div class="user-info">
+                      <p class="p-contactsTitle">
+                        <span *ngIf="!contact.isActive"><i class=" incative-color fa fa-exclamation-circle"
+                            aria-hidden="true"></i>
+                        </span>
+                        <span *ngIf="contact.isActive"><i class="active-color fa fa-check-circle"
+                            aria-hidden="true"></i>
+                        </span>
+
+                        <a rel='noreferrer' href="javascript:void(0)" (mousedown)='Hola($event, contact)'
+                          class="p-contactsTitle link-blue" class="cont-name" rel='noreferrer'>
+                          {{join([contact.prefix, contact.firstName, contact.lastName,contact.suffix], ' ')}}
+                        </a>
+                      </p>
+                      <p class="p-contactsSubTitle">{{contact.contactTitle}}</p>
+                      <div class="contactsAddress">
+                        {{( contact.address ? contact.address : "") + ( contact.address2 ? (", " + contact.address2)
+                        :
+                        "") }}
+                        <br /> {{( contact.city ? contact.city +
+                        ", " : "") + ( contact.state ? contact.state
+                        : "") + " " + ( contact.zip ? contact.zip
+                        : "")}}
+                        <br />
+                      </div>
+                    </div>
+                    <span *ngIf="contact.isActive" dropdown-widget [items]="this.contactWidgetItems"
+                      (onItemClick)="onContactWidgetItemClick($event, contact)" class="contact-widget"></span>
+                    <span *ngIf="!contact.isActive" dropdown-widget [items]="this.inActivecontactWidgetItems"
+                      (onItemClick)="onContactWidgetItemClick($event, contact)" class="contact-widget"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <span class="label-card">Contact</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <span class="span-label-card-other">Work:</span>
+                  </div>
+                  <div class="col-sm-8">
+                    <span class="span-label-card-other1">{{contact.workPhone}} {{contact.ext != null && contact.ext
+                      !=
+                      '' ? '+' :''}}{{contact.ext}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <span class="span-label-card-other">Mobile:</span>
+                  </div>
+                  <div class="col-sm-9">
+                    <span class="span-label-card-other1">{{contact.cellNumber}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <span class="span-label-card-other">Other:</span>
+                  </div>
+                  <div class="col-sm-9">
+                    <span class="span-label-card-other1">{{contact.otherPhone}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <span class="span-label-card-other">Email:</span>
+                  </div>
+                  <div class="col-sm-9">
+                    <a rel='noreferrer' class="span-label-card-other1 link-blue" href="mailto:{{contact.email}}"
+                      target="_top">{{contact.email}}</a>
+                  </div>
+                </div>
+
+                <br />
+
+                <div class="row" *ngIf="contact.license">
+                  <div class="col-sm-12">
+                    <span class="label-card">License</span>
+                  </div>
+                </div>
+                <div class="row" *ngIf="contact.license">
+                  <div class="col-sm-5">
+                    <span class="span-label-card-other">{{contact.license}}</span>
+                  </div>
+                  <div class="col-sm-7"><span class="span-label-card-other1"> {{contact.licenseNumber}}</span></div>
+                </div>
+                <div class="modify">Last modified by {{contact.lastModifiedByEmployeeName ?
+                  contact.lastModifiedByEmployeeName : contact.createdByEmployeeName}} on {{contact.lastModifiedDate
+                  ?( contact.lastModifiedDate | date :'MM/dd/yyyy, h:mm a') : (contact.createdDate | date
+                  :'MM/dd/yyyy, h:mm a')}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 text-center" *ngIf="!isContact && (queryString == null || queryString == '')">No records
+          found</div>
+        <div class="col-md-12 text-center"
+          *ngIf=" queryString !='' && (contacts | FilterPipe:queryString).length == 0 ">No matching records found
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="col-sm-9 div-no-padding-right-card ">
+      <ng-container *ngIf="ShowJobs">
+        <div class="comp-job">
+          <job-data-table [companyId]="rec.id" [srch]="queryString"></job-data-table>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="ShowRFP">
+        <div class="comp-rfp">
+          <rfp-data-table [companyId]="rec.id" [srch]="queryString"></rfp-data-table>
+        </div>
+      </ng-container>
+      </div>
+
+    <!-- TABS -->
+    <!-- <div class="col-sm-9 div-no-padding-right-card ">
+      <div>
+        <tabset class="companyDetailDefined">
+          <tab (selectTab)="onSelect($event)" heading="Contacts" class="comp-contact">
+            <div class="clearfix company-gid" *ngIf="isContact && contacts?.length > 0"
+              [ngStyle]="{'max-height': detailsGridHeight() + 'px'}">
+              <div class="col-md-4 force-col" *ngFor="let contact of contacts | FilterPipe: queryString">
+                <div class="row">
+                  <div class="panel panel-default panel-contacts grid-card">
+                    <div class="panel-heading panel-heading-companyContactsDetail">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="user-icon">
+                            <span class="user">AP</span>
+                          </div>
+                          <div class="user-info">
+                            <p class="p-contactsTitle">
+                              <span *ngIf="!contact.isActive"><i class=" incative-color fa fa-exclamation-circle"
+                                  aria-hidden="true"></i>
+                              </span>
+                              <span *ngIf="contact.isActive"><i class="active-color fa fa-check-circle"
+                                  aria-hidden="true"></i>
+                              </span>
+
+                              <a rel='noreferrer' href="javascript:void(0)" (mousedown)='Hola($event, contact)'
+                                class="p-contactsTitle" class="cont-name" rel='noreferrer'>
+                                {{join([contact.prefix, contact.firstName, contact.lastName,contact.suffix], ' ')}}
+                              </a>
+                            </p>
+                            <p class="p-contactsSubTitle">{{contact.contactTitle}}</p>
+                            <div class="contactsAddress">
+                              {{( contact.address ? contact.address : "") + ( contact.address2 ? (", " +
+                              contact.address2) : "") }}
+                              <br /> {{( contact.city ? contact.city +
+                              ", " : "") + ( contact.state ? contact.state
+                              : "") + " " + ( contact.zip ? contact.zip
+                              : "")}}
+                              <br />
+                            </div>
+                          </div>
+                          <span *ngIf="contact.isActive" dropdown-widget [items]="this.contactWidgetItems"
+                            (onItemClick)="onContactWidgetItemClick($event, contact)" class="contact-widget"></span>
+                          <span *ngIf="!contact.isActive" dropdown-widget [items]="this.inActivecontactWidgetItems"
+                            (onItemClick)="onContactWidgetItemClick($event, contact)" class="contact-widget"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="panel-body">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <span class="label-card">Contact</span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <span class="span-label-card-other">Work:</span>
+                        </div>
+                        <div class="col-sm-8">
+                          <span class="span-label-card-other1">{{contact.workPhone}} {{contact.ext != null &&
+                            contact.ext != '' ? '+' :''}}{{contact.ext}}</span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <span class="span-label-card-other">Mobile:</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <span class="span-label-card-other1">{{contact.cellNumber}}</span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <span class="span-label-card-other">Other:</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <span class="span-label-card-other1">{{contact.otherPhone}}</span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <span class="span-label-card-other">Email:</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <a rel='noreferrer' class="span-label-card-other1" href="mailto:{{contact.email}}"
+                            target="_top">{{contact.email}}</a>
+                        </div>
+                      </div>
+
+                      <br />
+
+                      <div class="row" *ngIf="contact.license">
+                        <div class="col-sm-12">
+                          <span class="label-card">License</span>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="contact.license">
+                        <div class="col-sm-5">
+                          <span class="span-label-card-other">{{contact.license}}</span>
+                        </div>
+                        <div class="col-sm-7"><span class="span-label-card-other1"> {{contact.licenseNumber}}</span>
+                        </div>
+                      </div>
+                      <div class="modify">Last modified by {{contact.lastModifiedByEmployeeName ?
+                        contact.lastModifiedByEmployeeName : contact.createdByEmployeeName}} on
+                        {{contact.lastModifiedDate ?( contact.lastModifiedDate | date :'MM/dd/yyyy, h:mm a') :
+                        (contact.createdDate | date :'MM/dd/yyyy, h:mm a')}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 text-center" *ngIf="!isContact && (queryString == null || queryString == '')">No
+              records found</div>
+            <div class="col-md-12 text-center"
+              *ngIf=" queryString !='' && (contacts | FilterPipe:queryString).length == 0 ">No matching records found
+            </div>
+          </tab>
+          <tab (selectTab)="onSelect($event)" heading="Proposal">
+            <div class="comp-rfp" *ngIf="ShowRFP">
+              <rfp-data-table [companyId]="rec.id"></rfp-data-table>
+            </div>
+          </tab>
+          <tab (selectTab)="onSelect($event)" heading="Projects">
+            <div class="comp-job" *ngIf="ShowJobs">
+              <job-data-table [companyId]="rec.id"></job-data-table>
+            </div>
+          </tab>
+          <div class="details-right-block">
+
+          </div>
+        </tabset>
+      </div>
+    </div> -->
+
+  </div>
+</div>
+
+<ng-template #formContact>
+  <div form-contact [contact]="contactModal" [modalRef]="modalRef" [idCompany]="rec.id" [onSave]="onSave"></div>
+</ng-template>
+
+<ng-template #formCompany>
+  <div form-company [company]="rec" [modalRef]="modalRef" [onSave]="onSave"></div>
+</ng-template>
+
+<ng-template #formJob>
+  <div form-job [job]="jobOfComp" [modalRefJob]="modalRef" [onSave]="onSave" [fromComp]="true"></div>
+</ng-template>
+<ng-template #addtask>
+  <div add-task [addtask]="addtask" [idCompany]="idCompany" [isNew]="true" [modalRef]="modalRef" [reload]="reload">
+  </div>
+</ng-template>
+<!-- View Create Send Email for Company-->
+<ng-template #sendemailCompany>
+  <div send-email [modalRef]="modalRef" [idCompany]="idCompany" [openFromCompany]="true"></div>
+</ng-template>
+<!-- View Create Send Email for Contact-->
+<ng-template #sendemailContact>
+  <div send-email [modalRef]="modalRef" [idCompany]="idCompany" [idContact]="idContact" [openFromContact]="true"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<script src="https://cdn.datatables.net/scroller/1.5.1/js/dataTables.scroller.min.js"></script>

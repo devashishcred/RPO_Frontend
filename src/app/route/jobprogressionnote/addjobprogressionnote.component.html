@@ -1,0 +1,49 @@
+<div class="modal-custom-content" cdkDrag>
+    <div class="main-model">
+        <form #progressNoteForm="ngForm">
+            <div class="modal-header" cdkDragHandle>
+                <!-- <button type="button" class="close close-icn" (click)="modalRef.hide()">
+                    <span class="fa fa-times"></span>
+                </button> -->
+                <button type="button" class="close close-icn" cdkDragHandle>
+                    <span class="fa fa-arrows"></span>
+                </button>
+                <h4 class="modal-title pull-left">Project Highlights</h4>
+            </div>
+            <div class="modal-body pt15">
+                <textarea class="form-control progression-note" name="notes" id="" rows="5"
+                    [(ngModel)]="addJobProgressionNote.notes" placeholder="Add Notes" #notes="ngModel"
+                    required></textarea>
+                <div class="error-message pl0" *ngIf="isNewGenrealNote">
+                    <div *ngIf="notes.errors && (notes.dirty || notes.touched)">
+                        {{errorMsg.requiredProgressionNote}}
+                    </div>
+                </div>
+                <div class="text-right mt10">
+                    <button type="button" class="btn btn-white mr10" (click)="modalRef.hide()">Cancel</button>
+                    <button class="btn btn-blue" [disabled]="!progressNoteForm.form.valid"
+                        (click)="saveProgressionNote()">Add Note</button>
+                </div>
+                <div *ngIf="exsitingNotes?.length > 0">
+                    <div class="note-list">
+                        <div class="single-note" *ngFor="let progression of exsitingNotes;  let i = index">
+                            <p class="desc">
+                                <read-more [text]="progression.notes" [maxLength]="250"></read-more>
+                            </p>
+                            <p class="users">Added by
+                                {{progression.lastModified}} on {{progression.lastModifiedDate| date :'MM/dd/yyyy h:mm
+                                a'}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lds-css" *ngIf="loading">
+                <div class="lds-ripple">
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

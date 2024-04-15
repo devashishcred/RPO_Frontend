@@ -1,0 +1,163 @@
+<div class="modal-custom-content" cdkDrag>
+  <form (submit)="save()" ngNativeValidate>
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">Advanced Search</h4>
+      <a href="javascript:void(0)" class="clear-search link-blue" (click)="clearSearch()">Clear Filter</a>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="form-advance-search">
+        <div class="row">
+          <div class="col-sm-12">
+            <form>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Project Status</label>
+                  <select name="status" [(ngModel)]="filter.JobStatus" class="form-control" (change)="setJobsPerStatus()">
+                    <option value="null">Project Status</option>
+                    <option value="1">InProgress</option>
+                    <option value="2">On Hold</option>
+                    <option value="3">Completed</option>
+                  </select>
+                </div>
+                <div class="col-sm-6">
+                  <label for="">Project#</label>
+                  <angular2-multiselect [data]="jobList" name="jobId" [(ngModel)]="filter.jobId" [settings]="dropdownJobListSettings"
+                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event,'Project')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'Project')" #jobId="ngModel">
+                  </angular2-multiselect>
+                </div>
+  
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6" *ngIf="companies?.length>0">
+                  <label for="">Company</label>
+                  <ng-select name="idCompany" [items]="companies" bindLabel="name" bindValue="id" placeholder="Company"
+                    [(ngModel)]="filter.idCompany" (change)="setContacts()" #idCompany="ngModel">
+                  </ng-select>
+                </div>
+                <div class="col-md-6" *ngIf="contacts?.length>0">
+                  <label>Contact</label>
+                  <angular2-multiselect [data]="contacts" name="contact" [(ngModel)]="filter.contact" [settings]="dropdownContactListSettings"
+                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event,'contact')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'contact')" #contact="ngModel">
+                  </angular2-multiselect>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6" *ngIf="applicationTypesList?.length>0">
+                  <label for="">Application Type</label>
+                  <angular2-multiselect [data]="applicationTypesList" name="appType" [(ngModel)]="filter.appType"
+                    [settings]="dropdownAppTypeListSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event,'apptype')"
+                    (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event,'apptype')" #appType="ngModel">
+                  </angular2-multiselect>
+                </div>
+                <div class="col-sm-6" *ngIf="applicationStatusList?.length>0">
+                  <label for="">Application Status</label>
+                  <angular2-multiselect [data]="applicationStatusList" name="appStatus" [(ngModel)]="filter.appStatus"
+                    [settings]="dropdownAppStatusListSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'appstatus')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'appstatus')" #appStatus="ngModel">
+                  </angular2-multiselect>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6" *ngIf="projectManagerList?.length>0">
+                  <label>Project Manager</label>
+                  <angular2-multiselect [data]="projectManagerList" name="projectManager" [(ngModel)]="filter.projectManager"
+                    [settings]="dropdownProjectManagerListSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'pm')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'pm')" #projectManager="ngModel">
+                  </angular2-multiselect>
+                </div>
+                <div class="col-sm-2">
+                  <label> Landmark </label>
+                  <select name="hasLandMarkStatus" [(ngModel)]="filter.hasLandMarkStatus" class="form-control">
+                    <option [value]="null">All</option>
+                    <option value='true'>Yes</option>
+                    <option value='false'>No</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <label>Work Description </label>
+                  <input type="text" name="description" [(ngModel)]="filter.description" class="form-control">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Filed Date From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="FiledOnDateTo"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="filedOnFromDate" type="text" name="filedOnFromDate" [(ngModel)]="filter.filedOnFromDate"
+                      class="form-control" />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">Filed Date To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="FiledOnDateTo" [customMinDate]="filter.filedOnFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="filedOnToDate" [(ngModel)]="filter.filedOnToDate" type="text" name="filedOnToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Issue Date From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="IssuedToDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="issuedFromDate" type="text" name="issuedFromDate" [(ngModel)]="filter.issuedFromDate" class="form-control" />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">Issue Date To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="IssuedToDate" [customMinDate]="filter.issuedFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="issuedToDate" [(ngModel)]="filter.issuedToDate" type="text" name="issuedToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Completion Date From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="SignedOffToDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="signedOffFromDate" type="text" name="signedOffFromDate" [(ngModel)]="filter.signedOffFromDate"
+                      class="form-control" />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <label for="">Completion Date To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="SignedOffToDate" [customMinDate]="filter.signedOffFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="signedOffToDate" [(ngModel)]="filter.signedOffToDate" type="text" name="signedOffToDate"
+                      class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRefAdvanceSearch.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" (click)="searchJobs()">Search</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

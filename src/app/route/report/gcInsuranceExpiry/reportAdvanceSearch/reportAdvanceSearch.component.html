@@ -1,0 +1,173 @@
+<div class="modal-custom-content" cdkDrag>
+  <form (submit)="save()" ngNativeValidate>
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">Advanced Search</h4>
+      <a href="javascript:void(0)" class="clear-search link-blue" (click)="clearSearch()">Clear Filter</a>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="form-advance-search">
+        <div class="row">
+          <div class="col-sm-12">
+            <form>
+              <!-- <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Project#</label>
+                  <angular2-multiselect [data]="jobList" name="jobId" [(ngModel)]="filter.jobId" [settings]="dropdownJobListSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'Project')" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event,'Project')"
+                    #jobId="ngModel">
+                  </angular2-multiselect>
+                </div>
+              </div> -->
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Tracking Expiry From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="TrackingFromDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="TrackingFromDate" type="text" name="TrackingFromDate" [(ngModel)]="filter.TrackingFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">Tracking Expiry To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="TrasckingToDate" [customMinDate]="filter.TrackingFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="TrackingToDate" [(ngModel)]="filter.TrackingToDate" type="text" name="TrackingToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">DOB_WC From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="DOBWCFromDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOBWCFromDate" type="text" name="DOBWCFromDate" [(ngModel)]="filter.DOBWCFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">DOB_WC To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="DOBsWCToDate" [customMinDate]="filter.DOBWCFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOBWCToDate" [(ngModel)]="filter.DOBWCToDate" type="text" name="DOBWCToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">DOB_GL From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="DOBGLFromDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOBGLFromDate" type="text" name="DOBGLFromDate" [(ngModel)]="filter.DOBGLFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">DOB_GL To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="DOBGsLToDate" [customMinDate]="filter.DOBGLFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOBGLToDate" [(ngModel)]="filter.DOBGLToDate" type="text" name="DOBGLToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">DOB_DI From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="DOBDIFromDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOBDIFromDate" type="text" name="DOBDIFromDate" [(ngModel)]="filter.DOBDIFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">DOB_DI To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="DOBsDIToDate" [customMinDate]="filter.DOBDIFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOBDIToDate" [(ngModel)]="filter.DOBDIToDate" type="text" name="DOBDIToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">DOT_WC From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="DOTWCFromDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOTWCFromDate" type="text" name="DOTWCFromDate" [(ngModel)]="filter.DOTWCFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">DOT_WC To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="DOTWsCToDate" [customMinDate]="filter.DOTWCFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOTWCToDate" [(ngModel)]="filter.DOTWCToDate" type="text" name="DOTWCToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">DOT_GL From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="DOTGLFromDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOTGLFromDate" type="text" name="DOTGLFromDate" [(ngModel)]="filter.DOTGLFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">DOT_GL To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="DOTGLToDaste" [customMinDate]="filter.DOTGLFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOTGLToDate" [(ngModel)]="filter.DOTGLToDate" type="text" name="DOTGLToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">DOT_SOB From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="DOTSOBFromDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOTSOBFromDate" type="text" name="DOTSOBFromDate" [(ngModel)]="filter.DOTSOBFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">DOT_SOB To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="DOTSOBTosDate" [customMinDate]="filter.DOTSOBFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="DOTSOBToDate" [(ngModel)]="filter.DOTSOBToDate" type="text" name="DOTSOBToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" (click)="searchJobs()">Search</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

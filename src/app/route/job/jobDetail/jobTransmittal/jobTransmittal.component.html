@@ -1,0 +1,34 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-12 pt15">
+      <div class="component-body">
+        <h4 class="component-title pull-left mr-2">Transmittals</h4>
+        <div class="search-area">
+          <div class="search middle pull-left">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input class="form-control" type="text" placeholder="Search Transmittal" [(ngModel)]="srch" (ngModelChange)="search($event)">
+            </div>
+          </div>        
+          <button class="btn btn-panel pull-right no-padding {{btnShowHide}} {{showTransmittalAddBtn}}" (click)="openCreateTransmittalModal(addtransmittal, 'fromList')">Create Transmittal</button>
+        </div>
+        
+        <div class="">
+          <table id="dt-transmittal" class="display"  style="width:100%"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+<ng-template #addtransmittal>
+  <div add-transmittal [modalRef]="modalRef" [idJob]="idJob" [jobObj]="jobDetail"  [reload]="reload" [idTask]="tasknumberofTransmittal" [idOldTrasmittal]="idOldTrasmittal" [isResend]="isResend" [isRevise]="isRevise" [createNewTransmittal]='createNewTransmittal'></div>
+</ng-template>
+<ng-template #viewtask>
+  <div view-task [modalRef]="modalRef" [idTask]="idTask"></div>
+</ng-template>

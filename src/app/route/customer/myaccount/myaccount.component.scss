@@ -1,0 +1,196 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+.rpo-employee {
+  background: #f8f9fb;
+  padding-bottom: 50px;
+  min-height: calc(100vh - 20px);
+  .component-header {
+    margin-top: 20px;
+  }
+  .btn.btn-panel:not(.no-padding) {
+    padding: 8px 40px;
+  }
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    span {
+      color: #2db32d;
+      font-size: 12px;
+    }
+  }
+  .detail {
+    color: rgba(18, 18, 18, 0.5);
+  }
+  h3 {
+    font-size: 18px;
+  }
+  ul.myAccount-right {
+    list-style: none;
+    padding-left: 0;
+    li {
+      position: relative;
+      display: flex;
+      align-items: start;
+      gap: 10px;
+      line-height: 22px;
+      &:not(:last-child) {
+        margin-bottom: 15px;
+      }
+      &::before {
+        content: "\e876";
+        position: relative;
+        font-family: "Material Icons";
+        font-weight: normal;
+        font-style: normal;
+        font-size: 22px;
+        color: #2db32d;
+      }
+    }
+  }
+}
+.myAccount-left {
+  margin-top: 82px;
+  list-style: none;
+  height: calc(100vh - 60px);
+  position: fixed;
+  li {
+    &:not(:last-child) {
+      margin-bottom: 14px;
+    }
+    a {
+      font-weight: bold;
+      color: #121212;
+      text-decoration: none;
+      &:hover,
+      &.active {
+        color: #2db32d;
+      }
+    }
+  }
+}
+.myProfile-details {
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  max-width: 550px;
+  padding: 20px;
+  border-radius: 4px;
+  display: none;
+  &.open {
+    display: block;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 20px;
+  }
+  & [class^="col-"] {
+    margin-bottom: 20px;
+  }
+  & [class^="col-"] + [class^="col-"]:not(.force-col) {
+    padding-left: 15px !important;
+  }
+  textarea.form-control {
+    height: 180px;
+  }
+  .n-settings {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.myAccount-left li a {
+  cursor: pointer;
+}
+
+.is-invalid {
+  border: 1px solid #eb0101;
+  border-radius: 7px;
+}
+
+.invalid-feedback {
+  color: #eb0101;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.error-span {
+  color: #eb0101;
+}
+.profile-img-box {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  line-height: 68px;
+  text-align: center;
+  position: relative;
+  font-size: 32px;
+  font-weight: 600;
+  color: #fff;
+  &::after {
+    content: "\e412";
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #121212;
+    font-family: "Material Icons";
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+  }
+  input {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    font-family: Arial;
+    font-size: 118px;
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+  }
+  .profile-display-image {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+  }
+}
+
+.submit-comment {
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  h2 {
+    color: #2db32d;
+    margin: 0;
+    font-size: 26px;
+  }
+  p {
+    font-size: 18px;
+    max-width: 380px;
+    text-align: center;
+    a {
+      color: #2db32d;
+      margin: 0;
+      font-size: 26px;
+      cursor: pointer;
+    }
+  }
+  &.open {
+    display: flex;
+  }
+}
+
+.d-none {
+  display: none!important;
+}

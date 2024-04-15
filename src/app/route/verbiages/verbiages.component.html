@@ -1,0 +1,83 @@
+<div class="rpo-verbiages rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <h2 class="component-title pull-left">Verbiage</h2>
+      <button type="button" class="btn btn-panel pull-right middle {{showVerbiageAddBtn}}" (click)="openModal(formVerbiages)">Add Verbiage</button>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-verbiages" class="display"  style="width:100%"></table>
+  </div>
+
+  <ng-template #formVerbiages>
+    <div class="modal-custom-content" cdkDrag>
+      <form (submit)="save()" #addVerbiageForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+          <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+          </button>
+          <h4 class="modal-title pull-left">{{new ? 'Add Verbiage' : 'Edit Verbiage'}}</h4>
+        </div>
+        <div class="modal-body pt15 pb0">
+            <div class="modify pb10">
+                The following keywords in Content is to have dynamic data inserted : ##Name##, ##Company##, Addressee, subject
+            </div>
+  
+          <div class="row form-group">
+            <div class="col-md-12">
+              <label for="name">Name*</label>
+              <input required autofocus id="name" type="text" name="name" [(ngModel)]="rec.name" class="form-control" #name="ngModel" placeholder="Name"
+              />
+              <div class="error-message pl0">
+                <div *ngIf="name.errors && (name.dirty || name.touched)">
+                  {{errorMsg.requirename}}
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row form-group">
+            <div class="col-md-12">
+              <label>Verbiage Type*</label>
+              <ng-select name="verbiageType" [items]="verbiageTypeList" bindLabel="itemName" bindValue="id" placeholder="Verbiage Type"
+                [(ngModel)]="rec.verbiageType" #verbiageType="ngModel" required (change)="getContent()">
+              </ng-select>
+            </div>
+            <div class="error-message">
+              <div *ngIf="verbiageType.errors && (verbiageType.dirty || verbiageType.touched)">
+                {{errorMsg.requireVerbiageType}}
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="row">
+            <div class="col-md-12">
+              <label for="content"> Content</label>
+              <ck-editor id="content" name="content" [(ngModel)]="rec.content" [config]="constantValues.CKEDITORCONFIGSETTING"
+                debounce="500"></ck-editor>
+            </div>
+          </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-blue pull-right" [disabled]="!addVerbiageForm.form.valid">Save</button>
+          <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">Cancel</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+          <div class="lds-ripple">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

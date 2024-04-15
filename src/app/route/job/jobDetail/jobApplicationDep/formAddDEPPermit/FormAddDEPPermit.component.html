@@ -1,0 +1,124 @@
+<div class="modal-custom-content" cdkDrag>
+  <form ngNativeValidate name="formWorkPermit" #formWorkPermit="ngForm">
+    <div class="permit-content">
+      <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+          <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">{{ jobPermit.id?'Edit':'Add'}} Work Permit</h4>
+      </div>
+      <div class="modal-body pb0">
+        <div class="form-add-permit">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="Type">Application type</label>
+                  <input type="text" name="applicationType" [(ngModel)]="jobPermit.jobApplicationTypeName" readonly="readonly" disabled="disabled"
+                    class="form-control" />
+                </div>
+                <div class="col-sm-6">
+                  <label for="">Permit#</label>
+                  <input class="form-control" type="text" name="permitNumber" placeholder="Permit#" [(ngModel)]="jobPermit.permitNumber" #permitNumber="ngModel"
+                  />
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="Type">Work/Permit Type*</label>
+                  <ng-select name="idJobWorkType" [items]="workPermit" bindLabel="description" bindValue="id" placeholder="Work/Permit Type"
+                    [(ngModel)]="jobPermit.idJobWorkType" (change)="onChangeWorkPermitType($event)" #idJobWorkType="ngModel"
+                    required>
+                  </ng-select>
+                  <div class="error-message pl0">
+                    <div *ngIf="idJobWorkType.errors && (idJobWorkType.dirty || idJobWorkType.touched)">
+                      {{errorMsg.requireJobWorkPermitType}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <label for="code">Code</label>
+                  <input type="text" placeholder="Code" disabled="disabled" readonly="readonly" name="code" class="form-control" [(ngModel)]="jobPermit.code"
+                  />
+                </div>
+                <div class="col-sm-3" *ngIf="this.jobPermit.jobApplicationTypeName == 'Hydrant'">
+                  <label for="cost">Cost</label>
+                  <input type="text" placeholder="Cost" name="cost" #cost="ngModel" class="form-control" [(ngModel)]="jobPermit.estimatedCost"
+                    maxlength="10" pattern="^[0-9.,]+$" />
+                  <div class="error-message pl0">
+                    <div *ngIf="cost.invalid && (cost.dirty || cost.touched)">
+                      <div *ngIf="cost.errors.pattern">
+                        {{errorMsg.onlyCostDEP}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group date-row">
+                <div class="col-sm-3">
+                  <label for="filed">Filed on</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="filed" type="text" name="filed" class="form-control" [(ngModel)]="jobPermit.filed" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <label for="issued">Issued on</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="issued" type="text" name="issued" class="form-control" [(ngModel)]="jobPermit.issued" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <label for="expires">Expiry date</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="expires" type="text" name="expires" class="form-control" [(ngModel)]="jobPermit.expires" />
+                    <div class="error-message pl0">
+                      <div *ngIf="jobPermit.expires && (getTheDateObject(jobPermit.issued) > getTheDateObject(jobPermit.expires))">
+                        {{errorMsg.requiredExpiryDateSmaller}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <label for="signOff">Completed on</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="signOff" type="text" name="signOff" class="form-control" [(ngModel)]="jobPermit.signedOff" />
+                    <div class="error-message pl0">
+                      <div *ngIf="(jobPermit.signedOff && getTheDateObject(jobPermit.filed) > getTheDateObject(jobPermit.signedOff))">
+                        {{errorMsg.requiredCompletedDateSmaller}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <label for="description">Work Description</label>
+                  <textarea class="form-control" rows="3" placeholder="" name="desc" [(ngModel)]="jobPermit.workDescription"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer text-right">
+          <div class="col-sm-7 text-left">
+              <div class="modify" *ngIf="jobPermit.lastModifiedDate && jobPermit.lastModifiedDate">Last modified by {{jobPermit.lastModifiedByEmployeeName}} on {{jobPermit.lastModifiedDate | date :'MM/dd/yyyy, h:mm a'}}</div>
+            </div>
+        <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+        <button type="submit" class="btn btn-blue" [disabled]="!formWorkPermit.form.valid || jobPermit.expires && (getTheDateObject(jobPermit.issued) > getTheDateObject(jobPermit.expires))
+          || (jobPermit.signedOff && getTheDateObject(jobPermit.filed) > getTheDateObject(jobPermit.signedOff)) ||
+          (jobPermit.withdrawn && getTheDateObject(jobPermit.issued) > getTheDateObject(jobPermit.withdrawn))" (click)="savePermit()">{{jobPermit.id?'Update':'Save'}}</button>
+      </div>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

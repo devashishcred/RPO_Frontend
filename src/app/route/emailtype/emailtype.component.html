@@ -1,0 +1,28 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">Transmittal Type</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showTransmittalTypeAddBtn}}" (click)="openModalForm(emailtypeform,null,true)">Add Transmittal Type</button>
+        <div class="pull-left search middle">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Transmittal Type" [(ngModel)]="search" (ngModelChange)="searchEmailType(search)" />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body overflow-hidden">
+    <table id="dt-email-type" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #emailtypeform>
+    <div add-email-type  [modalRef]="modalRef" [reload]="reload" [emailTypeId]="emailTypeId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

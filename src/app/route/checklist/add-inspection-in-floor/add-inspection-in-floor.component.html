@@ -1,0 +1,32 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #groupform="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left"> Add Inspections</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label style="font-size: 14px; font-weight: 700;">Select Inspections*</label>
+                    <angular2-multiselect [data]="allInspections" name="InspectionType" #InspectionType="ngModel" [(ngModel)]="inspections" 
+                        [settings]="dropdownSettingsForFloors" required>
+                    </angular2-multiselect>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" [disabled]="!groupform.form.valid"
+                (click)="saveData()">Save</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

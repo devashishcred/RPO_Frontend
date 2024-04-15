@@ -1,0 +1,38 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-12">
+      <h4 class="component-title pull-left mr-2">Project History</h4>
+      <a href="javascript:void(0)" class="ad-filter pull-left mt-12 material-icon" tooltip="Filter History" (click)="openModalFilterHistory(filterhistory)">
+        <img _ngcontent-sdn-c25="" src="./assets/images/filter_icon.svg" width="24px">
+      </a>
+    </div>
+    <div class="col-sm-12">
+      <div class="timeline-centered">
+        <article class="timeline-entry" *ngFor="let jh of jobHistoryData; index as i">
+          <div class="timeline-entry-inner">
+            <div class="timeline-icon"></div>
+            <div class="timeline-label">
+              <p class="date">{{jh.historyDate | date:'MM/dd/yyyy h:mm a'}}</p>
+              <p class="name" *ngIf="jh.idEmployee!= null">{{jh.firstName}} {{jh.lastName}}</p>
+              <p class="name" *ngIf="jh.idEmployee == null">System Project</p>
+              <p class="description">{{jh.description}}</p>
+            </div>
+          </div>
+        </article>
+        <div *ngIf="jobHistoryData.length == 0 && !loading">
+          <p>No matching records found</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+  </div>
+</div>
+<ng-template #filterhistory>
+    <div filter-history [idJob]="idJob" [modalRef]="modalRef" [reloadFilter]="reloadFilter" [selectedType]="selectedType" [selectedEmp]="selectedEmp" [selectedStartDate]="selectedStartDate" [selectedEndDate]="selectedEndDate"></div>
+  </ng-template>

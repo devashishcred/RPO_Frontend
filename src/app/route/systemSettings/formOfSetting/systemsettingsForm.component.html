@@ -1,0 +1,36 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #settingsform="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">EDIT SETTINGS</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="name">Notification event</label>
+                    <input id="name" name="name" type="text" disabled="true" class="form-control" [(ngModel)]="settingType.name" #name="ngModel"
+                    />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="email">Recipients</label>
+                    <angular2-multiselect [data]="ListOfEmployeeEmails" name="selectEmail" [(ngModel)]="settingType.value" [settings]="dropdownSettings" >
+                        </angular2-multiselect>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" [disabled]="!settingsform.form.valid" (click)="saveSetting()">Save</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

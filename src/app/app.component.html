@@ -1,0 +1,27 @@
+<div class="rpo-app background">
+    <delete-confirmation #deleteConfirmation></delete-confirmation>
+    <save-confirmation #saveConfirmation></save-confirmation>
+    <main>
+        <app-header [login]="login" [user]="user"></app-header>
+        <router-outlet></router-outlet>
+    </main>
+</div>
+<span class="material-symbols-rounded" style="font-size: 0px!important;position: absolute;">keyboard_arrow_down</span>
+<span class="material-symbols-outlined" style="font-size: 0px!important;position: absolute;">overview</span>
+
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<ng-template #viewtask>
+    <div notification-task [modalRef]="modalRef" [idTask]="idTask" [idJob] = "idJob" [redirectionURL] = "redirectionURL"></div>
+</ng-template>
+<!-- <script type="text/javascript">
+    $('.sub-menu ul').hide();
+    $(".sub-menu a").click(function () {
+        $(this).parent(".sub-menu").children("ul").slideToggle("100");
+        $(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
+    });
+</script> -->

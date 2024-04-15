@@ -1,0 +1,55 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #applicationTypeForm="ngForm">
+  <div class="modal-header" cdkDragHandle>
+    <button type="button" class="close close-icn mr-2" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+    </button>
+    <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Application Type</h4>
+  </div>
+  <div class="modal-body pb0 pt15">
+    <div class="row form-group">
+      <div class="col-sm-12">
+        <label for="task">Job Type*</label>
+        <ng-select name="idParent" [items]="applicationTypeList" bindLabel="itemName" bindValue="id" placeholder="Job Type" [(ngModel)]="applicationType.idParent"
+          required #idParent="ngModel">
+        </ng-select>
+        <div class="error-message pl0">
+          <div *ngIf="idParent.errors && (idParent.dirty || idParent.touched)">
+            {{errorMsg.requireJobType}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-sm-12">
+        <label for="task">Application Type*</label>
+        <input id="description" name="description" type="text" class="form-control" [(ngModel)]="applicationType.description" #description="ngModel"
+          required placeholder="Application Type"/>
+        <div class="error-message pl0">
+          <div *ngIf="description.errors && (description.dirty || description.touched)">
+            {{errorMsg.requireApplicationType}}
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-12">
+        <label for="task">Description</label>
+        <textarea rows="5" cols="5" id="content" name="content" type="text" class="form-control" [(ngModel)]="applicationType.content"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+    <button type="button" class="btn btn-blue" [disabled]="!applicationTypeForm.form.valid" (click)="saveApplicationType()">Save</button>
+  </div>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</form>
+</div>

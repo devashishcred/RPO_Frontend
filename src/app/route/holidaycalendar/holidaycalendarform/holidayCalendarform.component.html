@@ -1,0 +1,49 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #holidayCalendarform="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Holiday </h4>
+    </div>
+    <div class="modal-body pb0 pt15" style="min-height:48vh">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Name*</label>
+          <input id="name" name="name" type="text" class="form-control" [(ngModel)]="holidayCalendar.name" #name="ngModel" placeholder="Name"
+            required/>
+          <div class="error-message pl0">
+            <div *ngIf="name.errors && (name.dirty || name.touched)">
+              {{errorMsg.requirename}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Holiday Date*</label>
+          <div datetime-picker class="inner-addon right-addon input-group">
+            <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+            <input placeholder="MM/DD/YYYY" id="holidayDate" name="holidayDate" type="text" class="form-control" [(ngModel)]="holidayCalendar.holidayDate" #holidayDate="ngModel" required
+            />
+          </div>
+          <div class="error-message pl0">
+            <div *ngIf="holidayDate.errors && (holidayDate.dirty || holidayDate.touched)">
+              {{errorMsg.requireHolidayDate}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!holidayCalendarform.form.valid" (click)="saveHoldiay()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

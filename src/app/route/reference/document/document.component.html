@@ -1,0 +1,95 @@
+<div class="rpo-Company rpo-component" [ngStyle]="{'display': !this.isConsulting ? 'none' : ''}">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left mr-2">Documents</h2>
+            <button type="button" class="btn btn-panel pull-right middle {{showDocumentAddBtn}}" (click)="openModal(formDocument)">Add Document</button>
+            <div class="pull-left search middle">
+                <div class="inner-addon left-addon">
+                <i class="icon fa fa-search"></i>
+                <input type="text" class="form-control" placeholder="Search Document" [(ngModel)]="srch" (ngModelChange)="search(srch)" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="component-body overflow-hidden">
+        <table id="dt-document" class="display"  style="width:100%"></table>
+    </div>
+
+
+    <ng-template #formDocument>
+        <div class="modal-custom-content" cdkDrag>
+            <form (submit)="save()" #documentForm="ngForm" ngNativeValidate novalidate>
+                    <div class="modal-header" cdkDragHandle>
+                        <button type="button" class="close close-icn" cdkDragHandle>
+                            <span class="fa fa-arrows"></span>
+                        </button>
+                        <h4 class="modal-title pull-left">{{new ? 'Add Document' : 'Edit Document'}}</h4>
+                    </div>
+                
+                    <div class="modal-body pt15 pb0">
+                        <div class="form-document">
+                            <div class="row form-group">
+                                <div class="col-sm-7">
+                                    <label>Document Name*</label>
+                                    <input class="form-control" placeholder="Document Name" [(ngModel)]="rec.name" id="name" type="text" name="name" required #name="ngModel"  maxlength="50"/>
+                                    <div class="error-message pl0" *ngIf="name.errors && (name.dirty || name.touched)">
+                                        {{errorMsg.requireDocName}}
+                                    </div>
+                                </div>
+                            </div>                        
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <label>Keywords</label>
+                                    <textarea class="form-control" placeholder="Write keywords" rows="4" [(ngModel)]="rec.keywords" id="keywords" type="text" name="keywords" #keywords="ngModel" maxlength="2000"></textarea>                                
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <label>Description</label>
+                                    <textarea class="form-control" placeholder="Write description...." rows="5" [(ngModel)]="rec.description" id="description" type="text" name="description" #description="ngModel" maxlength="2000"></textarea>                                
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4 class="blue-title mb0">
+                                        Attach File*
+                                        <div class="fl-upload">
+                                            <label class="upload-link rpo-file-upload mb0" for="document-file-upload">
+                                                Click to <span> Browse</span> to Upload your files
+                                            </label>
+                                            <input type="file" id="document-file-upload" name="document-file-upload" class="rpo-file-upload"  (change)="handleFileSelect($event)" accept=" .pdf, .doc, .docx, .txt, .xlx, .xlxs, .ppt,.pptx" required/>                                    
+                                        </div>
+                                    </h4>
+                                    <div class="attach-document-box">
+                                        <span *ngIf="!chkfile">{{rec.fileName}}</span>
+                                        <a *ngIf="chkfile" target="_blank" class="pointer" style="margin-left:10px;" (click)="getDocumentViaDownload(rec.id)">{{rec.fileName}}</a>             
+                                    </div>
+                                    <div class="error-message" *ngIf="valfile && !rec.file">
+                                        {{errorMsg.requireDocFileContent}}
+                                    </div>
+                                </div>                         
+                            </div>
+                        </div>
+                    </div>            
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-blue pull-right"  [disabled]="rec.name == '' || rec.fileName == ''" #button>Save</button>
+                        <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">Cancel</button>
+                    </div>
+                    <div class="lds-css" *ngIf="loading">
+                        <div class="lds-ripple">
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </ng-template>
+</div>
+
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

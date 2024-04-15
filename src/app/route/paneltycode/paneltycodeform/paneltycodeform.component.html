@@ -1,0 +1,58 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #penaltyCodeForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Penalty Code</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Penalty Code*</label>
+          <input id="paneltyCode" name="paneltyCode" type="text" class="form-control" [(ngModel)]="penaltyCode.paneltyCode" #paneltyCode="ngModel" required/>
+          <div class="error-message pl0">
+            <div *ngIf="paneltyCode.errors && (paneltyCode.dirty || paneltyCode.touched)">
+              {{errorMsg.requiredPenaltyCode}}
+            </div>
+  
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Code Section*</label>
+          <input id="codeSection" name="codeSection" type="text" class="form-control" [(ngModel)]="penaltyCode.codeSection" #codeSection="ngModel" required/>
+          <div class="error-message pl0">
+            <div *ngIf="codeSection.errors && (codeSection.dirty || codeSection.touched)">
+              {{errorMsg.requiredPenaltyCodeSection}}
+            </div>
+  
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Description*</label>
+          <input id="penlatyDescription" name="penlatyDescription" type="text" class="form-control" [(ngModel)]="penaltyCode.description" #penlatyDescription="ngModel" required/>
+          <div class="error-message pl0">
+            <div *ngIf="penlatyDescription.errors && (penlatyDescription.dirty || penlatyDescription.touched)">
+              {{errorMsg.requiredDescription}}
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!penaltyCodeForm.form.valid" (click)="savePenaltyCode()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

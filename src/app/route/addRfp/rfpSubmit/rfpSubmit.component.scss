@@ -1,0 +1,99 @@
+.rpo-rfpSubmit {
+    button.middle {
+      margin-top: 12px;
+    }
+    .wizard-body{
+      width: 1005px;
+      margin: 0 auto;
+      transform: translate(-20px, 0);
+      hr{
+        margin-top: 25px;
+        margin-bottom: 25px;
+        border-color: #e5e5e5;
+      }
+      p{
+        color: #666666;
+        // margin: 30px 0px;
+      }
+      .footer-area{
+        padding-top: 0px;
+        .btn{
+          margin-left: 0px;
+        }
+      }
+    }
+    .button-group{
+      margin-top: 22px;
+      .btn{
+        margin-left: 10px;
+      }
+    }
+    .btn-panel{
+      &.big{
+        padding: 8px 50px 8px 20px;
+        font-size: 16px;
+        i{
+          margin-right: 15px;
+          font-size: 24px;
+        }
+        span{
+          position: relative;
+          top: -3px;
+        }
+      }
+    }
+    .footer-area{
+      // border-top: 1px solid #ddd;
+      // margin-top: 15px;
+      .btn-panel{
+        padding-left: 0;
+        padding-right: 0px;
+        i{
+          padding-right: 5px;
+        }
+      }
+      .modal-body{
+        padding-left: 15px;
+        padding-top: 0px !important;
+        padding-right: 0px;
+      }
+    }
+    .ex-job{
+      padding-left: 15px;
+      .list-inline{
+        margin-bottom: 0px;
+        li{
+          vertical-align: top;
+          &:nth-child(4){
+            vertical-align: middle;
+            margin-top: 5px;
+          }
+        }
+      }
+      .j-id, .po{
+        width: 140px;
+      }
+      .btn{
+        padding: 5px 15px;
+        vertical-align: inherit;
+      }
+      .linked{
+        padding-top: 30px;
+        font-weight: normal;
+        a{
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  
+  .search {
+    width: 294px;
+    margin-right: 20px;
+    &.middle {
+      margin-top: 15px;
+    }
+  }
+  .dlink{
+    margin-left: 1rem;
+  }

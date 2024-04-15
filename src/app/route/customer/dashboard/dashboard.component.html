@@ -1,0 +1,123 @@
+<ng-container *ngIf="isCustomerLoggedIn">
+    <div class="rpo-home">
+        <div class="row component-header">
+            <div class="col-sm-12 welcome-title">
+                <h2><span>Welcome! </span> {{userInfo?.name}}</h2>
+                <!-- <p><img src="../../../../assets/RPO_svg_logo.svg" style="margin-top: -3px;" width="36px"/> Information in a Snap</p> -->
+                <!-- <p><img src="../../../../assets/RPO_svg_logo.svg" style="margin-top: -3px;" width="36px"/> Inc. Powered by SnapCor<span class="trademark">®</span></p> -->
+            </div>
+        </div>
+         <div class="component-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- <h2>Select from the options below to begin</h2> -->
+                    <h2>Let's get started!</h2>
+                    <br>
+                    <!-- <p>Information in a Snap</p> -->
+                    <!-- <p>Information in a SnapCor<span class="trademark">®</span></p> -->
+                </div>
+                <div class="col-md-12 d-flex">
+                    <div class="dash-card">
+                        <div class="circle-icon">
+                            <span class="material-symbols-outlined">assignment</span>
+                        </div>
+                        <div class="txt-box">
+                            <h4>Projects</h4>
+                            <p>See a list of your projects</p>
+                        </div>
+                        <button class="btn btn-blue" routerLink="/jobs" name="" type="submit">My Projects</button>
+                    </div>
+                    <div class="dash-card">
+                        <div class="circle-icon">
+                            <img src="./assets/violation_ico.svg" style="opacity: .5;" width="50px" height="50px" alt="">
+                            <!-- <span class="material-symbols-outlined">insert_chart</span> -->
+                        </div>
+                        <div class="txt-box">
+                            <h4>Violations</h4>
+                            <p>See violations affecting your projects</p>
+                        </div>
+                        <button class="btn btn-blue" routerLink="/allviolationreport" name="" type="submit">Violations</button>
+                    </div>
+                    <div class="dash-card">
+                        <div class="circle-icon">
+                            <span class="material-symbols-outlined">quick_reference</span>
+                        </div>
+                        <div class="txt-box">
+                            <h4>Expiring Permits</h4>
+                            <p>View expiring permits for your projects</p>
+                        </div>
+                        <button class="btn btn-blue" name="" type="submit" routerLink="/permitsexpiryreport">Expiring Permits</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row component-footer">
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="employDetail">
+                            <h4>Michael Pressel 
+                                <img src="../../../../assets/rpo-logo-2.png"/> 
+                                <!-- <img src="../../../../assets/RPO_svg_logo.svg"/>  -->
+                            </h4>
+                            <span>President</span>
+                            <p dataName="call">(212) 566-5110/1110</p>
+                            <p dataName="mail"><a href="mailto:mpressel@rpoinc.com">mpressel@rpoinc.com</a></p>
+                            <p dataName="link"><a [attr.href]="'//' + 'www.rpoinc.com'" target="_blank" rel="noopener noreferrer">www.rpoinc.com</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="employDetail">
+                            <h4>Robert Anic 
+                                <img src="../../../../assets/rpo-logo-2.png"/> 
+                                <!-- <img src="../../../../assets/RPO_svg_logo.svg"/>  -->
+                            </h4>
+                            <span>Vice President, Operations</span>
+                            <p dataName="call">(212) 566-5110/1114</p>
+                            <p dataName="mail"><a href="mailto:ranic@rpoinc.com">ranic@rpoinc.com</a></p>
+                            <p dataName="link"><a [attr.href]="'//' + 'www.rpoinc.com'" target="_blank" rel="noopener noreferrer">www.rpoinc.com</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="employDetail">
+                            <h4>Kelly Mullaney 
+                                <img src="../../../../assets/rpo-logo-2.png"/> 
+                                <!-- <img src="../../../../assets/RPO_svg_logo.svg"/>  -->
+                            </h4>
+                            <span>Business Manager</span>
+                            <p dataName="call">(212) 566-5110/1118</p>
+                            <p dataName="mail"><a href="mailto:kmullaney@rpoinc.com">kmullaney@rpoinc.com</a></p>
+                            <p dataName="link"><a [attr.href]="'//' + 'www.rpoinc.com'" target="_blank" rel="noopener noreferrer">www.rpoinc.com</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 footer-right">            
+                <div class="requestNew">
+                    <div class="txt-box">
+                        <h4>Request a Proposal</h4>      
+                        <button class="btn btn-sm" name="" type="button" (click)="openNewProjectModal()">Click Here</button>      
+                    </div>
+                </div>
+                <div class="newsBlog">
+                    <div class="img-box" (click)="openNewsLink()">
+                        <img (click)="openNewsLink()" [src]="newsDetails?.newsImagePath || '../../../assets/blog-img.jpg'" />
+                    </div>
+                    <div class="txt-box">
+                        <h4 style="-webkit-box-orient: vertical;">{{newsDetails?.title || 'Deadline for posting building energy efficiency rating tables'}}</h4> 
+                        <p>{{newsDetails?.createdDate ? (newsDetails?.createdDate | date : 'mediumDate') : 'December 21, 2022'}}</p>
+                        <button class="btn btn-sm" name="" type="submit" (click)="openNewsLink()">Click to Read</button>    
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 copyRight">© 2023 SnapCor<span class="trademark">®</span> Inc. All Rights Reserved.</div>
+        </div>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</ng-container>

@@ -1,0 +1,109 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #addApplicationForm="ngForm">
+  <div class="modal-header" cdkDragHandle>
+    <button type="button" class="close close-icn" cdkDragHandle>
+      <span class="fa fa-arrows"></span>
+    </button>
+    <h4 class="modal-title pull-left">{{application.id?'Edit':'Add'}} Application</h4>
+  </div>
+  <div class="modal-body pt15 pb0">
+    <div class="form-add-application">
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <label for="Type">Application Type*</label>
+          <div>
+            <ng-select name="appType" [items]="applicationType" bindLabel="description" bindValue="id" placeholder="Application Type"
+              [(ngModel)]="application.idJobApplicationType" (change)='onChangeApplicationType($event,application.idJobApplicationType)' required #appType="ngModel">
+            </ng-select>
+            <div class="error-message pl0">
+              <div *ngIf="appType.errors && (appType.dirty || appType.touched)">
+                {{errorMsg.requireJobApplicationType}}
+              </div>
+            </div>
+          </div>
+        </div>
+       
+        <div class="col-sm-4">
+          <label for="Application">Application#</label>
+          <input type="text" placeholder="Application#" name="appnumber" id="appnumber" [(ngModel)]="application.applicationNumber"
+            [required]="appNUmberRequired" #appnumber="ngModel" class="form-control application"  
+          />
+          <div class="error-message pl0">
+            <div *ngIf="appnumber.invalid && (appnumber.dirty || appnumber.touched)">
+              <div *ngIf="appnumber.errors.minlength">
+                {{errorMsg.requiredApplicationDOBNumber}}
+              </div>
+              <div *ngIf="appnumber.errors.required">
+                {{errorMsg.requiredApplicationDOBNumber}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <label for="for">For</label>
+          <input type="text" placeholder="For" readonly="readonly" [(ngModel)]="application.applicationFor" name="appFor" #appFor="ngModel"
+            class="form-control" />
+        </div>
+      </div>
+      <div class="row" *ngIf='workOnFloorRequired'>
+        <div class="col-sm-4 border-bottom">
+          <label for="type">Work Type*</label>
+          <angular2-multiselect [data]="workTypes"  name="workType"   [(ngModel)]="application.idJobWorkTypes" [settings]="dropdownSettings"
+              (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+              (onDeSelectAll)="onDeSelectAll($event)" required #workType="ngModel" >
+          </angular2-multiselect>
+      </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <label for="for">Work on Floor (if different from above)</label><label *ngIf='workOnFloorRequired'>*</label>
+          <input type="text" name="floor" placeholder="Work on Floor (if different from above)" [(ngModel)]="application.floorWorking"
+            [required]= "workOnFloorRequired" #floor="ngModel" class="form-control" />
+            <div class="error-message pl0">
+              <div *ngIf="floor.invalid && (floor.dirty || floor.touched)">
+                <div *ngIf="floor.errors.required">
+                  {{errorMsg.requiredFloorsWorkOnFloors}}
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+          <label for="status">Status</label>
+          <input type="text" name="jobApplicationStatus" placeholder="Status" [(ngModel)]="application.jobApplicationStatus" #jobApplicationStatus="ngModel"
+            class="form-control" />
+        </div>
+        
+      </div>
+
+      <div class="form-group mt-2">
+        <div class="checkbox-inline form-check">
+          <label for="readySignOff" class="form-check-label">
+            <input class="form-check-input" id="readySignOff" name="readySignOff" type="checkbox" [(ngModel)]="application.signOff"> Ready For Sign Off 
+            <i class="input-helper"></i>
+          </label>
+        </div>
+        <div class="checkbox-inline form-check mt-2">
+          <label for="site" class="form-check-label">
+            <input class="form-check-input" id="site" name="site" type="checkbox" [(ngModel)]="application.isHighRise"> High Rise 
+            <i class="input-helper"></i>
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="modal-footer text-right">
+    <div class="col-sm-7 text-left">
+      <div class="modify" *ngIf="application.lastModifiedDate && application.lastModifiedDate">Last modified by {{application.lastModifiedByEmployeeName}} on {{application.lastModifiedDate | date :'MM/dd/yyyy, h:mm a'}}</div>
+    </div>
+    <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+    <button type="submit" class="btn btn-blue" [disabled]="!addApplicationForm.form.valid" (click)="saveJobApplication()">{{application.id?'Update':'Save'}}</button>
+  </div>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</form>
+</div>

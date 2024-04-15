@@ -1,0 +1,285 @@
+<div class="modal-custom-content" cdkDrag>
+    <!--
+    <form #addressTypeForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Address</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+
+
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label>Borough*</label>
+                    <select class="form-control" name="idBorough" [(ngModel)]="address.idBorough" #idBorough="ngModel" required (ngModelChange)="checkBisAddressInfo()">
+                        <option disabled hidden [value]="selectUndefinedOptionValue">Borough</option>
+                        <option *ngFor="let borough of boroughs" [value]="borough.id">{{borough.description}}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>House#*</label>
+                    <input class="form-control" name="houseNumber" [(ngModel)]="address.houseNumber" placeholder="House#" #houseNumber="ngModel"
+                           required (ngModelChange)="checkBisAddressInfo()"/>
+                </div>
+                <div class="col-md-5">
+                    <label>Street Name*</label>
+                    <input class="form-control" name="street" [(ngModel)]="address.street" placeholder="Street Name" #street="ngModel" required
+                           (ngModelChange)="checkBisAddressInfo()"/>
+                </div>
+                <div class="col-md-3">
+                    <label class="block">&nbsp;</label>
+                    <button type="button" class="btn btn-blue no-padding" [disabled]="!displayGetInfo" (click)="getBisAddressInfo()">Get Info</button>
+                </div>
+                <div class="error-message">
+                    <div *ngIf="idBorough.errors && (idBorough.dirty || idBorough.touched)">
+                        {{errorMsg.requireBorough}}
+                    </div>
+                    <div *ngIf="houseNumber.errors && (houseNumber.dirty || houseNumber.touched)">
+                        {{errorMsg.requireHouseNumber}}
+                    </div>
+                    <div *ngIf="street.errors && (street.dirty || street.touched)">
+                        {{errorMsg.requireStreet}}
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label>Zip</label>
+                    <input class="form-control" name="zipCode" [(ngModel)]="address.zipCode" placeholder="Zip" maxlength="5"/>
+                </div>
+                <div class="col-md-2">
+                    <label>Block</label>
+                    <input class="form-control" name="block" [(ngModel)]="address.block" placeholder="Block"/>
+                </div>
+                <div class="col-md-2">
+                    <label>Lot</label>
+                    <input class="form-control" name="lot" [(ngModel)]="address.lot" placeholder="Lot"/>
+                </div>
+                <div class="col-md-2">
+                    <label>Bin#</label>
+                    <input class="form-control" name="binNumber" [(ngModel)]="address.binNumber" placeholder="Bin#"/>
+                </div>
+                <div class="col-md-3">
+                    <label>Community Board#</label>
+                    <input class="form-control" name="comunityBoardNumber" [(ngModel)]="address.comunityBoardNumber" placeholder="Community Board#"
+                    />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <label>Zone District(s)</label>
+                    <input class="form-control" name="zoneDistrict" [(ngModel)]="address.zoneDistrict" placeholder="Zone District(s)"/>
+                </div>
+                <div class="col-md-3">
+                    <label>Overlay(s)</label>
+                    <input class="form-control" name="overlay" [(ngModel)]="address.overlay" placeholder="Overlay(s)"/>
+                </div>
+                <div class="col-md-3">
+                    <label>Special District(s)</label>
+                    <input class="form-control" name="specialDistrict" [(ngModel)]="address.specialDistrict" placeholder="Special District(s)"
+                    />
+                </div>
+                <div class="col-md-2">
+                    <label>Map</label>
+                    <input class="form-control" name="map" [(ngModel)]="address.map" placeholder="Map"/>
+                </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label>Address Type*</label>
+                    <ng-select name="idAddressType" [items]="addressTypes" bindLabel="itemName" bindValue="id" placeholder="Select Address Type"
+                               [(ngModel)]="address.idAddressType" #idAddressType="ngModel" (change)="setAddressType()" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idAddressType.errors && (idAddressType.dirty || idAddressType.touched)">
+                            {{errorMsg.requireAddressType}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="block">
+                        Company*
+                        <div class="checkbox pull-right form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="nonProfit" [(ngModel)]="address.nonProfit"/> Non-Profit
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </label>
+                    <ng-select name="idCompany" [items]="companies" bindLabel="name" bindValue="id" placeholder="Company" [(ngModel)]="address.idCompany"
+                               #idCompany="ngModel" required #idCompany="ngModel">
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idCompany.errors && (idCompany.dirty || idCompany.touched)">
+                            {{errorMsg.companyName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Owner</label>
+                    <ng-select name="street" [items]="contactList" bindLabel="itemName" bindValue="id" placeholder="Owner" [(ngModel)]="address.idOwnerContact"
+                               #idContact="ngModel" (change)="setContact()">
+                    </ng-select>
+                </div>
+            </div>
+            <hr>
+
+            <div class="classify-info">
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        <label class="block">
+                            Occupancy Classification
+                            <div class="checkbox form-check pull-right">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="isOcupancyClassification20082014" [(ngModel)]="address.isOcupancyClassification20082014"/> 2008/2014
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                        </label>
+                        <select id="idOccupancyClassification" placeholder="Select" name="idOccupancyClassification" [(ngModel)]="address.idOccupancyClassification"
+                                class="form-control" (change)="setOccupancyClassification()">
+                            <option disabled hidden [value]="selectUndefinedOptionValue">Occupancy Classification</option>
+                            <option *ngFor="let occuClassification of occuClassifications" [value]="occuClassification.id">{{occuClassification.description}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="block">
+                            Construction Classification
+                            <div class="checkbox form-check pull-right">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="isConstructionClassification20082014" [(ngModel)]="address.isConstructionClassification20082014"
+                                    /> 2008/2014
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                        </label>
+                        <select id="idConstructionClassification" placeholder="Select" name="idConstructionClassification" [(ngModel)]="address.idConstructionClassification"
+                                class="form-control" (change)="setConstructionClassifications()">
+                            <option disabled hidden [value]="selectUndefinedOptionValue">Construction Classification</option>
+                            <option *ngFor="let constructionClassification of constructionClassifications" [value]="constructionClassification.id">{{constructionClassification.description}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Multiple Dwelling Classification</label>
+                        <select id="idMultipleDwellingClassification" placeholder="Select" name="idMultipleDwellingClassification" [(ngModel)]="address.idMultipleDwellingClassification"
+                                class="form-control" (change)="setmultipleDwellingClassifications()">
+                            <option disabled hidden [value]="selectUndefinedOptionValue">Multiple Dwelling Classification</option>
+                            <option *ngFor="let multipleDwellingClassification of multipleDwellingClassifications" [value]="multipleDwellingClassification.id">{{multipleDwellingClassification.description}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        <label>Primary Structural system</label>
+                        <select id="idPrimaryStructuralSystem" placeholder="Select" name="idPrimaryStructuralSystem" [(ngModel)]="address.idPrimaryStructuralSystem"
+                                class="form-control" (change)="setprimaryStructuralSystems()">
+                            <option disabled hidden [value]="selectUndefinedOptionValue">Primary Structural system</option>
+                            <option *ngFor="let primaryStructuralSystem of primaryStructuralSystems" [value]="primaryStructuralSystem.id">{{primaryStructuralSystem.description}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Structure Occupancy Category</label>
+                        <select id="idStructureOccupancyCategory" placeholder="Select" name="idStructureOccupancyCategory" [(ngModel)]="address.idStructureOccupancyCategory"
+                                class="form-control" (change)="setstructureOccupancyCategories()">
+                            <option disabled hidden [value]="selectUndefinedOptionValue">Structure Occupancy Category</option>
+                            <option *ngFor="let structureOccupancyCategorie of structureOccupancyCategories" [value]="structureOccupancyCategorie.id">{{structureOccupancyCategorie.description}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Seismic Design Category</label>
+                        <select id="idSeismicDesignCategory" placeholder="Select" name="idSeismicDesignCategory" [(ngModel)]="address.idSeismicDesignCategory"
+                                class="form-control">
+                            <option disabled hidden [value]="selectUndefinedOptionValue">Seismic Design Category</option>
+                            <option *ngFor="let seismicDesignCategory of seismicDesignCategories" [value]="seismicDesignCategory.id">{{seismicDesignCategory.description}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex-row">
+                    <div class="column-vsmall">
+                        <label>Stories#</label>
+                        <input type="text" class="form-control" name="stories" [(ngModel)]="address.stories" placeholder="Stories"/>
+                    </div>
+                    <div class="column-vsmall">
+                        <label>Height (
+                            <i>inch</i>)
+                        </label>
+                        <input type="text" class="form-control" name="height" [(ngModel)]="address.height" placeholder="Height inch"/>
+                    </div>
+                    <div class="column-vsmall">
+                        <label>Height (
+                            <i>feet</i>)
+                        </label>
+                        <input type="text" class="form-control" name="feet" [(ngModel)]="address.feet" placeholder="Feet inch"/>
+                    </div>
+                    <div class="column-small">
+                        <label>Dwelling Units</label>
+                        <input type="text" class="form-control" name="dwellingUnits" [(ngModel)]="address.dwellingUnits" placeholder="Dwelling Units"
+                        />
+                    </div>
+                    <div class="column-small">
+                        <label>Gross Area</label>
+                        <input type="text" class="form-control" name="grossArea" [(ngModel)]="address.grossArea" placeholder="Gross Area"/>
+                    </div>
+                    <div class="column-small">
+                        <label>Street Legal width</label>
+                        <input type="text" class="form-control" name="streetLegalWidth" [(ngModel)]="address.streetLegalWidth" placeholder="Street Legal width"
+                        />
+                    </div>
+
+
+                </div>
+                <div class="row form-group pb0 mb0">
+                    <div class="add-checkbox checkbox">
+                        <label class="form-check-label col-md-2">
+                            <input type="checkbox" class="form-check-input" name="isLandmark" [(ngModel)]="address.isLandmark"/> Landmark
+                            <i class="input-helper"></i>
+                        </label>
+
+                        <label class="form-check-label col-md-2">
+                            <input type="checkbox" class="form-check-input" name="isLittleE" [(ngModel)]="address.isLittleE"/> Little "E" (value)
+                            <i class="input-helper"></i>
+                        </label>
+
+                        <label class="form-check-label col-md-2">
+                            <input type="checkbox" class="form-check-input" name="tidalWetlandsMapCheck" [(ngModel)]="address.tidalWetlandsMapCheck"/> Tidal Wetlands Map
+                            <i class="input-helper"></i>
+                        </label>
+
+                        <label class="form-check-label col-md-2">
+                            <input type="checkbox" class="form-check-input" name="coastalErosionHazardAreaMapCheck" [(ngModel)]="address.coastalErosionHazardAreaMapCheck"/> Coastal Erosion Hazard Area Map
+                            <i class="input-helper"></i>
+                        </label>
+
+                        <label class="form-check-label col-md-2">
+                            <input type="checkbox" class="form-check-input" name="specialFloodHazardAreaCheck" [(ngModel)]="address.specialFloodHazardAreaCheck"/> Special Flood Hazard Area
+                            <i class="input-helper"></i>
+                        </label>
+
+                        <label class="form-check-label col-md-2">
+                            <input type="checkbox" class="form-check-input" name="freshwaterWetlandsMapCheck" [(ngModel)]="address.freshwaterWetlandsMapCheck"/> Freshwater Wetlands Map
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" [disabled]="!addressTypeForm.form.valid" (click)="saveAddressType()">Save</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form> -->
+    <div>
+        TODO
+    </div>
+</div>

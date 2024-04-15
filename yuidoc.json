@@ -1,0 +1,10 @@
+{
+    "name": "RPO Angular Docs",
+    "description": "The Documentation contain the tech guide",
+    "version": "1.0.0",
+    "url": "localhost:3000",
+    "logo":"http://localhost:3000/assets/logo-login.f0026a2d19ed2bd164fd0acd23183206.png",
+    "options": {
+        "outdir": "./out"
+    }
+}

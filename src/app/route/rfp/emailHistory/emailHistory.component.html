@@ -1,0 +1,74 @@
+<div class="rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <ul class="breadcrumb rfp-bread">
+        <li>
+          <small>
+            <a class="pointer" routerLink="/rfp">Proposals</a>
+          </small>
+        </li>
+        <li *ngIf="rfpNumber">
+          <small>
+            <a class="pointer" routerLink="/rfpSubmit/{{idRfp}}">Proposal# {{rfpNumber}}</a>
+          </small>
+        </li>
+        <li>
+          <a> Email History</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="component-body" *ngIf="historyData?.length > 0">
+    <div *ngFor="let history of historyData" class="email-history">
+      <div class="row mb5">
+        <div class="col-sm-6">
+          <label>{{history.sentVia.name}}</label> sent via
+          <label>{{history.transmittaltype.name}}</label>
+
+          on
+          <span>{{history.sentOn |date :'MM/dd/yyyy, h:mm a'}}</span> by
+          <span>{{history.sentBy}}</span>
+        </div>
+      </div>
+      <div>
+        <label class="text-uppercase">From </label>
+        <span> {{history.from}}</span>
+        <label class="text-uppercase">To </label>
+        <span> {{history.to}}</span>
+      </div>
+      <div>
+        <label class="text-uppercase">CC </label>
+        <div class="cc-block">
+          <p *ngFor="let cc of history.rfpEmailCC">
+            {{cc.contact.firstName + " " + cc.contact.lastName + " (" + cc.contact.email + ")"}}
+          </p>
+        </div>
+      </div>
+
+      <div class="email-body" *ngIf="history.emailMessage">
+        <label class="text-uppercase">Message</label>
+        <read-more [text]="history.emailMessage" [maxLength]="100"></read-more>
+      </div>
+
+      <div class="e-attach">
+        <label class="text-uppercase">Attachments</label>
+        <div>
+          <a *ngFor="let file of history.attachments" href="{{history.documentFrontPath  + file.id + '_'+ file.name}}" class="link-blue" target="_blank">
+            <i class="glyphicon glyphicon-paperclip"></i> {{file.name}}
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="no-data" *ngIf="historyData?.length == 0">
+    No Email History Found
+  </div>
+</div>
+
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

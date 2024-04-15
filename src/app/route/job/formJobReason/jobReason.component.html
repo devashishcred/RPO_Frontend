@@ -1,0 +1,32 @@
+<div class="modal-custom-content" cdkDrag>
+    <form ngNativeValidate name="addreasonform" #addreasonform="ngForm" novalidate>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+        <h4 class="modal-title pull-left">ADD REASON</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <textarea id="Reason" name="Reason" rows="5"  class="form-control" [(ngModel)]="ReasonType.description" required #Reason="ngModel"></textarea>
+                <div class="error-message pl0">
+                        <div *ngIf="Reason.errors && (Reason.dirty || Reason.touched)">
+                            {{errorMessage.Reason}}
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+        <button type="button" class="btn btn-blue" [disabled]="!addreasonform.form.valid" (click)="saveReason()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</form>
+</div>

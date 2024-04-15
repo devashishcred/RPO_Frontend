@@ -1,0 +1,546 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #companyForm="ngForm" novalidate autocomplete="off">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{ !rec.id ? 'Add Company' : 'Edit Company' }}</h4>
+        </div>
+
+        <div class="modal-body pt15 pb0">
+            <div class="form-company">
+                <!-- LINE 1 -->
+                <div class="row form-group">
+                    <div class="col-sm-6 border-bottom">
+
+                        <label for="name">Company Name*</label>
+                        <input autofocus required maxlength="100" placeholder="Company Name" id="name" type="text" name="name"
+                               #name="ngModel" [(ngModel)]="rec.name" class="form-control"/>
+
+                        <div class="error-message pl0">
+                            <div *ngIf="name.errors && (name.dirty || name.touched)">
+                                {{ errorMsg.companyName }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="type">Company Type*</label>
+                        <angular2-multiselect [data]="dropdownList" name="selectComp" [(ngModel)]="tmpComType" [settings]="dropdownSettings"
+                                              (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                              (onDeSelectAll)="onDeSelectAll($event)" required #selectComp="ngModel"
+                        >
+                            >
+                        </angular2-multiselect>
+                        <div class="error-message pl0">
+                            <div *ngIf="selectComp.errors && (selectComp.dirty || selectComp.touched)">
+                                {{ errorMsg.companyType }}
+                            </div>
+                            <div *ngIf="isTwoTypesSelected">
+                                {{ errorMsg.twoCompanyTypeSelected }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 border-bottom" *ngIf="(!isTwoTypesSelected) && (gcSelected || siSelected || ctSelected)">
+                        <label>&nbsp;</label>
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <button type="button" class="btn btn-blue no-padding" (click)="getCompanyInfo(rec)" style="margin-left:5px">Get
+                                    Info
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LINE 2 -->
+                <div class="row">
+                    <!-- COLUMN 1 -->
+                    <div class="col-sm-6 border-right">
+                        <div *ngIf="caSelected" class="city-checobox">
+                            <h4 class="blue-title">City Agency</h4>
+                            <div class="checkbox form-check">
+                                <label class="form-check-label input-inline" *ngFor="let sType of caSubTypes;let i = index">
+                                    <input type="checkbox" class="form-check-input" name="{{sType.id}}" (change)="OnCheckboxSelect(sType.id,sType.idParent,$event)"
+                                           [(ngModel)]="tmpCitySubTypes[sType.id].checked"/> {{ sType.itemName }}
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                            <hr class="mt10">
+                        </div>
+                        <div *ngIf="gcSelected">
+                            <div class="city-checobox">
+                                <h4 class="blue-title">General Contractor</h4>
+                                <div class="checkbox form-check">
+                                    <label class="form-check-label input-inline" *ngFor="let sType of gcSubTypes;let i = index">
+                                        <input type="checkbox" class="form-check-input" name="{{sType.id}}" (change)="OnCheckboxSelect(sType.id,sType.idParent,$event)"
+                                               [(ngModel)]="tmpCompanySubTypes[sType.id].checked"/> {{ sType.itemName }}
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-4">
+                                    <label for="trackingNumber">Tracking#</label>
+                                    <input id="trackingNumber" placeholder="Tracking#" type="text" name="trackingNumber"
+                                           [(ngModel)]="rec.trackingNumber" class="form-control"/>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="trackingExpiry"> Tracking# Expiration Date</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="trackingExpiry" type="text" name="trackingExpiry" [(ngModel)]="rec.trackingExpiry"
+                                               class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="ibmNumber">IBM#</label>
+                                    <input id="ibmNumber" placeholder="IBM#" type="text" name="ibmNumber" [(ngModel)]="rec.ibmNumber"
+                                           class="form-control"/>
+                                </div>
+                            </div>
+                            <!-- COL1.LINE 2 -->
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="hicNumber">HIC#</label>
+                                    <input id="hicNumber" placeholder="HIC#" type="text" name="hicNumber" [(ngModel)]="rec.hicNumber"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="hicExpiry"> HIC# Expiration Date</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="hicExpiry" type="text" name="hicExpiry" [(ngModel)]="rec.hicExpiry"
+                                               class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="taxIdNumber">Tax ID#</label>
+                                    <input id="taxIdNumber" placeholder="Tax ID#" type="text" name="taxIdNumber"
+                                           [(ngModel)]="rec.taxIdNumber" class="form-control" maxlength="9" minlength="9"
+                                           #taxIdNumber="ngModel"/>
+                                    <div class="error-message pl0">
+                                        <div *ngIf="taxIdNumber.errors?.minlength">
+                                            {{ errorMsg.taxIdMinLength }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- COL1.LINE 3 -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4 class="font16">DOB Insurance Expiration Date</h4>
+                                </div>
+                            </div>
+                            <!-- COL1.LINE 4 -->
+                            <div class="row form-group">
+                                <div class="col-sm-5">
+                                    <label for="insuranceWorkCompensation"> Work Compensation</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="insuranceWorkCompensation" type="text" name="insuranceWorkCompensation"
+                                               [(ngModel)]="rec.insuranceWorkCompensation" class="form-control gcdate"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2"></div>
+
+                                <div class="col-sm-5">
+                                    <label for="insuranceDisability"> Disability</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="insuranceDisability" type="text" name="insuranceDisability" [(ngModel)]="rec.insuranceDisability"
+                                               class="form-control gcdate"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- COL1.LINE 5 -->
+                            <div class="row form-group">
+                                <div class="col-sm-5">
+                                    <label for="insuranceGeneralLiability"> General Liability</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="insuranceGeneralLiability" type="text" name="insuranceGeneralLiability"
+                                               [(ngModel)]="rec.insuranceGeneralLiability" class="form-control gcdate"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2"></div>
+
+                                <!-- <div class="col-sm-5">
+                                    <label for="insuranceObstructionBond"> Street Obstruction Bond</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="insuranceObstructionBond" type="text" name="insuranceObstructionBond" [(ngModel)]="rec.insuranceObstructionBond"
+                                            class="form-control" />
+                                    </div>
+                                </div> -->
+                            </div>
+                            <hr>
+                            <!-- COL1.LINE 3 -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4 class="font16">DOT Insurance Expiration Date</h4>
+                                </div>
+                            </div>
+                            <!-- COL1.LINE 4 -->
+                            <div class="row form-group">
+                                <div class="col-sm-5">
+                                    <label for="DOTInsuranceWorkCompensation"> Work Compensation</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="dotInsuranceWorkCompensation" type="text" name="DOTInsuranceWorkCompensation"
+                                               [(ngModel)]="rec.dotInsuranceWorkCompensation" class="form-control gcdate"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-5">
+                                    <label for="DOTInsuranceGeneralLiability"> General Liability</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="dotInsuranceGeneralLiability" type="text" name="DOTInsuranceGeneralLiability"
+                                               [(ngModel)]="rec.dotInsuranceGeneralLiability" class="form-control gcdate"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- COL1.LINE 5 -->
+                            <div class="row form-group">
+                                <div class="col-sm-5">
+                                    <label for="insuranceObstructionBond"> Street Obstruction Bond</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="insuranceObstructionBond" type="text" name="insuranceObstructionBond"
+                                               [(ngModel)]="rec.insuranceObstructionBond" class="form-control gcdate"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div *ngIf="siSelected">
+                            <h4 class="blue-title">Special Inspection</h4>
+                            <div class="row form-group">
+                                <div class="col-sm-6">
+                                    <label for="specialInspectionAgencyNumber">Special Inspection Agency# (SIA#)</label>
+                                    <input id="specialInspectionAgencyNumber" placeholder="Special Inspection Agency# (SIA#)"
+                                           type="text" name="specialInspectionAgencyNumber" [(ngModel)]="rec.specialInspectionAgencyNumber"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="specialInspectionAgencyExpire"> SIA# Expiration Date</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="specialInspectionAgencyExpire" type="text" name="specialInspectionAgencyExpiry"
+                                               [(ngModel)]="rec.specialInspectionAgencyExpiry" class="form-control gcdate"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+
+                        <div *ngIf="ctSelected">
+                            <h4 class="blue-title">Concrete Testing Lab</h4>
+                            <div class="row form-group">
+                                <div class="col-sm-6">
+                                    <label for="ctLicenseNumber">Licence#</label>
+                                    <input id="ctLicenseNumber" placeholder="Licence Number" type="text" name="ctLicenseNumber"
+                                           [(ngModel)]="rec.ctLicenseNumber" class="form-control"/>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="ctExpirationDate">Expiration Date</label>
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="ctExpirationDate" type="text" name="ctExpirationDate" [(ngModel)]="rec.ctExpirationDate"
+                                               class="form-control gcdate"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <!-- COL1.LINE 6 -->
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <label for="note">Company URL</label>
+                                <input placeholder="www.companysite.com" class="form-control" rows="5" [(ngModel)]="rec.url"
+                                       name="url" id="url"
+                                       pattern="^(?:(?:https?|ftp):\/\/|www\.)([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.[a-zA-Z]{2,4})(\:[0-9]+)?(/[^/][a-zA-Z0-9\.\,\?\'\\/\+&amp;%\$#\=~_\-@]*)*$"
+                                       #url="ngModel"/>
+                                <div class="error-message pl0">
+                                    <div *ngIf="url.hasError('pattern') && (url.dirty || url.touched)">
+                                        {{ errorMsg.companyUrl }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <label for="note">Notes</label>
+                                <textarea placeholder="Note" class="form-control" placeholder="Notes" rows="3" [(ngModel)]="rec.notes"
+                                          name="notes" id="notes"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <h4 class="blue-title">
+                                    DOCUMENTS
+                                    <div class="fl-upload">
+                                        <label for="contact-file-upload" class="upload-link rpo-file-upload mb0">
+                                            Click to <span> Browse</span> to Upload your files
+                                        </label>
+                                        <input id="contact-file-upload" type="file" name="companyDocuments[]" (change)="documentUpload($event)"
+                                               class="rpo-file-upload" multiple/>
+                                    </div>
+                                </h4>
+                                <div class="file-upload-wrap">
+                                    <div class="rpo-file-upload" *ngFor="let document of rec.documents">
+                                        <span class="doc-name" *ngIf="!document.id" style="vertical-align: top;"
+                                              tooltip="{{document.name}}" placement="top">{{ document.name }}</span>
+                                        <a target="" class="remove" tooltip="Delete" placement="right" (click)="deleteDocument(document)">
+                                            <i class="material-symbols-rounded">delete</i>
+                                        </a>
+                                        <a *ngIf="document.id" href="{{document.documentPath}}" class="pointer doc-name link-blue"
+                                           style="vertical-align: top;" target="_blank" tooltip="{{document.name}}"
+                                           placement="top">{{ document.name }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <label for="emailAddress">Email</label>
+                                <input autocomplete="new-password" placeholder="Email" maxlength="255" id="emailAddress" type="email"
+                                       name="emailAddress" [(ngModel)]="rec.emailAddress" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" #emailAddress="ngModel"
+                                       class="form-control"/>
+                                <div class="error-message pl0">
+                                    <div *ngIf="emailAddress.hasError('pattern') && (emailAddress.dirty || emailAddress.touched)">
+                                        Enter valid email
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="emailPassword">Password</label>
+                                <div class="inner-addon right-addon">
+                                    <i class="icon material-symbols-rounded eye clickable" (click)="togglePassword('applicationPasswordType')">
+                                        {{ applicationPasswordType == 'password' ? 'visibility' : 'visibility_off' }}
+                                    </i>
+                                    <input id="emailPassword" autocomplete="new-password" type="{{applicationPasswordType}}" name="emailPassword" placeholder="password"
+                                           [(ngModel)]="rec.emailPassword" class="form-control"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <ng-container *ngIf="gcSelected">
+                            <h4 class="blue-title">Responsible Party</h4>
+                            <div class="row form-group">
+                                <div class="col-sm-4">
+                                    <ng-select name="idResposibilityType" id="idResposibilityType" [items]="responsibility" bindLabel="name" bindValue="id"
+                                               placeholder="Type" [(ngModel)]="rec.idResponsibility" #idResposibilityType="ngModel">
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <h4 class="blue-title">License</h4>
+                        <div class="contact-licenses">
+                            <div *ngFor="let cl of rec.companyLicenses; index as i" class="ac-wrapper">
+                                <div class="cl-content clearfix">
+                                    <div class="col-sm-4 pl0">{{ cl.companyLicenseType.name }}</div>
+                                    <div class="col-sm-4">{{ cl.number }}</div>
+                                    <div class="col-sm-4 pr0">{{ cl.expirationLicenseDate | date:'MM/dd/yyyy' }}
+                                        <span class="pull-right acts">
+                                            <i class="material-symbols-rounded pointer" style="font-size: 22px;" (click)="editContactLicense(cl,i)" tooltip="Edit"
+                                               placement="left">edit_square</i>
+                                            <i class="material-symbols-rounded pointer ml5" (click)="deleteContactLicense(cl)" tooltip="Delete"
+                                               placement="left">delete</i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row license-form">
+                            <form ngNativeValidate autocomplete="off">
+                                <div class="col-sm-4">
+                                    <ng-select required id="idCompanyLicenseType" placeholder="Select" name="idCompanyLicenseType"
+                                               [(ngModel)]="companyLicense.idCompanyLicenseType" [items]="companyLicenseTypes"
+                                               bindLabel="itemName" bindValue="id" placeholder="Type" #idCompanyLicenseType="ngModel">
+                                    </ng-select>
+                                    <div class="error-message pl0" *ngIf="requireAddLicence && !companyLicense.idCompanyLicenseType">
+                                        {{ errorMsg.requireLicenceType }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input required maxlength="15" id="number" type="text" name="number" placeholder="Number"
+                                           [(ngModel)]="companyLicense.number" class="form-control"/>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="expirationLicenseDate" type="text" name="expirationLicenseDate"
+                                               [(ngModel)]="companyLicense.expirationLicenseDate" class="form-control"
+                                               placeholder="Expire Date"/>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-blue no-padding btn-add" (click)="addContactLicense()">Save</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <!-- COLUMN 2 -->
+                    <div class="col-sm-6 force-col">
+                        <form id="formAddress" (submit)="addAddress()" #formAddress="ngForm" novalidate autocomplete="off">
+                            <!-- COL2.LINE 1 -->
+                            <h4 class="blue-title">address</h4>
+                            <div class="row form-group">
+                                <div class="col-sm-4">
+                                    <ng-select name="idAddressType" [items]="addressTypes" bindLabel="name" bindValue="id"
+                                               placeholder="Type*" [(ngModel)]="address.idAddressType" #idAddressType="ngModel"
+                                               [required]="requireAddType" (ngModelChange)="checkAddressFields(address.idAddressType)">
+                                    </ng-select>
+                                    <div class="error-message pl0" *ngIf="requireAddType && !address.idAddressType">
+                                        {{ errorMsg.requireAddressType }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input maxlength="50" id="address1" type="text" placeholder="Address 1*" name="address1"
+                                           [(ngModel)]="address.address1" class="form-control" (ngModelChange)="checkAddressFields(address.address1)"/>
+                                    <div class="error-message pl0" *ngIf="requireAddType && !address.address1">
+                                        {{ errorMsg.requireAddress1 }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- COL2.LINE2 -->
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <input maxlength="50" id="address2" type="text" placeholder="Address 2" name="address2"
+                                           [(ngModel)]="address.address2" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="row form-group state-row">
+                                <div class="col-sm-6">
+                                    <input type="text" placeholder="City" id="idCity" name="idCity" [(ngModel)]="address.city"
+                                           class="form-control"/>
+                                </div>
+                                <div class="col-sm-3">
+                                    <ng-select id="idState" name="idState" [(ngModel)]="address.idState" [items]="states"
+                                               bindLabel="itemName" bindValue="id" placeholder="State*" required #idState="ngModel"
+                                               (ngModelChange)="checkAddressFields(address.idState)">
+                                    </ng-select>
+                                    <div class="error-message">
+                                        <div *ngIf="requireAddType && !address.idState">
+                                            {{ errorMsg.requireAddressState }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input minlength="5" maxlength="5" id="zipCode" pattern="[0-9]{1,5}" placeholder="Zip"
+                                           type="text" name="zipCode" [(ngModel)]="address.zipCode" class="form-control zipCode"
+                                           #zipCode="ngModel"/>
+                                </div>
+
+
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-4">
+                                    <input minlength="14" maxlength="14" id="phone" type="text" placeholder="Phone Number"
+                                           name="phone" [(ngModel)]="address.phone" (blur)="address.phone = $event.target.value"
+                                           #phone="ngModel" (keypress)="isNumber($event)" (paste)=" address.phone = $event.clipboardData.getData('Text')"
+                                           class="form-control phone-number"/>
+                                    <div *ngIf="phone.errors?.minlength 
+                                            && !phone.errors?.pattern && !requireAddPhone && (phone.dirty || phone.touched)"
+                                         class="error-message">
+                                        {{ errorMsg.phone }}
+                                    </div>
+                                    <div *ngIf="phone.errors?.pattern && !requireAddPhone && (phone.dirty || phone.touched)"
+                                         class="error-message">
+                                        {{ errorMsg.phone }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input minlength="14" maxlength="14" id="phone" type="text" placeholder="Fax Number"
+                                           name="FaxNumber" [(ngModel)]="address.faxNumber" (blur)="address.faxNumber = $event.target.value"
+                                           #FaxNumber="ngModel" (keypress)="isNumber($event)" (paste)=" address.faxNumber = $event.clipboardData.getData('Text')"
+                                           class="form-control phone-number"/>
+                                    <div *ngIf="FaxNumber.errors?.minlength 
+                                            && !FaxNumber.errors?.pattern && !requireAddPhone && (FaxNumber.dirty || FaxNumber.touched)"
+                                         class="error-message">
+                                        {{ errorMsg.fax }}
+                                    </div>
+                                    <div *ngIf="FaxNumber.errors?.pattern && !requireAddPhone && (FaxNumber.dirty || FaxNumber.touched)"
+                                         class="error-message">
+                                        {{ errorMsg.fax }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 ad">
+                                    <button type="submit" class="btn btn-blue no-padding btn-add">Save</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="Address-list-wrap">
+                            <div *ngFor="let ad of rec.addresses; index as i" class="ac-wrapper">
+                                <div class="cl-content clearfix">
+                                    <div class="col-sm-12 pl0">
+                                        <label class="adds-label">{{ ad.addressType.name }}</label>
+                                        <span class="pull-right acts">
+                                            <i class="material-symbols-rounded pointer" style="font-size: 22px;" (click)="editAddress(ad,i)" tooltip="Edit"
+                                               placement="left">edit_square</i>
+                                            <i class="material-symbols-rounded pointer" (click)="deleteAddress(ad)" tooltip="Delete"
+                                               placement="left">delete</i>
+                                        </span>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        {{ ad.address1 + (ad.address2 ? "," : "") }} {{
+                                        (ad.address2 ? ad.address2 : "") +
+                                        ","
+                                        }} {{
+                                        (ad.city ? ad.city + ", " : "") + ad.state + " " + (ad.zipCode ?
+                                          ad.zipCode : "")
+                                        }}
+                                    </div>
+                                    <div class="col-sm-12 pr0">{{ ad.phone }} {{ ad.faxNumber }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="modify text-left" *ngIf="rec.lastModifiedByEmployeeName">
+                        Last modified by {{ rec.lastModifiedByEmployeeName }} on {{
+                        rec.lastModifiedDate | date:'MM/dd/yyyy
+                          h:mm a'
+                        }}
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-blue pull-right" [disabled]="!companyForm.form.valid  || phone.errors || isTwoTypesSelected || addressFieldRequire"
+                            (click)="save()">Save
+                    </button>
+                    <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+<ng-template #viewBisCompanyList>
+    <div view-bis-companylist [modalRefViewBis]="modalRefViewBis" [bisListOfCompanies]="bisListOfCompanies"
+         [companyObj]="rec" [address]="address" [states]="states" (updateFormFieldsFromBIS)="updateFormFieldsFromBIS($event)"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="rpo-employee rpo-component">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left mr-2">Portal Contacts</h2>
+            <div class="pull-left search middle">
+                <div class="inner-addon left-addon">
+                    <i class="icon fa fa-search"></i>
+                    <input type="text" class="form-control" placeholder="Search Customer" [(ngModel)]="srch"
+                        (change)="search($event)" />
+                </div>
+            </div>
+            <div class="pull-left search middle">
+                <ng-select [items]="filterList" bindLabel="itemName" bindValue="id" placeholder="Select Status"
+                    [(ngModel)]="filter['isActive']" (change)="changeStatus($event)" #idRfpAddress="ngModel">
+                </ng-select>
+            </div>
+        </div>
+    </div>
+
+    <div class="component-body">
+        <table id="dt-customer" class="display" style="width:100%"></table>
+    </div>
+
+    <ng-template #permissionUsergroup>
+        <div permission-user-group [modalRef]="modalRef" [customerId]="empId" [reloadEmployee]="reload"></div>
+    </ng-template>
+
+    <ng-template #notificationSettings>
+        <ng-container *ngIf="empId">
+            <div notification-settings [modalRef]="modalRef" [customerId]="empId"></div>
+        </ng-container>
+    </ng-template>
+</div>
+
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

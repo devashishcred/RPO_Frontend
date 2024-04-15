@@ -1,0 +1,66 @@
+<div class="modal-custom-content" cdkDrag>
+  <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left"> View Documents</h4>
+  </div>
+  <div class="modal-body pb0 pt15">
+      <div class="content-area">
+          <div class="row">
+            <div class="col-sm-12">
+              <!-- <h4>JOB DOCUMENTS</h4> -->
+              <div class="search-area">
+                <div class="inner-addon left-addon">
+                  <!-- <em class="icon fa fa-search"></em> -->
+                  <input class="form-control input" type="text" placeholder="Search Project Documents" [(ngModel)]="srch" (ngModelChange)="search($event)">
+                  <span class="icon"><i class="fa fa-search" aria-hidden="true"></i>
+                  </span>
+                </div>                
+                <button class="btn btn-panel pull-right mr10 no-padding {{showdocumentAddBtn}}" (click)="openModalAddJobDocument(addJobDocument,jobId)"
+                *ngIf="showdocumentAddBtn !='hide'">Add Project Document</button>
+                <button class="btn btn-panel pull-right {{showdocumentAddBtn}}" (click)="openDropBoxFolder(jobId)"
+                *ngIf="showdocumentAddBtn !='hide'">Open in Dropbox</button>
+                
+              </div>
+              <div class="component-body mt20">
+                <table id="dt-jobDocument" class="display" style="width:100%"></table>
+              </div>
+            </div>
+          </div>
+          <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </div>
+  </div>
+  <div class="modal-footer">      
+    <button type="button" class="btn btn-white pull-right" (click)="modalRefChecklist.hide()">Cancel</button>
+  </div>
+</div>
+   
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- <ng-template #addJobDocument>
+        <div add-job-document [modalRef]="modalRef" [reload]="reload" [DocumentId]="DocumentId" [DocumentObj]="DocumentObj" [idJob]="jobId"
+          [isClone]=isClone></div>
+      </ng-template> -->
+      <ng-template #addJobDocument>
+        <div upload-doc-in-checklist [modalRef]="modalRef" [IsPlGroup]="IsPlGroup" (reload)="reload()" [DocumentId]="DocumentId" [DocumentObj]="DocumentObj" [idJob]="jobId" [isChecklist]="idChecklistItem"></div>
+        </ng-template>
+      <ng-template #updateJobDocument>
+        <div update-job-document [modalRef]="modalRef"  [reload]="reload" [idJob]="jobId" [DocumentId]="DocumentId" [DocumentObj]="DocumentObj" >
+        </div>
+      </ng-template>
+      
+      <ng-template #pullpermit>
+        <div pull-permit [modalRef]="modalRef" [reload]="reload" [idJob]="jobId" [DocumentId]="DocumentId" [pullpermitData]="PullpermitData"
+          [documentCode]="selectedDocumentCode"></div>
+      </ng-template>

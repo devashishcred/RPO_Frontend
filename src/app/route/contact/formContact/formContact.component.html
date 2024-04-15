@@ -1,0 +1,385 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #contactForm="ngForm" ngNativeValidate novalidate>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{!rec.id ? 'Add Contact' : 'Edit Contact'}}</h4>
+            <p class="inactive-text"  *ngIf="!rec.isActive"> <b>Status:</b> Inactive <span><i class=" incative-color fa fa-exclamation-circle" aria-hidden="true"></i>
+            </span></p>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="form-contact">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4 class="blue-title">CONTACT INFORMATION</h4>
+                        <div class="row">
+                            <div class="col-sm-3 border-bottom">
+                                <label for="contact-profile-upload" class="profile100">
+    
+                                    <img class="rpo-image-border" src="{{rec.imageAux || './assets/photo-upload.png'}}" alt="Upload Photo">
+                                </label>
+                                <input id="contact-profile-upload" type="file" name="contactphotoupload" class="rpo-file-upload" accept=".jpg,.jpeg,.png,.gif"
+                                    (change)="handleFileSelect($event)" />
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row form-group">
+    
+                                    <div class="col-sm-5 border-bottom">
+                                        <input required maxlength="50" placeholder="First Name*" id="firstName" type="text"
+                                            name="firstName" #firstName="ngModel" [(ngModel)]="rec.firstName" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-2 border-bottom">
+                                        <input maxlength="2" placeholder="M" id="middleName" type="text" name="middleName"
+                                            [(ngModel)]="rec.middleName" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-5 border-bottom">
+                                        <input maxlength="50" placeholder="Last Name" id="lastName" type="text" name="lastName"
+                                            #lastName="ngModel" [(ngModel)]="rec.lastName" class="form-control" />
+                                    </div>
+                                    <div class="error-message">
+                                        <div *ngIf="firstName.errors && (firstName.dirty || firstName.touched)">
+                                            {{errorMessage.requireFirstName}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-4"> 
+                                        <ng-select name="idPrefix" [items]="prefixes" bindLabel="name" id="idPrefix"  bindValue="id" placeholder="Prefix*"  
+                                        [(ngModel)]="rec.idPrefix" #idPrefix="ngModel" required>
+                                        </ng-select>
+                                      
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div datetime-picker pastOrFuture="past" class="inner-addon right-addon input-group">
+                                            <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                                            <input placeholder="DOB" id="birthDate" type="text" name="birthDate"
+                                                [(ngModel)]="rec.birthDate" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <ng-select name="suffix" [items]="suffixes" bindLabel="description" bindValue="id"
+                                            placeholder="Suffix" [(ngModel)]="rec.idSuffix">
+                                        </ng-select>
+                                    </div>
+                                    <div class="error-message">
+                                        <div *ngIf="idPrefix.errors && (idPrefix.dirty || idPrefix.touched)">
+                                            {{errorMessage.requirePrefix}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <ng-select name="company" [items]="companies" bindLabel="itemName" bindValue="id"
+                                    placeholder="Company" [(ngModel)]="rec.idCompany" (change)="fetchAddressFromCompany()">
+                                </ng-select>
+                                
+                            </div>
+                        </div>
+                        <h4 class="blue-title">Select Company Address</h4>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <ng-select class="mb15" name="CompanyAddress" [items]="companyPrimaryAddresses" bindLabel="itemName"
+                                    bindValue="id" placeholder="Select from company address" [(ngModel)]="rec.idPrimaryCompanyAddress" (change)="switchCheckbox(rec.idPrimaryCompanyAddress)"> 
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <div class="checkbox form-check">
+                                    <label class="form-check-label input-inline">
+                                        <input type="checkbox" class="form-check-input" name="isPrimaryCompanyAddress" [(ngModel)]="rec.isPrimaryCompanyAddress"
+                                            (ngModelChange)="showWarning('PrimaryCompany')" [disabled]="disableThePrimaryCheckbox || (!rec.idCompany && !rec.idPrimaryCompanyAddress) || (rec.idCompany && !rec.idPrimaryCompanyAddress)|| (!rec.idCompany && rec.idPrimaryCompanyAddress)  "/> Used for Forms & Project Documents
+                                            <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                                <p *ngIf="showWarningMsg">There is already Main Address</p>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <ng-select id="idContactTitle" placeholder="Title" name="idContactTitle" [items]="contactTitles"
+                                    bindLabel="itemName" bindValue="id" [(ngModel)]="rec.idContactTitle" #idContactTitle="ngModel">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-7">
+                                <input autocomplete="false" placeholder="Email" maxlength="255" id="email" type="email"
+                                    name="email" [(ngModel)]="rec.email" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" #email="ngModel"
+                                    class="form-control" />
+                                <div class="error-message pl0">
+                                    <div *ngIf="contactForm.hasError('pattern', 'email') && (email.dirty || email.touched)">
+                                        {{errorMessage.validEmail}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <input maxlength="14" minlength="14" id="mobilePhone" type="text" placeholder="Mobile#"
+                                    name="mobilePhone" [(ngModel)]="rec.mobilePhone" #mobilePhone="ngModel" class="form-control phone-number"
+                                    (blur)="rec.mobilePhone = $event.target.value" (keypress)="isNumber($event)" (paste)=" rec.mobilePhone = $event.clipboardData.getData('Text')" />
+                                <div class="error-message pl0">
+                                    <div *ngIf="mobilePhone.invalid && (mobilePhone.dirty || mobilePhone.touched)">
+                                        <div *ngIf="mobilePhone.errors.minlength">
+                                            {{errorMessage.mobilePhone}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="row form-group">
+                            <div class="col-sm-5">
+                                <input placeholder="Work Phone" minlength="14" maxlength="14" id="workPhone" type="text"
+                                    name="workPhone" [(ngModel)]="rec.workPhone" class="form-control phone-number" (blur)="rec.workPhone = $event.target.value"
+                                    (keypress)="isNumber($event)" (paste)=" rec.workPhone = $event.clipboardData.getData('Text')"
+                                    #workPhone="ngModel" />
+    
+                                <div class="error-message pl0">
+                                    <div *ngIf="workPhone.errors?.minlength 
+                                        && !workPhone.errors?.pattern && (workPhone.dirty || workPhone.touched)">
+                                        {{errorMessage.phone}}
+                                    </div>
+                                    <div *ngIf="!rec.workPhone && rec.workPhoneExt">
+                                        {{errorMessage.phone}}
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="col-sm-2">
+                                <input maxlength="5" placeholder="Ext" id="workPhoneExt" type="text" name="workPhoneExt"
+                                    [(ngModel)]="rec.workPhoneExt" class="form-control" />
+                            </div>
+                            <div class="col-sm-5">
+                                <input minlength="14" maxlength="14" type="text" placeholder="Other#" #otherPhone="ngModel"
+                                    name="otherPhone" [(ngModel)]="rec.otherPhone" (blur)="rec.otherPhone = $event.target.value"
+                                    (keypress)="isNumber($event)" class="form-control phone-number" (paste)=" rec.otherPhone = $event.clipboardData.getData('Text')" />
+                                <div class="error-message pl0">
+                                    <div *ngIf="otherPhone.errors?.minlength 
+                                        && !otherPhone.errors?.pattern && (otherPhone.dirty || otherPhone.touched)">
+                                        {{errorMessage.otherNumber}}
+                                    </div>
+                                </div>
+                            </div>
+    
+                        </div>
+                        <h4 class="blue-title">License</h4>
+                        <div class="contact-licenses">
+                            <div *ngFor="let cl of rec.contactLicenses; index as i" class="row ac-wrapper">
+                                <div class="cl-content clearfix">
+                                    <div class="col-sm-4 pl0">{{cl.contactLicenseType.name}}</div>
+                                    <div class="col-sm-4">{{cl.number}}</div>
+                                    <div class="col-sm-4 pr0">{{cl.expirationLicenseDate}}
+                                        <span class="pull-right acts">
+                                            <i class="material-symbols-rounded pointer" style="font-size: 22px;" (click)="editContactLicense(cl, i)" tooltip="Edit"
+                                                placement="left">edit_square</i>
+                                            <i class="material-symbols-rounded pointer" (click)="deleteContactLicense(cl)" tooltip="Delete"
+                                                placement="left">delete</i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row license-form">
+                            <form ngNativeValidate>
+                                <div class="col-sm-4">
+                                    <ng-select required [dropdownPosition]="'top'" id="idContactLicenseType" placeholder="Select" name="idContactLicenseType"
+                                        [(ngModel)]="contactLicense.idContactLicenseType" [items]="contactLicenseTypes"
+                                        bindLabel="itemName" bindValue="id" placeholder="Type" #idContactLicenseType="ngModel">
+                                    </ng-select>
+                                    <div class="error-message pl0" *ngIf="requireAddLicence && !contactLicense.idContactLicenseType">
+                                        {{errorMessage.requireLicenceType}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input required maxlength="15" id="number" type="text" name="number" placeholder="Number"
+                                        [(ngModel)]="contactLicense.number" class="form-control" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <div datetime-picker class="inner-addon right-addon input-group">
+                                        <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                        <input id="expirationLicenseDate" type="text" name="expirationLicenseDate"
+                                            [(ngModel)]="contactLicense.expirationLicenseDate" class="form-control"
+                                            placeholder="Expire Date" />
+                                    </div>
+    
+                                </div>
+    
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-blue no-padding btn-add" (click)="addContactLicense()">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- col2 -->
+                    <div class="col-sm-6 force-col">
+                        <fieldset>
+                            <form id="formAddress" (submit)="addAddress()" class="form-addrs" novalidate #formAddress="ngForm">
+                                <h4 class="blue-title"> Personal address</h4>
+                                <div class="address-grid">
+                                    <div *ngFor="let ad of rec.addresses; index as i" class="ac-wrapper" [ngClass]="{'main-add':ad.isMainAddress} ">
+                                        <div class="cl-content clearfix">
+                                            <div class="col-sm-12 pl0">
+                                                <label class="adds-label">{{ad.addressType.name}}</label>
+                                                <span class="pull-right acts">
+                                                    <i class="material-symbols-rounded pointer" style="font-size: 22px;" (click)="editAddress(ad, i)"
+                                                        tooltip="Edit" placement="left">edit_square</i>
+                                                    <i class="material-symbols-rounded pointer" (click)="deleteAddress(ad)"
+                                                        tooltip="Delete" placement="left">delete</i>
+                                                </span>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                {{ad.address1 + (ad.address2 ? "," : "") }} {{(ad.address2 ? ad.address2 :
+                                                "") + "," }} {{(ad.city ? ad.city + ", " : "")
+                                                + ad.state + " " + (ad.zipCode ? ad.zipCode : "")}}
+                                            </div>
+                                            <div class="col-sm-12">{{ad.phone}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-4">
+                                        <ng-select name="idAddressType" [items]="addressTypes" bindLabel="itemName" bindValue="id" placeholder="Type" [(ngModel)]="address.idAddressType"
+                                            #idAddressType="ngModel" [required]="requireAddType">
+                                        </ng-select>
+                                        <div class="error-message pl0" *ngIf="requireAddType && !address.idAddressType">
+                                            {{errorMessage.requireAddressType}}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input  maxlength="50" id="address1" type="text" placeholder="Address 1" name="address1" [(ngModel)]="address.address1"
+                                            class="form-control" />
+                                        <div class="error-message pl0" *ngIf="requireAddType && !address.address1">
+                                            {{errorMessage.requireAddress1}}
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-8">
+                                        <input maxlength="50" id="address2" type="text" placeholder="Address 2" name="address2"
+                                            [(ngModel)]="address.address2" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" placeholder="City" id="idCity" name="idCity" [(ngModel)]="address.city"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+    
+                                <div class="row form-group state-row">
+    
+                                    <div class="col-sm-4">
+                                        <ng-select  id="idState" placeholder="State" name="idState" [(ngModel)]="address.idState" (change)="onStateCityChange(true)"
+                                            #idState="ngModel" [items]="states" bindLabel="itemName" bindValue="id">
+                                        </ng-select>
+                                        <div class="error-message pl0" *ngIf="requireAddType && !address.idState">
+                                            {{errorMessage.requireAddressState}}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input minlength="5" maxlength="5" placeholder="Zip" id="zipCode" pattern="[0-9]{1,5}"
+                                            type="text" name="zipCode" [(ngModel)]="address.zipCode" class="form-control zipCode"
+                                            #zipCode="ngModel" />
+    
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input minlength="14" maxlength="14" id="phone" type="text" placeholder="Phone Number"
+                                            name="phone" [(ngModel)]="address.phone" (blur)="address.phone = $event.target.value"
+                                            (focusout)="formatPhone()" class="form-control phone-number" #phone="ngModel"
+                                            (keypress)="isNumber($event)" (paste)=" address.phone = $event.clipboardData.getData('Text')" />
+                                        <div class="error-message pl0">
+                                            <div *ngIf="phone.errors && (phone.dirty || phone.touched)">
+                                                {{errorMessage.phone}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group state-row">
+                                    <div class="col-sm-10">
+                                        <div class="checkbox form-check">
+                                            <label class="form-check-label input-inline">
+                                                <input type="checkbox" class="form-check-input" name="mainAddress" [(ngModel)]="address.isMainAddress"
+                                                    (ngModelChange)="showWarning('PrimaryPersonal')" [disabled]="disableThePersonalCheckbox"> Used for Forms & Project Documents
+                                                    <i class="input-helper"></i>
+                                            </label>
+                                        </div>
+                                        <p *ngIf="showPersonalWarningMsg">There is already Main Address</p>
+                                    </div>
+                                    <div class="col-sm-2 ad">
+    
+                                        <button type="submit" class="btn btn-blue no-padding btn-add">Save</button>
+                                    </div>
+                                    <div class="error-message">
+                                        <div *ngIf="zipCode.errors && (zipCode.dirty || zipCode.touched)">
+                                            {{errorMessage.companyZipCode}}
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </form>
+    
+    
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <h4 class="blue-title mb0">
+                                        DOCUMENTS
+                                        <div class="fl-upload">
+                                            <label for="contact-file-upload" class="upload-link rpo-file-upload mb0">
+                                                Click to <span> Browse</span> to Upload your files
+                                            </label>
+                                            <input id="contact-file-upload" type="file" name="contactdocuments[]" (change)="documentUpload($event)"
+                                                class="rpo-file-upload" multiple />
+                                        </div>
+                                    </h4>
+                                    <div class="file-upload-wrap">
+                                        <div class="rpo-file-upload" *ngFor="let document of rec.documents">
+                                            <span class="doc-name" *ngIf="!document.id" style="vertical-align: top;"
+                                                tooltip="{{document.name}}" placement="top">{{document.name}}</span>
+                                            <a target="" class="remove" tooltip="Delete" placement="right" (click)="deleteDocument(document)">
+                                                <i class="material-symbols-rounded">delete</i>
+                                            </a>
+                                            <a *ngIf="document.id" href="{{document.documentPath}}" class="pointer doc-name link-blue"
+                                                style="vertical-align: top;" target="_blank" tooltip="{{document.name}}"
+                                                placement="top">{{document.name}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <textarea placeholder="Notes" id="notes" name="notes" [(ngModel)]="rec.notes" class="form-control"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="modify text-left" *ngIf="rec.lastModifiedByEmployeeName">
+                        Last modified by {{rec.lastModifiedByEmployeeName}} on {{rec.lastModifiedDate | date:'MM/dd/yyyy h:mm a'}}
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-blue pull-right" [disabled]="!contactForm.form.valid || (!rec.workPhone && rec.workPhoneExt) || ( !address.address1 && address.addressType)||( address.address1 &&!address.idState)|| !rec.firstName || !rec.idPrefix"
+                        (click)="save()">Save</button>
+                    <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

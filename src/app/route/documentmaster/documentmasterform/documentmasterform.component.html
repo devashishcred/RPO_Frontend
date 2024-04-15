@@ -1,0 +1,57 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #applicationTypeForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Document</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Document Name*</label>
+          <!-- <ng-select name="idParent" [items]="applicationTypeList" bindLabel="itemName" bindValue="id" placeholder="Project Type" [(ngModel)]="applicationType.idParent"
+            required #idParent="ngModel">
+          </ng-select> -->
+          <input id="idParent" name="idParent" type="text" class="form-control" [(ngModel)]="applicationType.documentName" #idParent="ngModel"
+          required placeholder="Document Name"/>
+          <div class="error-message pl0">
+            <div *ngIf="idParent.errors && (idParent.dirty || idParent.touched)">
+              {{errorMsg.requireDocName}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Document Code*</label>
+          <input id="description" name="description" type="text" class="form-control" [(ngModel)]="applicationType.code" #description="ngModel"
+            required placeholder="Document Code"/>
+          <div class="error-message pl0">
+            <div *ngIf="description.errors && (description.dirty || description.touched)">
+              {{errorMsg.requireDocCode}}
+            </div>
+  
+          </div>
+        </div>
+      </div>
+  
+      <!-- <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Description</label>
+          <textarea rows="5" cols="5" id="content" name="content" type="text" class="form-control" [(ngModel)]="applicationType.content"></textarea>
+        </div>
+      </div> -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!applicationTypeForm.form.valid" (click)="saveApplicationType()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

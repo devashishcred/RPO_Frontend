@@ -1,0 +1,21 @@
+::ng-deep .modal-content {
+  & [class^="col-"] + [class^="col-"]:not(.force-col) {
+    padding-left: 15px !important;
+    margin-top: 20px;
+  }
+}
+
+.is-invalid {
+  border: 1px solid #eb0101;
+  border-radius: 7px;
+}
+
+.invalid-feedback {
+  color: #eb0101;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.error-span {
+  color: #eb0101;
+}

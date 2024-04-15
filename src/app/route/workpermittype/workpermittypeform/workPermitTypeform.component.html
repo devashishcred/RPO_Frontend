@@ -1,0 +1,78 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #workPermitTypeForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Work Permit Type</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Project Type*</label>
+          <ng-select name="idJobType" [items]="jobTypeList" bindLabel="itemName" bindValue="id" placeholder="Project Type" [(ngModel)]="workPermitType.idJobType"
+            (ngModelChange)="getApplicationTypeByJobType()" required #idJobType="ngModel">
+          </ng-select>
+          <div class="error-message pl0">
+            <div *ngIf="idJobType.errors && (idJobType.dirty || idJobType.touched)">
+              {{errorMsg.requireJobType}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Application Type*</label>
+          <ng-select name="idJobApplicationType" [items]="applicationTypeList" bindLabel="itemName" bindValue="id" placeholder="Application Type"
+            [(ngModel)]="workPermitType.idJobApplicationType" (ngModelChange)="getApplicationTypeByJobType()" required #idJobApplicationType="ngModel">
+          </ng-select>
+          <div class="error-message pl0">
+            <div *ngIf="idJobApplicationType.errors && (idJobApplicationType.dirty || idJobApplicationType.touched)">
+              {{errorMsg.requireApplicationType}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Work Permit Type*</label>
+          <input id="description" name="description" type="text" class="form-control" [(ngModel)]="workPermitType.description" #description="ngModel"
+            required placeholder="Work Permit Type"/>
+          <div class="error-message pl0">
+            <div *ngIf="description.errors && (description.dirty || description.touched)">
+              {{errorMsg.requireWorkPermitTypeName}}
+            </div>
+  
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <label for="task">Code</label>
+          <input id="code" name="code" type="text" class="form-control" [(ngModel)]="workPermitType.code" placeholder="Code" />
+        </div>
+        <div class="col-sm-4">
+            <label for="task">Cost ($)</label>
+            <input id="cost" name="cost" type="text" (keypress)="isNumber($event);" placeholder="Cost($)" class="form-control" [(ngModel)]="workPermitType.cost" />
+        </div>
+      </div>
+     
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Description</label>
+          <textarea rows="5" cols="5" id="content" name="content" type="text" class="form-control" [(ngModel)]="workPermitType.content"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!workPermitTypeForm.form.valid" (click)="saveWorkPermitType()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

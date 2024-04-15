@@ -1,0 +1,352 @@
+<div class="job-detail">
+  <div class="component-header">
+      <div class="row">
+        <div class="col-sm-6">
+          <h2 class="component-title pull-left">
+            <small (click)="getBack()">
+              <a class="pointer">job/</a>
+            </small>Job Detail</h2>
+        </div>
+        <div class="col-sm-6 text-right job-head-right">
+          <label class="job-status job-progress">in progress</label>
+          <i class="fa fa-lg fa-ellipsis-v pointer dropdown-toggle" data-toggle="dropdown" style="padding:0px 5px;" aria-expanded="false"></i>
+          <ul class="dropdown-menu widget">
+              <li><a href="javascript:void(0)">Edit Job</a></li>
+              <li><a href="javascript:void(0)">Put Job on Hold</a></li>
+              <li><a href="javascript:void(0)">Add Task</a></li>
+              <li><a href="javascript:void(0)">Job Detail</a></li>
+              <li><a href="javascript:void(0)">Reassign</a></li>
+              <li><a href="javascript:void(0)">ViewProposal/RFP</a></li>
+              <li><a href="javascript:void(0)">Add Time</a></li>
+              <li><a href="javascript:void(0)">Send Email</a></li>
+              <li><a href="javascript:void(0)">Add Time Note</a></li>
+              <li><a href="javascript:void(0)">​​​​​​​Generate Label</a></li>
+              <li><a href="javascript:void(0)">Delete Job</a></li>
+          </ul>
+        </div>
+      </div>
+  </div>
+  <div class="component-body">
+      <div class="row">
+          <div class="col-sm-12">
+            <ul class="list-inline details-head">
+              <li>
+                <label>JOB#</label>
+                <p>123456789</p>
+              </li>
+              <li>
+                <label>START</label>
+                <p>05/04/17</p>
+              </li>
+              <li class="more-width dropdown" dropdown >
+                <div class="pointer" dropdownToggle>
+                    <label class="address">ADDRESS</label>
+                    <p>1530 BROADWAY, MANHATTAN, 10036</p>
+                </div>
+                <div *dropdownMenu class="dropdown-menu quickinfo" (click)="dropdownPropagation($event)">
+                    <h2>quick info</h2>
+                    <p>
+                      <label>CONSTRUCTION CLASSIFICATION:</label>
+                      <span>COM OLD CODE-COMMERCIAL BLDGS</span>
+                    </p>
+                    <p class="mb10">
+                      <label>DATE RANGE:</label>
+                      <span>2008/2014</span>
+                    </p>
+                    <p>
+                      <label>OCCUPANCY CLASSIFICATION:</label>
+                      <span>1st First Floor Structure</span>
+                    </p>
+                    <p class="mb10">
+                      <label>MULTIPLE DWELLING CLASSIFICATION:</label>
+                      <span></span>
+                    </p>
+                    <p>
+                      <label>PRIMARY STRUCTURAL SYSTEM:</label>
+                      <span></span>
+                    </p>
+                    <p>
+                      <label>STRUCTURE OCCUPANCY CATEGORY</label>
+                      <span></span>
+                    </p>
+                    <p>
+                      <label>SEISMIC DESING CATEGORY:</label>
+                      <span></span>
+                    </p>
+                    <p class="mb10">
+                      <label>STORIES:</label>
+                      <span>23</span>
+                    </p>
+                    <p>
+                      <label>HEIGHT:</label>
+                      <span>250feet 12inch</span>
+                    </p>
+                    <p>
+                      <label>DWELLING UNITS:</label>
+                      <span>5</span>
+                    </p>
+                    <p>
+                      <label>GROSS AREA: </label>
+                      <span></span>
+                    </p>
+                    <p>
+                      <label>STREET LEGAL WIDTH:</label>
+                      <span></span>
+                    </p>
+                    <p>
+                      <label>LANDMARK:</label>
+                      <span></span>
+                    </p>
+                    <p>
+                      <label>LITTLE 'E':</label>
+                      <span></span>
+                    </p>
+                    <div class="form-group">
+                      <button class="btn btn-panel btn-panel-bordered">Close</button>
+                      <button class="btn btn-panel">View Detail</button>
+                    </div>
+                  </div>
+              </li>
+              <li>
+                <label>APT#</label>
+                <p>21C</p>
+              </li>
+              <li>
+                <label>FLOOR#</label>
+                <p>21</p>
+              </li>
+              <li class="more-width">
+                  <label>SPECIAL PLACE NAME</label>
+                  <p>The Morgan Library & Museum</p>
+              </li>
+              <li class="more-width dropdown" dropdown >
+                  <div class="pointer" dropdownToggle>
+                      <label class="name">Mr. Anthony Smith</label>
+                      <p>1017 Home streer Partners, LLC</p>
+                  </div>
+                  
+                  <div *dropdownMenu class="dropdown-menu quickinfo" (click)="dropdownPropagation($event)">
+                      <h2>quick info</h2>
+                      <label>True Construction Co.</label>
+                      <p>
+                        <span>375 Hudson street 6th Foor, Newyork, NY 10014</span>
+                      </p>
+                      <p class="mb10">
+                        <label>PHONE:</label>
+                        <span>(212) 229-60000</span>
+                      </p>
+                      <p>
+                        <label>COMPANY TYPE:</label>
+                        <span>Contractor</span>
+                      </p>
+                      <p class="mb10">
+                          <label>TRACKING# EXPIRE:</label>
+                          <span>11/23/18</span>
+                      </p>
+                      <p>
+                        <label>TRACKING#</label>
+                        <span>002305</span>
+                      </p>
+                      <p>
+                        <label>IBM#:</label>
+                        <span>01283</span>
+                      </p>
+                      <p>
+                        <label>TAX ID TYPE:</label>
+                        <span>Company</span>
+                      </p>
+                      <p>
+                        <label>TAX ID:</label>
+                        <span>13-14010980</span>
+                      </p>
+                      <p>
+                        <label>HIC#: </label>
+                        <span></span>
+                      </p>
+                      <p class="mb10">
+                        <label>CONCRETE TESTING JOB#: </label>
+                        <span>23</span>
+                      </p>
+                      <span>INSURANCE/EXPIRATION DATES</span>
+                      <p>
+                        <label>WORK COMPENSATION:</label>
+                        <span>11/01/17</span>
+                      </p>
+                      <p>
+                        <label>DISABILITY:</label>
+                        <span>10/03/2017</span>
+                      </p>
+                      <p>
+                        <label>GENERAL LIABILITY: </label>
+                        <span>11/01/17</span>
+                      </p>
+                      <p>
+                        <label>STREET OBSTRUCTION BOND:</label>
+                        <span>03/31/17</span>
+                      </p>
+                      <div class="form-group">
+                        <button class="btn btn-panel btn-panel-bordered">Close</button>
+                        <button class="btn btn-panel">View Detail</button>
+                      </div>
+                    </div>
+              <li>
+                  <label>PM</label>
+                  <p>CM</p>
+              </li>
+              <li>
+                  <label>PC</label>
+                  <p>CM</p>
+              </li>
+              <li>
+                  <label>SC</label>
+                  <p>MP</p>
+              </li>
+              <li class="add-note-job dropdown" dropdown>
+                  <a dropdownToggle href="javascript:void(0)">
+                    <img src="../../../../assets/images/time-icn.png" alt="time icons" />
+                  </a>
+                  <div *dropdownMenu class="dropdown-menu" (click)="dropdownPropagation($event)">
+                    <div class="form-group row">
+                      <div class="col-sm-7">
+                          <label>Select Category</label>
+                          <select class="form-control">
+                            <option>Time Entry</option>
+                            <option>General</option>
+                            <option>Application</option>
+                            <option>Work Permit/Type</option>
+                            <option>Contact</option>
+                            <option>Document</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-12">
+                          <input type="text" class="form-control" placeholder="Inset Service Items" />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-12">
+                        <textarea class="form-control" placeholder="Write job progress notes"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-6">
+                          <label for="time">Date</label>
+                          <div datetime-picker pastOrFuture="past" class="inner-addon right-addon input-group">
+                              <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                              <input id="date" type="text" name="birthDate" class="form-control" />
+                          </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <label for="time">Enter Time</label>
+                        <input class="form-control" type="text" placeholder="H" />
+                      </div>
+                      <div class="col-sm-3">
+                          <label for="time">&nbsp;</label>
+                          <input class="form-control" type="text" placeholder="M" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-12 checkbox form-check">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input">Billable
+                          <i class="input-helper"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group text-right">
+                      <button class="btn btn-panel btn-panel-bordered">Close</button>
+                      <button class="btn btn-panel">Add Note</button>
+                    </div>
+                  </div>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+        <div class="job-details-area">
+          <div class="filter-tabs-area">
+            <div class="filter-type">
+              <h4>Filter Application Type by</h4>
+              <div class="form-check radio-inline">
+                <label class="input-inline form-check-label">
+                  <input type="radio" class="form-check-input" name="FltApplication" /> DOB</label>
+                  <i class="input-helper"></i>
+                <label class="input-inline form-check-label">
+                  <input type="radio" class="form-check-input" name="FltApplication" /> DOT</label>
+                  <i class="input-helper"></i>
+                <label class="input-inline form-check-label">
+                  <input type="radio" class="form-check-input" name="FltApplication" /> Violation</label>
+                  <i class="input-helper"></i>
+                <label class="input-inline form-check-label">
+                  <input type="radio" class="form-check-input" name="FltApplication" /> DEP Boiler</label>
+                  <i class="input-helper"></i>
+                <label class="input-inline form-check-label">
+                  <input type="radio" class="form-check-input" name="FltApplication" /> DEP Hydrant</label>
+                  <i class="input-helper"></i>
+              </div>
+            </div>
+            <div class="tabs">
+              <ul>
+                  <li>
+                      <a href="/job/{{jobId}}">Application</a>
+                    </li>
+                    <li>
+                      <a href="/jobContact/{{jobId}}">Job Contacts</a>
+                    </li>
+                    <li>
+                      <a href="/jobDocument/{{jobId}}">Job Documents</a>
+                    </li>
+                    <li>
+                      <a href="/jobTransmittalMemo/{{jobId}}">Transmittals/Memos</a>
+                    </li>
+                    <li>
+                      <a href="/jobTask/{{jobId}}">Tasks</a>
+                    </li>
+                    <li  class="active">
+                      <a href="javascript:void(0)">Check List</a>
+                    </li>
+                    <li>
+                      <a href="/jobHistory/{{jobId}}">Job History</a>
+                    </li>
+                    <li>
+                      <a href="/relatedJob/{{jobId}}">Related Job</a>
+                    </li>
+                    <li>
+                      <a href="/timeNotes/{{jobId}}">Time Notes</a>
+                    </li>
+                    <li>
+                      <a href="/jobScope/{{jobId}}">Scope</a>
+                    </li>
+                    <li>
+                      <a href="/jobMilestone/{{jobId}}">Milestone</a>
+                    </li>
+                  </ul>
+            </div>
+          </div>
+          <div class="content-area">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="search-area no-flex text-right no-border">
+                    <button class="btn btn-panel no-padding">Create Check List</button>
+                </div>
+                <div class="checklist-div row">
+                  <div class="col-md-6">
+                    <h4>PRE-APPROVAL CHECKLIST</h4>
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <button class="btn btn-panel btn-panel-bordered no-padding">Add Item</button>
+                  </div>
+                  <div class="col-md-12">
+                    <table class="table">
+                      <tr></tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+  </div>
+</div>

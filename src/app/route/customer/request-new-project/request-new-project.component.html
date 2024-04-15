@@ -1,0 +1,58 @@
+<div class="modal-custom-content" cdkDrag>
+  <div class="modal-header modal-block-primary" cdkDragHandle>
+    <button type="button" class="close close-icn" cdkDragHandle>
+      <span class="fa fa-arrows"></span>
+    </button>
+    <h4 class="modal-title pull-left">Request New Proposal</h4>
+  </div>
+
+  <form [formGroup]="requestNewProjectForm">
+    <div class="modal-body clearfix">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Project Name</label>
+          <input class="form-control" placeholder="Project Name" type="text" [ngClass]="{
+              'is-invalid': isSubmittedNewProject && requestNewProjectFormControl.projectName.errors
+            }" formControlName="projectName" />
+          <div *ngIf="isSubmittedNewProject && requestNewProjectFormControl.projectName.errors"
+            class="invalid-feedback">
+            <div *ngIf="requestNewProjectFormControl.projectName.errors.required">
+              {{ errorMessage.requiredProjectName }}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <label for="to">Address</label>
+          <input class="form-control" placeholder="Address" type="text" [ngClass]="{
+              'is-invalid': isSubmittedNewProject && requestNewProjectFormControl.address.errors
+            }" formControlName="address" />
+          <div *ngIf="isSubmittedNewProject && requestNewProjectFormControl.address.errors" class="invalid-feedback">
+            <div *ngIf="requestNewProjectFormControl.address.errors.required">
+              {{ errorMessage.requireAddress }}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <label for="by">Proposal Description</label>
+          <textarea class="form-control" placeholder="Write message here..." [ngClass]="{
+              'is-invalid': isSubmittedNewProject && requestNewProjectFormControl.projectDesc.errors
+            }" rows="5" formControlName="projectDesc">
+          </textarea>
+          <div *ngIf="isSubmittedNewProject && requestNewProjectFormControl.projectDesc.errors"
+            class="invalid-feedback">
+            <div *ngIf="requestNewProjectFormControl.projectDesc.errors.required">
+              {{ errorMessage.requiredProjectDesc }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer modify-footer pt0">
+      <button type="button" class="btn btn-white" (click)="bsModalRef.hide()">
+        Cancel
+      </button>
+      <button type="button" class="btn btn-blue" (click)="saveRequestNewProjectDetail()">Request</button>
+    </div>
+  </form>
+</div>

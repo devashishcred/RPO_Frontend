@@ -1,0 +1,29 @@
+<div class="rpo-address-type rpo-component">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left">States</h2>
+            <button type="button" class="btn btn-panel pull-right middle {{showStateAddBtn}}" (click)="openModalForm(statesform,null,true)">Add State</button>
+            <div class="pull-right search middle">
+                <div class="inner-addon right-addon">
+                    <i class="icon fa fa-search"></i>
+                    <input type="text" class="form-control pull-right" placeholder="Search State" [(ngModel)]="search" (ngModelChange)="searchStates(search)"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="component-body">
+        <table id="dt-company-types" class="display" style="width:100%"></table>
+    </div>
+    <ng-template #statesform>
+        <div add-state [modalRef]="modalRef" [reload]="reload" [StatesId]="StatesId" [isNew]="isNew"></div>
+    </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

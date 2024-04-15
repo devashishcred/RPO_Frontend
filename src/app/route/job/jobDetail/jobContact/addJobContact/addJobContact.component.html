@@ -1,0 +1,115 @@
+<div class="modal-custom-content" cdkDrag>
+  <form (submit)="save()" ngNativeValidate #JobContactForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn"  cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{(isNew)?'Add':'Edit'}} Project Contact</h4>
+    </div>
+    <div class="modal-body pb0">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group" *ngIf="companydropdownList?.length > 0">
+            <label>Company</label>
+            <ng-select id="company" name="company" [items]="companydropdownList" bindLabel="itemName" bindValue="id" placeholder="Company"
+              [(ngModel)]="jobContact.idCompany" #company="ngModel" (change)="getContact(jobContact.idCompany,'',1)">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group" *ngIf="contactdropdownList?.length > 0">
+            <label>Contact*</label>
+            <ng-select id="contact" name="contact" [items]="contactdropdownList" bindLabel="itemName" bindValue="id" placeholder="Contact"
+                       [(ngModel)]="jobContact.idContact" #contact="ngModel" (click)="getContactList(jobContact.idCompany)" (change)="getContactAddress(jobContact.idCompany,jobContact.idContact,'fromcontact')" required>
+            </ng-select>
+            <div class="error-message pl0">
+              <div *ngIf="contact.errors && (contact.dirty || contact.touched)">
+                {{errorMessage.requireContact}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="contactdropdownList?.length == 0">
+            <label>Contact*</label>
+            <ng-select id="blank" name="blank" [items]="blankList" bindLabel="itemName" bindValue="id" placeholder="Contact" [(ngModel)]="jobContact.idContact"
+              #blank="ngModel">
+            </ng-select>
+            <div class="error-message pl0">
+              <div *ngIf="blank.dirty || blank.touched">
+                {{errorMessage.requireContact}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group" *ngIf="contactTypedropdownList?.length > 0">
+            <label>Contact Type*</label>
+            <ng-select id="contactType" name="contactType" [items]="contactTypedropdownList" bindLabel="itemName" bindValue="id" placeholder="Contact Type"
+              [(ngModel)]="jobContact.idJobContactType" #contactType="ngModel" required>
+            </ng-select>
+            <div class="error-message pl0">
+              <div *ngIf="contactType.errors && (contactType.dirty || contactType.touched)">
+                {{errorMessage.requireContactType}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group" *ngIf="contactAddressdropdownList?.length > 0">
+            <label> Mailing Address</label>
+            <ng-select id="contactAddress" name="contactAddress" [items]="contactAddressdropdownList" bindLabel="itemName" bindValue="id"
+              placeholder="Mailing Address" [(ngModel)]="jobContact.idAddress" #contactAddress="ngModel">
+            </ng-select>
+          </div>
+          <div class="form-group" *ngIf="contactAddressdropdownList?.length == 0">
+            <label>Mailing Address</label>
+            <ng-select id="blank2" name="blank2" [items]="blankList2" bindLabel="itemName" bindValue="id" placeholder="Mailing Address"
+              [(ngModel)]="jobContact.idAddress">
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-12 checkbox form-check">
+          <label class="mr5 form-check-label input-inline">
+            <input type="checkbox" class="form-check-input" name="mainClient" [(ngModel)]="jobContact.isMainCompany" /> Main client
+            <i class="input-helper"></i>
+          </label>
+          <label class="mr5 form-check-label input-inline">
+            <input type="checkbox" class="form-check-input" name="billingClient" [(ngModel)]="jobContact.isBilling" /> Billing client
+            <i class="input-helper"></i>
+          </label>
+          <label class="mr5 form-check-label input-inline">
+            <input type="checkbox" class="form-check-input" name="giveAccess" [(ngModel)]="jobContact.hasJobAccess" /> Give Access
+            <i class="input-helper"></i>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group" *ngIf="jobGroupList?.length > 0">
+            <label> Group</label>
+            <angular2-multiselect [data]="jobGroupList" name="idJobGroupList" [(ngModel)]="tmpServicesId" [settings]="dropdownSettings"
+               (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+              (onSelectAll)="onSelectAll($event)">
+            </angular2-multiselect>
+           
+          </div>
+        </div>
+  
+      </div>
+  
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" (click)="save()" [disabled]="!JobContactForm.form.valid || jobContact.idContact == null">Save</button>
+    </div>
+  </form>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

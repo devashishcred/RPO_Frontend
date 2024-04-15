@@ -1,0 +1,425 @@
+<div class="modal-custom-content" cdkDrag>
+
+    <form ngNativeValidate name="addJobForm" #addJobForm="ngForm" novalidate>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 *ngIf="!isReAssign" class="modal-title pull-left">{{!rec.id ? 'Add Project' : 'Edit Project - #' +
+                rec.id}}</h4>
+        </div>
+        <div class="modal-body pt15 pb0">
+            <div class="">
+                <div class="row flex-job">
+                    <div class="col-md-6 pr60">
+                        <div class="form-group">
+                            <label>Address*</label>
+                            <a *ngIf="!isAddressDisable" href="javascript:void(0)" class="pull-right link-blue"
+                                (click)="openModalAddAdress(formAddAddress)">Add New Address</a>
+                            <div class="view-address" *ngIf="rfpAddressList.length > 0">
+                                <!-- <select class="form-control" name="idRfpAddress" [(ngModel)]="rec.idRfpAddress" (change)="setAddressData($event,true)" required
+                                #idRfpAddress="ngModel" id="selectidrfpAddress">
+                                <option disabled hidden [value]="selectUndefinedOptionAddressValue">Address</option>
+                                <option *ngFor="let address of rfpAddressList" [value]="address.id">
+                                    {{address.itemName}}
+                                </option>
+                            </select> -->
+                                <ng-select name="idRfpAddress" [items]="rfpAddressList" bindLabel="itemName"
+                                    bindValue="id" placeholder="Select Address" [(ngModel)]="rec.idRfpAddress" required
+                                    (change)="setAddressData(true)" #idRfpAddress="ngModel" id="selectidrfpAddress">
+                                </ng-select>
+                                <a class="pointer pull-right" [hidden]="!rec.idRfpAddress"
+                                    (click)="viewAddressModal(viewAddress)">
+                                    <i class="fa fa-info-circle"></i>
+                                </a>
+                                <div class="error-message pl0">
+                                    <div *ngIf="idRfpAddress.errors && (idRfpAddress.dirty || idRfpAddress.touched)">
+                                        {{errorMessage.requireAddress}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row form-group" *ngIf="rec.id">
+                            <div class="col-sm-12 modify">
+                                Please generate project documents again on changing the project address
+                            </div>
+                        </div>
+                        <div class="row form-group hide">
+                            <div class="col-md-6">
+                                <label for="borough">Borough*</label>
+                                <select class="form-control" name="idBorough" [(ngModel)]="rec.idBorough" required
+                                    #idBorough="ngModel">
+                                    <option disabled hidden [value]="selectUndefinedOptionBoroughValue">Select Borough
+                                    </option>
+                                    <option *ngFor="let borough of boroughs" [value]="borough.id">
+                                        {{borough.description}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>House#*</label>
+                                <input type="text" [(ngModel)]="rec.houseNumber" placeholder="House#" name="houseNumber"
+                                    class="form-control" #houseNumber="ngModel" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label>Street#*</label>
+                                <input type="text" [(ngModel)]="rec.streetNumber" placeholder="Street#"
+                                    name="streetNumber" class="form-control" #streetNumber="ngModel" required />
+                            </div>
+                            <div class="error-message">
+                                <div *ngIf="idBorough.errors && (idBorough.dirty || idBorough.touched)">
+                                    {{errorMessage.requireBorough}}
+                                </div>
+                                <div *ngIf="houseNumber.errors && (houseNumber.dirty || houseNumber.touched)">
+                                    {{errorMessage.requireHouseNumber}}
+                                </div>
+                                <div *ngIf="streetNumber.errors && (streetNumber.dirty || streetNumber.touched)">
+                                    {{errorMessage.requireStreet}}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3">
+                                <label>Floor</label>
+                                <input type="text" [(ngModel)]="rec.floorNumber" placeholder="Floor#" name="floor"
+                                    class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>Apartment</label>
+                                <input type="text" [(ngModel)]="rec.apartment" placeholder="Apartment#" name="apartment"
+                                    class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label>Special Place Name</label>
+                                <input type="text" [(ngModel)]="rec.specialPlace" placeholder="Special Place Name"
+                                    name="selectPlace" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label>Block</label>
+                                <input type="text" [(ngModel)]="rec.block" placeholder="Block" name="block"
+                                    class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <label>Lot (s)</label>
+                                <input type="text" [(ngModel)]="rec.lot" placeholder="Lot (s)" name="lot"
+                                    class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-inline form-check">
+                                <label class="form-check-label">
+                                    <input [disabled]="isReAssign" type="checkbox" class="form-check-input"
+                                        name="hasLandMarkStatus" [(ngModel)]="rec.hasLandMarkStatus" /> Landmark status
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                            <div class="checkbox-inline form-check">
+                                <label class="form-check-label">
+                                    <input [disabled]="true" type="checkbox" class="form-check-input"
+                                        name="hasEnvironmentalRestriction"
+                                        [(ngModel)]="rec.hasEnvironmentalRestriction" /> Environmental Restriction
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                            <div class="checkbox-inline form-check" style="margin-left: 0px;">
+                                <label class="form-check-label">
+                                    <input [disabled]="isReAssign" type="checkbox" class="form-check-input"
+                                        name="hasOpenWork" [(ngModel)]="rec.hasOpenWork" /> Open work without permit
+                                    violation
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                            <div class="checkbox-inline form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="hasHolidayEmbargo"
+                                           [(ngModel)]="rec.HasHolidayEmbargo" [disabled]="isReAssign" /> Holiday Embargo
+                                    <i class="input-helper"></i>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Project Description</label>
+                            <div>
+                                <input class="form-control" placeholder="Project Description" name="projectDescription"
+                                    [(ngModel)]="rec.projectDescription" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>QB Customer: Project</label>
+                            <div>
+                                <input class="form-control" placeholder="QB Customer: Project" name="QBCustomer"
+                                    [(ngModel)]="rec.qbJobName" />
+                            </div>
+                        </div>
+                        <h4 class="blue-title">CLIENT INFORMATION </h4>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <ng-select name="idCompany" [dropdownPosition]="'top'" [items]="companies"
+                                       bindLabel="itemName" bindValue="id" placeholder="Company" [(ngModel)]="rec.idCompany"
+                                       [disabled]="isReAssign" (change)="setContacts('company')" #idCompany="ngModel">
+                            </ng-select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="contactType">Contact</label>
+                                <ng-select name="idContact" [dropdownPosition]="'top'" [items]="contacts"
+                                    bindLabel="itemName" bindValue="id" placeholder="Contact"
+                                    [(ngModel)]="rec.idContact" [disabled]="isReAssign" #idContact="ngModel"
+                                    (click)="setContacts('',1)">
+                                </ng-select>
+                                <div class="error-message pl0">
+                                    <div *ngIf="idContact.errors && (idContact.dirty || idContact.touched)">
+                                        <!-- {{errorMessage.requireContact}} -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contactType">Contact Type</label>
+                                <ng-select name="jobContactType" [dropdownPosition]="'top'" [items]="contactType"
+                                    bindLabel="itemName" bindValue="id" placeholder="Contact Type"
+                                    [disabled]="isReAssign" [(ngModel)]="rec.idJobContactType"
+                                    #jobContactType="ngModel">
+                                </ng-select>
+                                <div class="error-message pl0">
+                                    <div
+                                        *ngIf="jobContactType.errors && (jobContactType.dirty || jobContactType.touched)">
+                                        <!-- {{errorMessage.requireContactType}} -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"></div>
+                        <div class="form-group">
+                            <label for="jobStatusNotes">Project Status Notes</label>
+                            <textarea type="text" name="jobStatusNotes" [(ngModel)]="rec.jobStatusNotes"
+                                placeholder="Project Status Notes" class="form-control">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6 client-info">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label for="startDate">Start Date*</label>
+                                <div datetime-picker class="inner-addon right-addon input-group">
+                                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                    <input id="startDates" type="text" name="startDate" class="form-control date"
+                                        [(ngModel)]="rec.startDate" #startDate="ngModel" [disabled]="isReAssign"
+                                        required />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="endDate">End Date</label>
+                                <div datetime-picker class="inner-addon right-addon input-group">
+                                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                                    <input id="endDates" type="text" name="endDate" class="form-control date"
+                                        [(ngModel)]="rec.endDate" [disabled]="isReAssign" #endDate="ngModel" />
+                                </div>
+
+                                <div class="error-message pl0">
+                                    <div *ngIf="getTheDateObject(rec.endDate) < getTheDateObject(rec.startDate)">
+                                        {{errorMessage.requiredStartDate}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="poNumber">PO Number</label>
+                                <input type="text" name="poNumber" [(ngModel)]="rec.poNumber" placeholder="PO Number"
+                                    class="form-control">
+                            </div>
+                            <!-- <div class="col-md-4" *ngIf="isEnableStatus">
+                            <label for="status">Status</label>
+                            <select class="form-control" name="status" [(ngModel)]="rec.status" [disabled]="isReAssign">
+                                <option disabled hidden [value]="selectUndefinedOptionValue">Status</option>
+                                <option value="1">InProgress</option>
+                                <option value="2">On Hold</option>
+                                <option value="3">Completed</option>
+                            </select>
+                        </div> -->
+                            <div class="error-message">
+                                <div *ngIf="startDate.errors && (startDate.dirty || startDate.touched)">
+                                    {{errorMessage.requireStartDate}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="application-type">
+                            <p>Project Type*</p>
+                            <div class="checkbox form-check">
+                                <label class="mr5 form-check-label input-inline"
+                                    *ngFor="let jobType of jobApplicationTypes;let i = index">
+                                    <ng-container *ngIf="jobType.id == 3;else other">
+                                        <input type="checkbox" class="form-check-input"
+                                               (focusout)="focusOutFunction($event)"
+                                               (change)="removeJobType(jobType.id,$event)" [checked]="true"
+                                               [name]="jobType.id" [(ngModel)]="rec.jobApplicationTypes[jobType.id]"
+                                               #jobType.id="ngModel" [disabled]="true" [value]="jobType.id">
+                                        {{jobType.description}}
+                                        <i class="input-helper"></i>
+                                    </ng-container>
+                                    <ng-template #other>
+                                        <input type="checkbox" class="form-check-input"
+                                               (focusout)="focusOutFunction($event)"
+                                               (change)="removeJobType(jobType.id,$event)" [checked]="jobType.id"
+                                               [name]="jobType.id" [(ngModel)]="rec.jobApplicationTypes[jobType.id]"
+                                               #jobType.id="ngModel" [disabled]="isReAssign" [value]="jobType.id">
+                                        {{jobType.description}}
+                                        <i class="input-helper"></i>
+                                    </ng-template>
+                                </label>
+                            </div>
+                            <div class="error-message pl0">
+                                <div *ngIf="applicationsCtr == 0 && touchedType">
+                                    {{errorMessage.projectType}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ap-type-data" *ngIf="showDob">
+                            <div class="col-md-12">
+                                <label for="projectManager">DOB Project Manager*</label>
+                                <ng-select name="idProjectManager" [items]="projectManager" bindLabel="itemName"
+                                    bindValue="id" placeholder="DOB Project Manager" [disabled]="isReAssign"
+                                    [(ngModel)]="rec.idProjectManager" required #idProjectManager="ngModel">
+                                </ng-select>
+                                <div class="error-message pl0">
+                                    <div
+                                        *ngIf="idProjectManager.errors && (idProjectManager.dirty || idProjectManager.touched)">
+                                        {{errorMessage.requirePm}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" row ap-type-data" *ngIf="showDob">
+                            <div class="col-md-12">
+                                <label for="projectCoordinator">DOB Project Team</label>
+                                <angular2-multiselect [data]="projectCoordinator" name="dobProjectTeam"
+                                    [(ngModel)]="dobProjectTeam" [settings]="dobdropdownSettings"
+                                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                                    (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)">
+                                </angular2-multiselect>
+                            </div>
+                        </div>
+                        <div class="ap-type-data" *ngIf="showDot">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="projectManager">DOT Project Team</label>
+                                    <angular2-multiselect [data]="projectManager" name="iddotProjectTeam"
+                                        [(ngModel)]="dotProjectTeam" [settings]="dotdropdownSettings"
+                                        [disabled]="isReAssign" (onSelect)="onItemSelect($event)"
+                                        (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                                        (onSelectAll)="onSelectAll($event)">
+                                    </angular2-multiselect>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>OCMC Number</label>
+                                    <input type="text" [(ngModel)]="rec.ocmcNumber" maxlength="9"
+                                        placeholder="OCMC Number" name="OCMCNumber" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Street Working On</label>
+                                    <input type="text" [(ngModel)]="rec.streetWorkingOn" placeholder="Street Working On"
+                                        name="streetWorkingOn" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Street Working From</label>
+                                    <input type="text" [(ngModel)]="rec.streetWorkingFrom"
+                                        placeholder="Street Working From" name="streetWorkingFrom"
+                                        class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Street Working To</label>
+                                    <input type="text" [(ngModel)]="rec.streetWorkingTo" placeholder="Street Working To"
+                                        name="streetWorkingTo" class="form-control" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row ap-type-data" *ngIf="showViolation">
+                            <div class="col-md-12">
+                                <label for="projectManager">Violation Project Team</label>
+
+                                <angular2-multiselect [data]="projectManager" name="idviolationProjectTeam"
+                                    [(ngModel)]="violationProjectTeam" [settings]="violationdropdownSettings"
+                                    [disabled]="isReAssign" (onSelect)="onItemSelect($event)"
+                                    (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                                    (onSelectAll)="onSelectAll($event)">
+                                </angular2-multiselect>
+                            </div>
+                        </div>
+                        <div class="row ap-type-data" *ngIf="showDep">
+                            <div class="col-md-12">
+                                <label for="projectManager">DEP Project Team</label>
+                                <angular2-multiselect [data]="projectManager" name="iddepProjectTeam"
+                                    [(ngModel)]="depProjectTeam" [settings]="depdropdownSettings"
+                                    [disabled]="isReAssign" (onSelect)="onItemSelect($event)"
+                                    (onDeSelect)="OnItemDeSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                                    (onSelectAll)="onSelectAll($event)">
+                                </angular2-multiselect>
+                            </div>
+                        </div>
+                        <div class="form-group"></div>
+                        <div class="form-group">
+                            <h4 class="blue-title">Referred By </h4>
+                            <div class="form-group">
+                                <label>Company</label>
+                                <ng-select name="idReferredByCompany" [dropdownPosition]="rec?.id ? 'top' : 'bottom'"
+                                    [items]="companies" bindLabel="name" bindValue="id" placeholder="Company"
+                                    [(ngModel)]="rec.idReferredByCompany" #idReferredByCompany="ngModel"
+                                    (change)="setContactsreferred('company')">
+                                </ng-select>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact</label>
+                                <ng-select name="idReferredByContact" [dropdownPosition]="rec?.id ? 'top' : 'bottom'"
+                                    [items]="contactsList" bindLabel="itemName" bindValue="id" placeholder="Contact"
+                                    [(ngModel)]="rec.idReferredByContact" #idReferredByContact="ngModel"
+                                    (click)="setContactsreferrel('',1)">
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="modifiedBy">
+                <div class="pull-left">
+                    <ul class="list-inline text-right rfp-md">
+                        <li class="modify">
+                            <span>Last modified by {{modifiedBy}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="modal-footer text-right">
+            <button type="button" class="btn btn-white" (click)="modalRefJob.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue"
+                [disabled]="!addJobForm.form.valid || !rec.startDate|| applicationsCtr == 0 ||getTheDateObject(rec.endDate) < getTheDateObject(rec.startDate)"
+                (click)="saveJob();">Save</button>
+        </div>
+
+    </form>
+
+    <ng-template #formJobAddNewAddress>
+        <div form-Add-new-address [formAddNewAddress]="formJobAddNewAddress" [modalRef]="modalRef" [isNew]="true"
+            [rfpAddressList]="rfpAddressList" (setAddressInDropDownList)="setAddressInDropDownList($event)"
+            [jobOject]="rec" [setAddressData]="setAddressData"></div>
+    </ng-template>
+    <!-- View Address popup -->
+    <ng-template #viewAddress>
+        <div view-address [viewAddress]="viewAddress" [modalRef]="modalRef" [addressId]="rec.idRfpAddress"></div>
+    </ng-template>
+
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

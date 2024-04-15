@@ -1,0 +1,40 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+
+      <h2 class="component-title pull-left mr-2">
+        <!-- AHV Permit Expiry Report -->
+        AHV Permit Reports
+      </h2>      
+      <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search Application Status" [(ngModel)]="srch"
+            (ngModelChange)="searchJob(srch)" />
+        </div>
+      </div>
+      <!-- customClassApply='{{showExportBtn}}' -->
+      <export-xls-pdf-widget (onExportClick)="exportClick($event)" showEmailOptions="true" [disabled]='disableExport'>
+      </export-xls-pdf-widget>
+      <a href="javascript:void(0)" tooltip="Reset" class="pull-left mt-12 material-icon" (click)="clearSort()">
+        <i class="material-symbols-rounded">cached</i>
+      </a>
+      <a href="javascript:void(0)" tooltip="Advanced Search" class="pull-left mt-12 material-icon" (click)="openModalAdvanceSearch(applicationStatusAdvanceSearch)">
+        <img src="./assets/images/filter_icon.svg" width="24px">
+      </a>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-application-status" class="display" style="width:100%"></table>
+  </div>
+</div>
+
+<ng-template #applicationStatusAdvanceSearch>
+  <div ahvreport-status-advance-search [modalRefAdvanceSearch]="modalRefAdvanceSearch" (reloadAdvanceSearch)="reloadAdvanceSearch($event)"
+    [filledFilter]="filter"></div>
+</ng-template>
+
+<ng-template #jobSelect>
+  <app-job-list [modalRef]="modalRefJobSelect" [reportDocument]='reportDocument'></app-job-list>
+</ng-template>

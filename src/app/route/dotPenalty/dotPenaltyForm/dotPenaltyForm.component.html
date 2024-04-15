@@ -1,0 +1,52 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #dotPenaltyForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} DOT Penalty Schedule</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Section*</label>
+          <input id="section" name="section" type="text" class="form-control" [(ngModel)]="dotPenalty.section" #section="ngModel"
+          required/>
+          <div class="error-message pl0">
+            <div *ngIf="section.errors && (section.dirty || section.touched)">
+              {{errorMsg.requireSection}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Description</label>
+          <input id="description" name="description" type="text" class="form-control" [(ngModel)]="dotPenalty.description"
+            #classification="ngModel" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Penalty ($)</label>
+          <input id="penalty" name="penalty" type="text" class="form-control" [(ngModel)]="dotPenalty.penalty"
+            #penalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Default Penalty ($)</label>
+          <input id="defaultPenalty" name="defaultPenalty" type="text" class="form-control" [(ngModel)]="dotPenalty.defaultPenalty"
+            #defaultPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!dotPenaltyForm.form.valid" (click)="saveDotPenalty()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  
+  </form>
+</div>

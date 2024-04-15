@@ -1,0 +1,59 @@
+<div class="modal-custom-content" cdkDrag>
+  <form (submit)="save()" ngNativeValidate>
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">Advanced Search</h4>
+      <a href="javascript:void(0)" class="clear-search link-blue" (click)="clearSearch()">Clear Filter</a>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="form-advance-search">
+        <div class="row">
+          <div class="col-sm-12">
+            <form>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Project#</label>
+                  <angular2-multiselect [data]="jobList" name="jobId" [(ngModel)]="filter.jobId" [settings]="dropdownJobListSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'Project')" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event,'Project')"
+                    #jobId="ngModel">
+                  </angular2-multiselect>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Expiry Date From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="expiresToDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="expiresFromDate" type="text" name="expiresFromDate" [(ngModel)]="filter.expiresFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">Expiry Date To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="expiresToDate" [customMinDate]="filter.expiresFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="expiresToDate" [(ngModel)]="filter.expiresToDate" type="text" name="expiresToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" (click)="searchJobs()">Search</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

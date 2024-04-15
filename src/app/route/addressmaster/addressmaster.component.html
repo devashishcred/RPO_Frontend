@@ -1,0 +1,37 @@
+<div class="rpo-address-type rpo-component">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left mr-2">Addresses</h2>
+            <button type="button" class="btn btn-panel pull-right middle {{showAddressAddBtn}}" (click)="openModalForm(formJobAddNewAddress,null,true)">Add Address</button>
+            <div class="pull-left search middle">
+                <div class="inner-addon left-addon">
+                    <i class="icon fa fa-search"></i>
+                    <input type="text" class="form-control pull-right" placeholder="Search Address " [(ngModel)]="search" (change)="searchAddress(search)"/>
+                </div>
+            </div>
+            <!-- <button type="button" class="btn btn-panel pull-right middle {{showAddressAddBtn}}" (click)="openModalForm(formJobAddNewAddress,'',true)">Add Address</button> -->
+        </div>
+    </div>
+
+    <div class="component-body">
+        <table id="dt-address-master" class="display" style="width:100%"></table>
+    </div>
+
+    <ng-template #formJobAddNewAddress>
+        <div form-Add-new-address [modalRef]="modalRef" [moduleName]="moduleName" [addressId]="addressId" [reloadAddress]="reload"
+             [isTitle]="true" [isNew]="isNew"></div>
+    </ng-template>
+    <!-- View Address popup -->
+    <ng-template #viewAddress>
+        <div view-address [viewAddress]="viewAddress" [modalRef]="modalRef" [addressId]="idAddress"></div>
+    </ng-template>
+    <ng-template #formJob>
+        <div form-job [job]="jobOfComp" [modalRefJob]="modalRef"></div>
+    </ng-template>
+</div>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

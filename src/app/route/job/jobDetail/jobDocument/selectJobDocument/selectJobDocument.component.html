@@ -1,0 +1,53 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #JobDocumentForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">Select Project Document</h4>
+    </div>
+    <div class="modal-body pt15">
+            <div class="component-body">
+                <div class="job-doc-search mb20">
+                    <div class="inner-addon left-addon">
+                        <i class="icon fa fa-search"></i>
+                        <input class="form-control" type="text" placeholder="Search Project Documents" name="search" [(ngModel)]="srch" (ngModelChange)="search($event)">
+                    </div>
+                </div>
+                <table id="dt-jobDocuments" class="display"  style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="min-auto" style="width:10px">
+                                <div class="checkbox form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" id="selectall" (click)="selectAllRow()" />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </th>
+                            <th class="min-auto" style="width:60px">ID</th>
+                            <th class="min-auto" style="width:60px">CODE</th>
+                            <th>A#/LOC/VIO#</th>
+                            <th>APPLICATION TYPE</th>
+                            <th>DOCUMENT NAME</th>
+                            <th>DOCUMENT DESCRIPTION</th>
+                            <th>MODIFIED BY</th>
+                            <th>MODIFIED DATE </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>    
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRefDoc.hide()">Cancel</button>
+            <button class="btn btn-blue" [disabled]="docList?.length == 0" (click)="setDocument()">Select</button>
+        </div>
+</form>
+</div>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

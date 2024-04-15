@@ -1,0 +1,37 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #reviewEmployee="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+        <h4 class="modal-title pull-left">Submit for Review</h4>
+    </div>
+    <div class="modal-body pt15" *ngIf="employee?.length>0">
+        <label for="task">Reviewer*</label>
+        <angular2-multiselect [data]="employee" name="selectReviewer" [(ngModel)]="reviewTeam" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)"
+            (onDeSelect)="OnItemDeSelect($event)" #selectReviewer="ngModel" required>
+        </angular2-multiselect>
+        <div class="error-message pl0">
+            <div *ngIf="count > 2">
+                {{errorMsg.MaximumTwoRequired}}
+            </div>
+        </div>
+        <div class="error-message pl0">
+            <div *ngIf="selectReviewer.errors && (selectReviewer.dirty || selectReviewer.touched)">
+                {{errorMsg.requireReviewer}}
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" (click)="modalRefFee.hide()">Cancel</button>
+        <button type="button" class="btn btn-blue" [disabled]="!reviewEmployee.form.valid || count >=3" (click)="save()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</form>
+</div>

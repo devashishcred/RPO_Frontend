@@ -1,0 +1,76 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #jobTypeform="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Service Group </h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Project Type*</label>
+                    <ng-select name="idRfpJobType" [items]="jobTypes" bindLabel="itemName" bindValue="id" placeholder="Project Type" [(ngModel)]="workTypeCategory.idRfpJobType"
+                        (ngModelChange)="getSubJobTypesCagetory(workTypeCategory.idRfpJobType,true);getSubJobTypes(workTypeCategory.idRfpJobType,true)"
+                        #idRfpJobType="ngModel" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idRfpJobType.errors && (idRfpJobType.dirty || idRfpJobType.touched)">
+                            {{errorMessage.requireJobType}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Project Type Description</label>
+                    <ng-select name="idRfpSubJobTypeCategory" [items]="subJobTypesCategory" bindLabel="itemName" bindValue="id" placeholder="Project Type Description"
+                        [(ngModel)]="workTypeCategory.idRfpSubJobTypeCategory" (ngModelChange)="getSubJobTypes(workTypeCategory.idRfpSubJobTypeCategory,true)">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Project Sub Type</label>
+                    <ng-select name="idRfpSubJobType" [items]="subJobTypes" bindLabel="itemName" bindValue="id" placeholder="Project Sub Type" [(ngModel)]="workTypeCategory.idRfpSubJobType"
+                        #idRfpSubJobTypeCategory="ngModel">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Service Group Name*</label>
+                    <input id="nameDesc" name="nameDesc" type="text" class="form-control" [(ngModel)]="workTypeCategory.name" #nameDesc="ngModel"
+                        placeholder="Service Group Name" required/>
+                    <div class="error-message pl0">
+                        <div *ngIf="nameDesc.errors && (nameDesc.dirty || nameDesc.touched)">
+                            {{errorMessage.requireServiceGroup}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Display Order*</label>
+                    <input id="displayOrder" name="displayOrder" type="text" class="form-control" [(ngModel)]="workTypeCategory.displayOrder" #displayOrder="ngModel"
+                        placeholder="Display Order" required/>
+                    <div class="error-message pl0">
+                        <div *ngIf="displayOrder.errors && (displayOrder.dirty || displayOrder.touched)">
+                            {{errorMessage.requireDisplayOrder}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" [disabled]="!jobTypeform.form.valid" (click)="saveWorkTypeCategory()">Save</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,180 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #addApplicationForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{application.id?'Edit':'Add'}} Application</h4>
+    </div>
+    <div class="modal-body pt15 pb0">
+      <div class="form-add-application">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="row form-group">
+              <div class="col-sm-4">
+                <label for="Type">Application Type*</label>
+                <div>
+                  <ng-select name="appType" [items]="applicationType" bindLabel="description" bindValue="id" placeholder="Application Type"
+                    [(ngModel)]="application.idJobApplicationType" required #appType="ngModel" (change)="getSelectedAppTypeName()"
+                    [disabled]="isAppDisabled">
+                  </ng-select>
+                  <div class="error-message pl0">
+                    <div *ngIf="appType.errors && (appType.dirty || appType.touched)">
+                      {{errorMsg.requireJobApplicationTypeForDob}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="for">For</label>
+                <input type="text" placeholder="For" readonly="readonly" [(ngModel)]="application.applicationFor" name="appFor" #appFor="ngModel"
+                  class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <label for="status">Status*</label>
+                <ng-select name="appStatus" [items]="applicationStatus" bindLabel="name" bindValue="id" placeholder="Status" [(ngModel)]="application.idApplicationStatus"
+                  #appStatus="ngModel" required="true">
+                </ng-select>
+                <div class="error-message pl0">
+                    <div *ngIf="appStatus.errors && (appStatus.dirty || appStatus.touched)">
+                      {{errorMsg.requireDepStatus}}
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-sm-4">
+                <label for="for">Street On</label>
+                <input type="text" name="streetWorkingOn" placeholder="Street On" [(ngModel)]="application.streetWorkingOn" #streetWorkingOn="ngModel"
+                  class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <label for="status">Street From</label>
+                <input type="text" name="streetFrom" placeholder="Street From" [(ngModel)]="application.streetFrom" #streetFrom="ngModel"
+                  class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <label for="for">Street To</label>
+                <input type="text" name="streetTo" placeholder="Street To" [(ngModel)]="application.streetTo" #streetTo="ngModel" class="form-control"
+                />
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-sm-12">
+                <label for="description">Description</label>
+                <textarea class="form-control" rows="3" placeholder="" name="desc" [(ngModel)]="application.description"></textarea>
+              </div>
+            </div>
+            <div class="row form-group" *ngIf="selectedAppTypeName == 'hydrant'">
+              <div class="col-sm-4">
+                <label for="modelNumber">Model Number</label>
+                <input type="text" name="modelNumber" placeholder="Model Number" [(ngModel)]="application.modelNumber" #modelNumber="ngModel"
+                  class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <label for="serialNumber">Serial Number</label>
+                <input type="text" name="serialNumber" placeholder="Serial Number" [(ngModel)]="application.serialNumber" #serialNumber="ngModel"
+                  class="form-control" />
+              </div>
+              <div class="col-sm-4">
+                <label for="modelNumber">Manufacturer</label>
+                <input type="text" name="manufacturer" placeholder="Manufacturer" [(ngModel)]="application.manufacturer" #manufacturer="ngModel"
+                  class="form-control" />
+              </div>
+            </div>
+            <!-- <div class="checkbox form-check">
+              <label class="mr5 form-check-label input-inline">
+                <input type="checkbox" name="isSunday" [(ngModel)]="application.isIncludeSunday" (change)="ChecktheValidDays('Checkboxes')" />Include Sunday
+                <i class="input-helper"></i>
+              </label>
+              <label class="mr5 form-check-label input-inline">
+                <input type="checkbox" name="isSunday" [(ngModel)]="application.isIncludeSunday" (change)="ChecktheValidDays('Checkboxes')" />Include Sunday
+                <i class="input-helper"></i>
+              </label>
+              <label class="mr5 form-check-label input-inline">
+                <input type="checkbox" name="isSunday" [(ngModel)]="application.isIncludeSunday" (change)="ChecktheValidDays('Checkboxes')" />Include Sunday
+                <i class="input-helper"></i>
+              </label>
+              <label class="mr5 form-check-label input-inline">
+                <input type="checkbox" name="isHoliday" [(ngModel)]="application.isIncludeHoliday" (change)="ChecktheValidDays('Checkboxes')" />Include Holidays
+                <i class="input-helper"></i>
+              </label>
+            </div>
+  
+            <div class="row form-group" *ngIf="selectedAppTypeName == 'hydrant'">
+              <div class="col-sm-8">
+                <div class="row form-group">
+                  <div class="col-sm-4">
+                    <label for="startDate">Start Date</label>
+                    <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="StartDateTo" class="inner-addon right-addon input-group">
+                      <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                      <input id="startDate" type="text" name="startDate" class="form-control" [(ngModel)]="application.startDate" (ngModelChange)="ChecktheValidDays('StartDate')"
+                      />
+                      <div class="error-message pl0">
+                        <div *ngIf="application.startDate">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <label for="totalDays">Total days</label>
+                    <input type="text" name="totalDays" placeholder="Total days" [(ngModel)]="application.totalDays" #days="ngModel" (ngModelChange)="ChecktheValidDays('TotalDays')"
+                      (keypress)="isNumber(event)" class="form-control" />
+                  </div>
+                  <div class="col-sm-4">
+                    <label for="endDate">End Date</label>
+                    <div datetime-picker class="inner-addon right-addon input-group" pastOrFuture="setEndDateForRangePicker" id="StartDateTo"  [customMinDate]="application.startDate">
+                      <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+  
+                      <input id="endDates" type="text" name="endDate"  class="form-control endDate" [disabled]="application.startDate==null" [(ngModel)]="application.endDate"
+                        #datpicker (ngModelChange)="checkEndDateValidDays(oldVal, $event);" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="purpose">Purpose</label>
+                <textarea class="form-control" rows="3" placeholder="" name="purpose" [(ngModel)]="application.purpose"></textarea>
+              </div>
+            </div> -->
+            <!-- <div class="row form-group" *ngIf="selectedAppTypeName == 'hydrant'">
+              <div class="col-sm-12">
+                <label for="totalDays" class="text-uppercase" style="width:80px">Water</label>
+                <span>${{application.waterCost}}</span>
+              </div>
+            </div>
+            <div class="row form-group" *ngIf="selectedAppTypeName == 'hydrant'">
+              <div class="col-sm-12">
+                <label for="totalDays" class="text-uppercase" style="width:80px">Hydrant</label>
+                <span>${{application.hydrantCost}}</span>
+              </div>
+            </div>
+            <div class="row form-group" *ngIf="selectedAppTypeName == 'hydrant'">
+              <div class="col-sm-12">
+                <label for="totalDays" class="text-uppercase" style="width:80px">Total</label>
+                <span>${{application.totalCost}}</span>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right pt10">
+      <div class="row">
+        <div class="col-sm-7 text-left">
+          <div class="modify" *ngIf="application.lastModifiedDate && application.lastModifiedDate">Last modified by {{application.lastModifiedByEmployeeName}} on {{application.lastModifiedDate | date :'MM/dd/yyyy, h:mm a'}}</div>
+        </div>
+        <div class="col-sm-5">
+          <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+          <button type="submit" class="btn btn-blue" [disabled]="!addApplicationForm.form.valid" (click)="saveDepJobApplication()">{{application.id?'Update':'Save'}}</button>
+        </div>
+      </div>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

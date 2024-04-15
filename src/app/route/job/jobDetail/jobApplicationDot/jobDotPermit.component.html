@@ -1,0 +1,34 @@
+<div class="search-area">
+    <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+            <i class="icon fa fa-search"></i>
+            <input class="form-control" type="text" [(ngModel)]="searchpermit" placeholder="Search Work Permit" (ngModelChange)="searchPermit($event)"
+            />
+        </div>
+    </div>
+    <button class="btn btn-panel pull-right no-padding mr5 {{btnShowHide}} {{showJobApplicationAddBtn}} {{showBtnStatus}}" (click)="openModalUploadPermit(formUploadDotPermit)" *ngIf="!isCustomerLoggedIn">Upload Permit</button>
+    <button class="btn btn-panel pull-right no-padding {{btnShowHide}} {{showJobApplicationAddBtn}} {{showBtnStatus}}" *ngIf="isAppData && !isCustomerLoggedIn" (click)="openModalFormAddPermit(formAddDotPermit)">Add Permit</button>
+    <div class="work-status permit-status pull-right" *ngIf="!isCustomerLoggedIn">
+        <label>
+            <span class="orange"></span>Signed off or Work Completed
+        </label>
+    </div>
+    
+</div>
+<div class="overflow-table jobDotWorkPermitApplication">
+    <table id="dt-aplication-permit" class="display permit-table"  style="width:100%"></table>
+</div>
+
+<ng-template #formAddDotPermit>
+    <div form-add-dot-permit  [modalRef]="modalRef" [onSave]="onSave" [idApplicationNumber]="idApplicationNumber" [idApp]="idApp" 
+        [appType]="appType" [reload]="reload" [idJob]="idJob" [idJobAppObject]="idJobApp" [isNew]="isNew" [jobAppObject]="jobAppObject"></div>
+</ng-template>
+<ng-template #formUploadDotPermit>
+        <div form-upload-dot-permit [modalRef]="modalRef" [idJob]="idJob" [reload]="reload"></div>
+    </ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>

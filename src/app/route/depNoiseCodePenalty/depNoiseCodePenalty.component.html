@@ -1,0 +1,29 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">DEP Noise Code Penalty Schedule</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showDepPenaltyAddBtn}}" (click)="openModalForm(deppenaltyform,null,true)">Add DEP Noise Code Penalty Schedule</button>
+        <div class="pull-left search middle">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search DEP Noise Code Penalty Schedule" [(ngModel)]="search" (ngModelChange)="searchDEPPenalty(search)"
+            />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body overflow-hidden">
+    <table id="dt-deppenalty" class="display task-grid"  style="width:100%"></table>
+  </div>
+  <ng-template #deppenaltyform>
+    <div add-dep-penalty  [modalRef]="modalRef" [reload]="reload" [id]="id" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

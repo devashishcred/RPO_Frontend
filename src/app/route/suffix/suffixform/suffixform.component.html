@@ -1,0 +1,34 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #suffixForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Suffix</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Description*</label>
+          <input id="suffixDescription" name="suffixDescription" type="text" class="form-control" [(ngModel)]="suffix.description" #suffixDescription="ngModel" required/>
+          <div class="error-message pl0">
+            <div *ngIf="suffixDescription.errors && (suffixDescription.dirty || suffixDescription.touched)">
+              {{errorMsg.requiredSuffixDescription}}
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!suffixForm.form.valid" (click)="saveSuffix()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

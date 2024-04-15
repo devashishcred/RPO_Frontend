@@ -1,0 +1,24 @@
+<div class="rpo-userGroup rpo-component">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left">User Group</h2>
+            <button type="button" class="btn btn-panel pull-right middle {{showUserGroupAddBtn}}" (click)="openModal(permissionUsergroup,null,'add')">Add User Group</button>
+        </div>
+    </div>
+
+    <div class="component-body pb0">
+        <table id="dt-userGroup" class="display" style="width:100%"></table>
+    </div>
+
+
+    <ng-template #permissionUsergroup>
+        <div permission-user-group [modalRef]="modalRef" [userGroupPermissionId]="userGroupId"
+             [showUserGroup]="true" (reload)="reload()"></div>
+    </ng-template>
+</div>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

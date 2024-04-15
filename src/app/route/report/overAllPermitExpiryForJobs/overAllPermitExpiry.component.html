@@ -1,0 +1,43 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <h2 class="component-title pull-left mr-2">Consolidated Status Reports</h2>
+    </div>
+  </div>
+  <div class="component-body">
+    <div class="form-advance-search">
+      <div class="row">
+        <div class="col-sm-12">
+          <form>
+            <div class="row form-group">
+              <div class="col-sm-6">
+                <label for="">Project#</label>
+                <angular2-multiselect [data]="jobList" name="id" [(ngModel)]="filter.id" [settings]="dropdownJobListSettings"
+                  (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event,'job')" (onSelectAll)="onSelectAll($event)"
+                  (onDeSelectAll)="onDeSelectAll($event,'job')" #id="ngModel">
+                </angular2-multiselect>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer text-right">
+    <!-- <a href="javascript:void(0)" [routerLink]="['/home']"  class="btn btn-white">Cancel</a> -->
+    <button type="button" class="btn btn-blue" (click)="exportReport('xls')"><i class="fa fa-file-excel-o export-icon export-icon-excel"></i> Export XLS</button>
+    <button type="button" class="btn btn-blue" (click)="exportReport('pdf')"><i class="fa fa-file-pdf-o export-icon export-icon-pdf"></i> Export PDF</button>
+    <button type="button" class="btn btn-blue" (click)="exportReport('xlsEmail')"><i class="fa fa-file-excel-o export-icon export-icon-excel"></i> Email XLS</button>
+    <button type="button" class="btn btn-blue" (click)="exportReport('pdfEmail')"><i class="fa fa-file-pdf-o export-icon export-icon-pdf"></i> Email PDF</button>
+  </div>
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
+
+<ng-template #jobSelect>
+  <app-job-list [modalRef]="modalRefJobSelect" [reportDocument]='reportDocument'></app-job-list>
+</ng-template>

@@ -1,0 +1,71 @@
+<div class="modal-custom-content" cdkDrag>
+    <div class="main-model">
+        <form #progressNoteForm="ngForm">
+            <div class="modal-header" cdkDragHandle>
+                <button type="button" class="close close-icn" cdkDragHandle>
+                    <span class="fa fa-arrows"></span>
+                </button>
+                <h4 class="modal-title pull-left">Progression Notes</h4>
+            </div>
+        
+            <div class="modal-body pt15">
+                <textarea class="form-control" name="notes" id="" rows="5" [(ngModel)]="progressionNote.notes" placeholder="Progression Notes"
+                    #notes="ngModel" required></textarea>
+                <div class="error-message pl0" *ngIf="isNewGenrealNote">
+                    <div *ngIf="notes.errors && (notes.dirty || notes.touched)">
+                        {{errorMsg.requiredProgressionNote}}
+                    </div>
+                </div>
+              
+                <div class="text-right mt10">
+                    <button type="button" class="btn btn-white mr10" (click)="modalRef.hide()">Cancel</button>
+                    <button class="btn btn-blue" [disabled]="!progressNoteForm.form.valid" (click)="openModalAddTime(saveTimeNote)">Add Note</button>
+                </div>
+            
+                <div *ngIf="exsitingNotes?.length > 0">
+                    <div class="note-list">
+                        <div class="single-note" *ngFor="let progression of exsitingNotes | orderBy: '-createdDate';  let i = index">
+                            <p class="desc">
+                                <read-more [text]="progression.notes" [maxLength]="250"></read-more>
+                            </p>
+                            <p class="users">Added by
+                                {{progression.lastModified}} on {{progression.lastModifiedDate| date :'MM/dd/yyyy h:mm a'}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lds-css" *ngIf="loading">
+                <div class="lds-ripple">
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<ng-template #addtimenotes>
+    <div add-time-notes [idJob]="idJob" [description]="progressionNote.notes" [modalRef]="modelcheck" [reload]="reload" [fromProgressionNote]="true"  (onTimeNoteSave)="TimeNoteSave($event)"></div>
+  </ng-template>
+
+  <ng-template #saveTimeNote>
+    <div class="modal-custom-content" cdkDrag>
+        <div class="modal-header" cdkDragHandle>
+          <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+          </button>
+          <h4 class="modal-title pull-left">Add Time Note</h4>
+        </div>
+    
+        <div class="modal-body" >
+          <label>Do you want to Add Time Note?
+          </label>
+        </div>
+    
+        <div class="modal-footer">
+          <button type="button" class="btn btn-blue pull-right" (click)="openModalAddTimeNotes(addtimenotes)" >Yes</button>
+          <button type="button" class="btn btn-white pull-right" (click)="saveProgressionNote()">No</button>
+        </div>
+    </div>
+  </ng-template>

@@ -1,0 +1,145 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #taskfilterForm="ngForm" novalidate>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">Advanced Search</h4>
+            <a class="clear-search link-blue" href="javascript:void(0)" (click)="clearFilter()">Clear Filter</a>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="form-group">
+                <div class="checkbox form-check">
+                    <label class="form-check-label input-inline">
+                        <input type="checkbox" class="form-check-input" name="isJob" [(ngModel)]="task.isActiveJob" (click)="taskChange($event,'isJob')"> Active Projects
+                        <i class="input-helper"></i>
+                    </label>
+                    <label class="form-check-label input-inline">
+                        <input type="checkbox" class="form-check-input" name="isHold" [(ngModel)]="task.isHoldJob" (click)="taskChange($event,'isHold')"> On Hold Projects
+                        <i class="input-helper"></i>
+                    </label>
+                    <label class="form-check-label input-inline">
+                        <input type="checkbox" class="form-check-input" name="isCompleted" [(ngModel)]="task.isCompletedJob" (click)="taskChange($event,'isCompleted')"> Completed Projects
+                        <i class="input-helper"></i>
+                    </label>
+                    <label class="form-check-label input-inline">
+                        <input type="checkbox" class="form-check-input" name="isRfp" [(ngModel)]="task.isRfp" (click)="taskChange($event,'isRfp')"> RFP task
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="checkbox form-check">
+                <label class="form-check-label input-inline">
+                    <input type="checkbox" class="form-check-input" name="isCompany" [(ngModel)]="task.isCompany"> Company task
+                    <i class="input-helper"></i>
+                </label>
+                <label class="form-check-label input-inline">
+                    <input type="checkbox" class="form-check-input" name="isContact" [(ngModel)]="task.isContact"> Contact task
+                    <i class="input-helper"></i>
+                </label>
+            </div>
+            <div class="row form-group" *ngIf="task.isRfp || task.isJob">
+                <div class="col-sm-5">
+                    <label>Borough</label>
+                    <ng-select name="borough" [items]="boroughs" bindLabel="description" bindValue="id" placeholder="Borough" [(ngModel)]="task.idBorough">
+                    </ng-select>
+                </div>
+                <div class="col-sm-2">
+                    <label>House#</label>
+                    <input type="text" class="form-control" placeholder="House#" name="houseNumber" [(ngModel)]="task.houseNumber">
+                </div>
+                <div class="col-sm-5">
+                    <label>Street name</label>
+                    <input type="text" class="form-control" placeholder="Street name" name="street" [(ngModel)]="task.street">
+                </div>
+            </div>
+    
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label>Task type</label>
+                    <ng-select name="taskType" [items]="taskType" bindLabel="name" bindValue="id" placeholder="Task type" [(ngModel)]="task.idTaskType">
+                    </ng-select>
+                </div>
+                <div class="col-sm-6">
+                    <label>Task status</label>
+                    <ng-select name="taskStatus" [items]="taskStatus" bindLabel="name" bindValue="id" placeholder="Task status" [(ngModel)]="task.idTaskStatus">
+                    </ng-select>
+                </div>
+            </div>
+    
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label>Assigned by</label>
+                    <angular2-multiselect [data]="employees" name="assignedBy" [(ngModel)]="task.assignedBy" [settings]="assignedByDDSettings"
+                    (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event)">
+                    </angular2-multiselect>
+                </div>
+                <div class="col-sm-6">
+                    <label>Assigned to</label>
+                    <angular2-multiselect [data]="employees" name="assignedTo" [(ngModel)]="task.assignedTo" [settings]="assignedByDDSettings">
+                    </angular2-multiselect>
+                </div>
+            </div>
+    
+            <label>Assigned on</label>
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <div datetime-picker class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                        <input placeholder="From date" id="assignedFromDate" name="assignedFromDate" type="text" class="form-control" [(ngModel)]="task.assignedFromDate"
+                        />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div datetime-picker class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                        <input placeholder="To date" id="assignedToDate" type="text" name="assignedToDate" class="form-control" [(ngModel)]="task.assignedToDate"
+                        />
+                    </div>
+                </div>
+            </div>
+    
+            <label>Due date</label>
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <div datetime-picker class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                        <input placeholder="From date" id="completedFromDate" type="text" name="completedFromDate" class="form-control" [(ngModel)]="task.completedFromDate"
+                        />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div datetime-picker class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                        <input placeholder="To date" id="completedToDate" type="text" name="completedToDate" class="form-control" [(ngModel)]="task.completedToDate"
+                        />
+                    </div>
+                </div>
+            </div>
+    
+            <label>Completed on</label>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div datetime-picker class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                        <input placeholder="From date" id="closedFromDate" type="text" name="closedFromDate" class="form-control" [(ngModel)]="task.closedFromDate"
+                        />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div datetime-picker class="inner-addon right-addon input-group">
+                        <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                        <input placeholder="To date" id="closedToDate" type="text" name="closedToDate" class="form-control" [(ngModel)]="task.closedToDate"
+                        />
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" (click)="applyFilter()">Search</button>
+        </div>
+    </form>
+</div>

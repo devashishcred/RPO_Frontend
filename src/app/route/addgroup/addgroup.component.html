@@ -1,0 +1,43 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #groupForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn"  cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title">Manage Group</h4>
+            <button class="btn btn-panel pull-left mt20 ad-grp-btn" id="addGroup" (click)="addGroup()">Add Group</button>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group" *ngIf="showMessage">
+                <div class="col-md-8">
+                    {{errorMsg.GroupNoRecordFound}}
+                </div>
+            </div>
+            <div class="job-milestone" *ngFor="let item of group; index as j">
+                <div class="row form-group">
+                    <div class="col-md-12 flex-center" style="flex-wrap: wrap;">
+                        <input class="form-control" name="value_{{item.name}}_{{j}}" [(ngModel)]="item.name" style="max-width: 396px;" />
+                        <div class="error-message pl0">
+                            <div *ngIf="item.name=='' || item.name==null">
+                                {{errorMsg.requriredGroupName}}
+                            </div>
+                        </div>
+                        <button class="btn btn-panel" *ngIf="item.name!=''" id="saveGroup{{j}}" (click)="updateGroup(item,item.id);">Save</button>
+                        <button class="btn btn-white ml10" *ngIf="item.name!='' && item.id > 0" id="deleteGroup{{j}}" (click)="deleteGroup(item,item.id)"><span class="material-symbols-rounded">
+                            delete</span></button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>        
+        <div class="modal-footer text-right">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

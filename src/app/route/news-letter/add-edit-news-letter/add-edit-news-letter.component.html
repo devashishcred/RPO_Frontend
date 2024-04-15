@@ -1,0 +1,69 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #newsForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} News</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Title*</label>
+                    <input id="newsTitle" name="title" type="text" class="form-control" [(ngModel)]="news.title"
+                        #newsTitle="ngModel" required />
+                    <div class="error-message pl0">
+                        <div *ngIf="newsTitle.errors && (newsTitle.dirty || newsTitle.touched)">
+                            {{errorMsg.requiredNewsTitle}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Url*</label>
+                    <input id="newsUrl" name="url" type="url" class="form-control" [(ngModel)]="news.url"
+                        #newsUrl="ngModel" required />
+                    <div class="error-message pl0">
+                        <div *ngIf="newsUrl.errors && (newsUrl.dirty || newsUrl.touched)">
+                            {{errorMsg.requiredNewsUrl}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">News Image Path*</label>
+                    <input id="newsImagePath" name="newsImagePath" type="url" class="form-control"
+                        [(ngModel)]="news.newsImagePath" #newsImagePath="ngModel" required />
+                    <div class="error-message pl0">
+                        <div *ngIf="newsImagePath.errors && (newsImagePath.dirty || newsImagePath.touched)">
+                            {{errorMsg.requiredNewsImagePath}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Description*</label>
+                    <textarea name="newsDescription" [(ngModel)]="news.description" #newsDescription="ngModel" class="form-control" id="newsDescription" required rows="5"></textarea>
+                    <div class="error-message pl0">
+                        <div *ngIf="newsDescription.errors && (newsDescription.dirty || newsDescription.touched)">
+                            {{errorMsg.requiredNewsDescription}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" [disabled]="!newsForm.form.valid" (click)="save()">Save</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

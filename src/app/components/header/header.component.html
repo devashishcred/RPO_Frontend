@@ -1,0 +1,950 @@
+<!-- <nav class="navbar navbar-default" [ngClass]="login?'hidden':''">
+    <div class="container-fluid">
+        <div class="navbar-header menu-part">
+            <ul class="nav navbar-nav">
+                <ng-container *ngFor="let menuItem of user.menu">
+                    <li *ngIf="menuItem.routerLink">
+                        <a href="" [routerLink]="menuItem.routerLink" routerLinkActive="active" (click)='clearGlobalSearch()'>{{menuItem.text}}</a>
+                    </li>
+
+                    <li *ngIf="!menuItem.routerLink" class="dropdown" dropdown>
+                        <a dropdownToggle role="button" [class.active]="isActive(menuItem)" [attr.text]="menuItem.text">{{menuItem.text}}</a>
+                        <ul class="dropdown-menu black">
+                            <li class="dropdown first-menu" dropdown *ngFor="let item of menuItem.items">
+                                <a dropdownToggle href="" [routerLink]="item.routerLink" routerLinkActive="active" *ngIf="item.text!='Other Masters' && item.text!='Address Masters' && item.text!='RFP Masters' && item.url==null && item.text!='Penalty Schedule Masters' && item.text!= 'Checklist Masters'">{{item.text}}</a>
+                                <a dropdownToggle href="{{item.url}}" target="_blank" *ngIf="item.text!='Other Masters' && item.text!='Address Masters' && item.url!=null && item.text!='Penalty Schedule Masters'&& item.text!= 'Checklist Masters'">{{item.text}}</a>
+                                <a dropdownToggle routerLinkActive="active" *ngIf="item.text=='Other Masters'  || item.text=='RFP Masters' || item.text=='Address Masters' || item.text=='Penalty Schedule Masters' || item.text == 'Checklist Masters'"
+                                    (click)="closeDropdown($event)">{{item.text}}</a>
+                                <ul class="dropdown-menu black second-level" *ngIf="item.text=='Other Masters' || item.text=='RFP Masters' || item.text=='Address Masters' || item.text=='Penalty Schedule Masters' || item.text == 'Checklist Masters'">
+                                    <li *ngFor="let childitem of item.items">
+                                        <a href="" [routerLink]="childitem.routerLink" routerLinkActive="active">{{childitem.text}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ng-container>
+            </ul>
+
+        </div>
+
+        <div class="navbar-header pull-right">
+
+            <form class="navbar-form navbar-left" novalidate name="globalsearch">
+                <div class="input-group search-box search-box-head">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="fa fa-bars"></span>
+                        </button>
+                        <ul class="dropdown-menu widget">
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '1'}">
+                                <a href="javascript:void(0)" (click)="search(1 , 'Job#')">Job#</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '2'}">
+                                <a href="javascript:void(0)" (click)="search(2, 'Application#')">Application#</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '11'}">
+                                <a href="javascript:void(0)" (click)="search(11 , 'Tracking#')">Tracking#</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '12'}">
+                                <a href="javascript:void(0)" (click)="search(12, 'Violation#')">Violation#</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '3'}">
+                                <a href="javascript:void(0)" (click)="search(3, 'RFP#')">RFP#</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '4'}">
+                                <a href="javascript:void(0)" (click)="search(4, 'Job Address')">Job Address</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '5'}">
+                                <a href="javascript:void(0)" (click)="search(5, 'Contact name')">Contact name</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '6'}">
+                                <a href="javascript:void(0)" (click)="search(6 ,'Company name')">Company name</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '7'}">
+                                <a href="javascript:void(0)" (click)="search(7, 'Special place name')">Special place name</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '8'}">
+                                <a href="javascript:void(0)" (click)="search(8, 'Transmittal#')">Transmittal#</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '9'}">
+                                <a href="javascript:void(0)" (click)="search(9, 'Zone District')">Zone District</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == '10'}">
+                                <a href="javascript:void(0)" (click)="search(10, 'Overlay')">Overlay</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <input class="form-control search-area" (keyup.enter)="globalSearch()" type="text" placeholder="Job#" [(ngModel)]="globalSearchText"
+                        name="globalSearchText">
+                    <div class="input-group-btn search-btn">
+                        <button type="button" class="btn btn-default" (click)="globalSearch()">
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <ul class="nav navbar-nav">
+                <li class="notif-dropdown dropdown">
+                    <label class="dropdown-toggle" data-toggle="dropdown">
+                        <a (click)="getBadgeList()">
+                            <span class="fa fa-bell-o"></span>
+                            <i class="badge"></i>
+                        </a>
+                    </label>
+                    <div *ngIf="badgeList?.length>0" class="dropdown-menu dropdown-menu-right">
+                        <ul>
+                            <li *ngFor="let notification of badgeList; index as j" class="not-content" id="{{notification.id}}">
+                                <span class="pointer" [innerHTML]="notification.notificationMessage" (click)="redirectFromNotification(j,$event)">
+                                </span>
+                              
+                                <br/>
+                                <span class="modify">{{notification.notificatoinDate |date :'MM/dd/yyyy, h:mm a'}}</span>
+                                <i class="cross-icon" (click)="deleteNotification(notification.id ,$event)">&times;</i>
+                            </li>
+                        </ul>
+                        <button *ngIf="badgeList?.length>0" class="btn btn-panel {{moreBtn}}" (click)="getAllNotification()">MORE</button>
+                    </div>
+                </li>
+                <li class="dropdown user-dropdown" dropdown>
+                    <a dropdownToggle role="button">{{user.name}}
+                        <i class="fa fa-user-circle-o" style="margin-left: 5px;font-size:1.2em;"></i>
+                        <i class="caret" style="margin-left: 5px; margin-top: -3px;"></i>
+                    </a>
+                    <ul *dropdownMenu class="dropdown-menu">
+                        <li>
+                            <a href="javascript:void(0)" (click)="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav> -->
+
+<nav class="navbar navbar-change" [ngClass]="login?'hidden':''">
+    <div class="container-fluid">
+        <button class="hamburger-btn" (click)="toggleSideMenu()"><img class="information-icon pointer"
+                                                                      src="./assets/menu-icon2.png" alt="information"></button>
+        <div class="navbar-header">
+            <!-- <img class="logo pointer" src="./assets/logo-white.png" (click)="goToMain()" alt="logo"> -->
+            <img class="logo pointer" src="./assets/snap_cor_logo_white.svg" (click)="goToMain()" alt="logo">
+        </div>
+        <ng-container *ngIf="isJobHeaderShow">
+            <div class="navbar-header project">Project # {{ jobDetail?.id }}
+                <div class="information-icon">
+                    <i class="fa fa-info-circle"
+                       [ngStyle]="{'color': jobDetail?.status == 1 ? '#33CC33' : jobDetail?.status == 2 ? '#f40f02' : jobDetail?.status == 3 ? '#454C5C' : '#006CFF'}"
+                       (click)="toggleProjectInfoPover()"></i>
+                    <div class="dropdown" [class.show]="showProjectInfoPover">
+                        <span class="material-symbols-outlined filled pull-right"
+                              (click)="toggleProjectInfoPover()">cancel</span>
+                        <div class="row">
+                            <div class="col-md-4" *ngIf="jobDetail?.id">
+                                <label>Project#</label>
+                                <span>{{ jobDetail?.id }}</span>
+                            </div>
+                            <div class="col-md-8" *ngIf="jobDetail?.startDate">
+                                <label>START </label>
+                                <span>{{ jobDetail?.startDate | date:'MM/dd/yyyy' }}</span>
+                            </div>
+                            <div class="col-md-12" *ngIf="statusData?.jobStatus">
+                                <label>Project Status</label>
+                                <span>{{ statusData?.jobStatus }}</span>
+                            </div>
+                            <div class="col-md-4" *ngIf="jobDetail?.floorNumber">
+                                <label>FLOOR</label>
+                                <span>{{ jobDetail?.floorNumber }}</span>
+                            </div>
+                            <div class="col-md-8" *ngIf="jobDetail?.apartment">
+                                <label>APT</label>
+                                <span>{{ jobDetail?.apartment }}</span>
+                            </div>
+                            <div class="col-md-4" *ngIf="jobDetail?.rfpAddress?.houseNumber">
+                                <label>HOUSE#</label>
+                                <span>{{ jobDetail?.rfpAddress?.houseNumber }}</span>
+                            </div>
+                            <div class="col-md-8">
+                                <label>STREET</label>
+                                <span>{{ jobDetail?.rfpAddress?.street }}, {{ jobDetail?.borough?.description }}
+                                    {{ jobDetail?.rfpAddress?.zipCode }}</span>
+                            </div>
+                            <div class="col-md-12" *ngIf="jobDetail?.specialPlace">
+                                <label>SPECIAL PLACE NAME</label>
+                                <span>{{ jobDetail?.specialPlace }}</span>
+                            </div>
+                            <div class="col-md-12" *ngIf="jobDetail?.rfpAddress">
+                                <label>Project ADDRESS</label>
+                                <span class="upload-link" (click)="openModalProjectAddress(projectAddressViewModal)">
+                                    {{ jobDetail?.rfpAddress?.houseNumber }}
+                                    {{ jobDetail?.rfpAddress?.street }},
+                                    {{ jobDetail?.borough?.description }}
+                                    {{ jobDetail?.rfpAddress?.zipCode }} </span>
+                            </div>
+                            <div class="col-md-12" *ngIf="jobDetail?.contact">
+                                <label class="user-name">
+                                    {{ jobDetail?.contact?.idPrefix != null ? jobDetail?.contact.prefix?.name : '' }}
+                                    {{ jobDetail?.contact?.firstName }} {{ jobDetail?.contact?.lastName }}
+                                </label>
+                                <span class="user-name-add">{{ jobDetail?.contact?.addresses }}</span>
+                            </div>
+                            <div class="col-md-2" *ngIf="pm">
+                                <label>PM</label>
+                                <span>{{ pm }}</span>
+                            </div>
+                            <div class="col-md-2" *ngIf="pc">
+                                <label>PC</label>
+                                <span>{{ pc }}</span>
+                            </div>
+                            <div class="col-md-2" *ngIf="sc">
+                                <label>SC</label>
+                                <span>{{ sc }}</span>
+                            </div>
+                            <div class="col-md-12" *ngIf="jobDetail?.projectDescription">
+                                <label>PROJECT DESCRIPTION</label>
+                                <span>{{ jobDetail?.projectDescription }}</span>
+                            </div>
+                            <div class="col-md-12" *ngIf="jobDetail?.jobStatusNotes">
+                                <label>PROJECT STATUS NOTE</label>
+                                <span>{{ jobDetail?.jobStatusNotes }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="input-box">
+                <input class="form-control" placeholder="Enter here" type="text">
+            </div> -->
+
+            <div class="input-box" *ngIf="isCustomerLoggedIn">
+                <input class="form-control" [ngClass]="{'project-name': !customerProjectName}"
+                       placeholder="Enter project name here" type="text" [(ngModel)]="customerProjectName"
+                       (keyup.enter)="onEnterProjectName()">
+            </div>
+
+            <!-- <ng-container *ngIf="jobDetail?.dobProjectTeam?.length > 0">
+                <div class="top-link">
+                    <ng-container *ngFor="let doBT of jobDetail?.dobProjectTeam; let e = index">
+                        <a [tooltip]="doBT?.itemName">{{doBT.itemName.split(' ')[0].charAt(0)}}{{doBT.itemName.split('
+                            ')[1]?.charAt(0)}}</a>
+                    </ng-container>
+                </div>
+            </ng-container> -->
+            <ng-container *ngIf="teamInitials && teamInitials.length > 0">
+                <div class="top-link">
+                    <ng-container *ngFor="let doBT of teamInitials; let e = index">
+                        <ng-container *ngIf="doBT.emailAddress">
+                            <a class="cursor-pointer" (click)="addTextToEmail(doBT.emailAddress)"
+                               [tooltip]="doBT?.fullName">{{ doBT.itemName }}</a>
+                        </ng-container>
+                        <ng-container *ngIf="!doBT.emailAddress">
+                            <a [tooltip]="doBT?.fullName">{{ doBT.itemName }}</a>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </ng-container>
+
+        </ng-container>
+
+        <ng-container *ngIf="isSideMenuShow">
+            <div class="navbar-header menu-part">
+                <!-- <img class="logo pointer" src="./assets/logo-white.png" (click)="goToMain()" alt="logo"> -->
+                <button class="hamburger-btn" (click)="toggleSideMenu()"><img class="information-icon pointer"
+                                                                              src="./assets/menu-icon2.png" alt="information"></button>
+                <img class="logo pointer" src="./assets/snap_cor_logo_white.svg" (click)="goToMain()" alt="logo">
+                <div class="search">
+                    <ng-container *ngIf="!isCustomerLoggedIn">
+                        <form class="navbar-form navbar-left" novalidate name="globalsearch">
+                            <div class="input-group search-box search-box-head">
+                                <div class="input-group-btn">
+                                    <button type="button" (click)="checkIsCustomer()"
+                                            class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        <span class="fa fa-bars"></span>
+                                    </button>
+                                    <ul class="dropdown-menu widget">
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '1'}">
+                                            <a href="javascript:void(0)" (click)="search(1 , 'Project#')">Project#</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '2'}">
+                                            <a href="javascript:void(0)"
+                                               (click)="search(2, 'Application#')">Application#</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '11'}">
+                                            <a href="javascript:void(0)"
+                                               (click)="search(11 , 'Tracking#')">Tracking#</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '12'}">
+                                            <a href="javascript:void(0)"
+                                               (click)="search(12, 'Violation#')">Violation#</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '3'}">
+                                            <a href="javascript:void(0)" (click)="search(3, 'Proposal#')">Proposal#</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '4'}">
+                                            <a href="javascript:void(0)" (click)="search(4, 'Project Address')">Project
+                                                Address</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '5'}">
+                                            <a href="javascript:void(0)" (click)="search(5, 'Contact name')">Contact
+                                                name</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '6'}">
+                                            <a href="javascript:void(0)" (click)="search(6 ,'Company name')">Company
+                                                name</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '7'}">
+                                            <a href="javascript:void(0)"
+                                               (click)="search(7, 'Special place name')">Special
+                                                Place Name</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '8'}">
+                                            <a href="javascript:void(0)"
+                                               (click)="search(8, 'Transmittal#')">Transmittal#</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '9'}">
+                                            <a href="javascript:void(0)" (click)="search(9, 'Zone District')">Zone
+                                                District</a>
+                                        </li>
+                                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == '10'}">
+                                            <a href="javascript:void(0)" (click)="search(10, 'Overlay')">Overlay</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <input class="form-control search-area" (keyup.enter)="globalSearch()" type="text"
+                                       [placeholder]="placeholder" [(ngModel)]="globalSearchText" name="globalSearchText">
+                                <div class="input-group-btn search-btn">
+                                    <button type="button" class="btn btn-default" (click)="globalSearch()">
+                                        <span class="fa fa-search"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </div>
+
+                <ul class="nav navbar-nav">
+                    <!-- <li class='sub-menu'>
+                        <a class="active"><i class="fa fa-laptop" aria-hidden="true"></i> CRM <i class="fa fa-angle-down" aria-hidden="true"></i>
+                        </a>
+                        <ul class="show">
+                            <li><a >Company</a></li>
+                            <li><a >Contact</a></li>
+                            <li><a >Address</a></li>
+                        </ul>
+                    </li> -->
+
+                    <!-- <li *ngIf="isCustomerLoggedIn">
+                        <a routerLink="/customer-dashboard" routerLinkActive="active">
+                            <span class="material-symbols-outlined filled">assignment</span>
+                            DASHBOARD
+                        </a>
+                    </li> -->
+                    <ng-container *ngFor="let menuItem of user.menu">
+
+                        <ng-container>
+                            <li *ngIf="menuItem.routerLink">
+                                <a [routerLink]="menuItem.routerLink" routerLinkActive="active"
+                                   (click)='onSelectTab(menuItem.text,menuItem.items?.length);'>
+                                    <!-- <i [class]="menuItem?.icon || 'fa fa-laptop'" aria-hidden="true"></i>  -->
+                                    <div [innerHTML]="menuItem?.icon"></div>
+                                    {{ menuItem.text }}
+                                </a>
+                            </li>
+
+                            <li class='sub-menu' *ngIf="!menuItem.routerLink">
+                                <a [routerLink]="menuItem.routerLink"
+                                   (click)='onSelectTab(menuItem.text,menuItem.items?.length)'>
+                                    <div [innerHTML]="menuItem?.icon"></div>
+                                    {{ menuItem.text }}
+                                    <i class="material-symbols-outlined"
+                                       [class.rotate-90]="selectedTab != menuItem.text" aria-hidden="true">
+                                        expand_more</i>
+                                </a>
+                                <ul [class.show]="selectedTab == menuItem.text" *ngIf="menuItem.items?.length>0">
+                                    <ng-container *ngFor="let item of menuItem.items">
+                                        <li>
+                                            <a [routerLink]="item.routerLink" (click)="toggleSideMenu()"
+                                               routerLinkActive="sub-menu-active"
+                                               *ngIf="item.text!='Other Masters' && item.text!='Address Masters' && item.text!='Proposal Masters' && item.url==null && item.text!='Penalty Schedule Masters' && item.text!= 'Checklist Masters'">{{ item.text }}
+                                            </a>
+                                            <a routerLinkActive="sub-menu-active"
+                                               (click)='onSelectSubMenuTab(item.text,item.items?.length)'
+                                               *ngIf="item.text=='Other Masters'  || item.text=='Proposal Masters' || item.text=='Address Masters' || item.text=='Penalty Schedule Masters' || item.text == 'Checklist Masters'">{{ item.text }}
+                                                <i class="material-symbols-outlined" *ngIf="item?.items?.length>0"
+                                                   aria-hidden="true"
+                                                   [class.rotate-90]="getSelectedSubMenu() != item.text">
+                                                    expand_more</i>
+                                            </a>
+                                            <a href="{{item.url}}" target="_blank" (click)="toggleSideMenu()"
+                                               *ngIf="item.text!='Other Masters' && item.text!='Address Masters' && item.url!=null && item.text!='Penalty Schedule Masters'&& item.text!= 'Checklist Masters'">{{ item.text }}
+                                            </a>
+                                            <ul [class.show]="getSelectedSubMenu() == item.text"
+                                                *ngIf="item?.items?.length>0">
+                                                <ng-container *ngFor="let subItem of item.items">
+                                                    <li><a [routerLink]="subItem.routerLink" (click)="toggleSideMenu()"
+                                                           routerLinkActive="sub-menu-active">{{ subItem.text }}</a></li>
+                                                </ng-container>
+                                            </ul>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </li>
+                        </ng-container>
+                        <!-- <li *ngIf="!menuItem.routerLink" class="dropdown" dropdown>
+                            <a dropdownToggle role="button" [class.active]="isActive(menuItem)" [attr.text]="menuItem.text">{{menuItem.text}}</a>
+                            <ul class="dropdown-menu black">
+                                <li class="dropdown first-menu" dropdown *ngFor="let item of menuItem.items">
+                                    <a dropdownToggle href="" [routerLink]="item.routerLink" routerLinkActive="active" *ngIf="item.text!='Other Masters' && item.text!='Address Masters' && item.text!='RFP Masters' && item.url==null && item.text!='Penalty Schedule Masters' && item.text!= 'Checklist Masters'">{{item.text}}</a>
+                                    <a dropdownToggle href="{{item.url}}" target="_blank" *ngIf="item.text!='Other Masters' && item.text!='Address Masters' && item.url!=null && item.text!='Penalty Schedule Masters'&& item.text!= 'Checklist Masters'">{{item.text}}</a>
+                                    <a dropdownToggle routerLinkActive="active" *ngIf="item.text=='Other Masters'  || item.text=='RFP Masters' || item.text=='Address Masters' || item.text=='Penalty Schedule Masters' || item.text == 'Checklist Masters'"
+                                        (click)="closeDropdown($event)">{{item.text}}</a>
+                                    <ul class="dropdown-menu black second-level" *ngIf="item.text=='Other Masters' || item.text=='RFP Masters' || item.text=='Address Masters' || item.text=='Penalty Schedule Masters' || item.text == 'Checklist Masters'">
+                                        <li *ngFor="let childitem of item.items">
+                                            <a href="" [routerLink]="childitem.routerLink" routerLinkActive="active">{{childitem.text}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li> -->
+                        <!-- <li>
+                            <a ><i class="fa-sharp fa-regular fa-circle-dot"></i> RFP</a>
+                        </li> -->
+                    </ng-container>
+                    <!-- <li *ngIf="isCustomerLoggedIn">
+                        <a routerLink="/customer-my-account" routerLinkActive="active">
+                            <span class="material-symbols-outlined filled">assignment</span>
+                            MY ACCOUNT
+                        </a>
+                    </li> -->
+                    <!-- <li>
+                        <a ><i class="fa-solid fa-clipboard-list"></i> Projects</a>
+                    </li>
+                    <li class='sub-menu'>
+                        <a ><i class="fa-solid fa-square-poll-vertical"></i> Reports <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                        <ul>
+                            <li><a >Company</a></li>
+                            <li><a >Contact</a></li>
+                            <li><a >Address</a></li>
+                        </ul>
+                    </li>
+                    <li class='sub-menu'>
+                        <a ><i class="fa-solid fa-message"></i> reference <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                        <ul>
+                            <li><a >Company</a></li>
+                            <li><a >Contact</a></li>
+                            <li><a >Address</a></li>
+                        </ul>
+                    </li>
+                    <li class='sub-menu'>
+                        <a ><i class="fa-regular fa-calendar-check"></i> Task <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                        <ul>
+                            <li><a >Company</a></li>
+                            <li><a >Contact</a></li>
+                            <li><a >Address</a></li>
+                        </ul>
+                    </li>
+                    <li class='sub-menu'>
+                        <a ><i class="fa fa-gear" aria-hidden="true"></i> administration <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                        <ul>
+                            <li><a >Company</a></li>
+                            <li><a >Contact</a></li>
+                            <li><a >Address</a></li>
+                        </ul>
+                    </li> -->
+                    <br><br>
+                </ul>
+                <div class="nav-bottom">
+                    <div class="profile-detail" (click)="toggleLogout()">
+                        <div class="profile-icon">{{ user.name.charAt(0) }}</div>
+                        <div class="user-detail">
+                            <p class="name">{{ user.name }}</p>
+                            <p class="email">{{ getUserEmail() }}</p>
+                            <p>v12</p>
+                        </div>
+                        <span class="material-symbols-rounded pull-right"
+                              [class.rotate-90]="!isShowLogout">keyboard_arrow_down</span>
+                    </div>
+                    <ul class="logout" [class.visible]="isShowLogout">
+                        <ng-container *ngIf="this.isCustomerLoggedIn && isAllowMyAccount">
+                            <li><a routerLink="/customer-my-account" (click)="toggleSideMenu()">
+                                    <span class="material-symbols-outlined">
+                                        account_circle
+                                    </span>
+                                My Account</a></li>
+                        </ng-container>
+                    </ul>
+                    <ul class="logout" [class.visible]="isShowLogout">
+                        <li><a (click)="logout()">
+                                <span class="material-symbols-outlined">
+                                    logout
+                                </span>
+                            Logout</a></li>
+                    </ul>
+                    <div class="rpo-detail">
+                        <img src="./assets/RPO-logo.png" width="68px">
+                        <!-- <img src="./assets/RPO_svg_logo.svg" width="68px"> -->
+                        <p class="RPO-user">Construction Consultants</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="sidebar-backdrop" (click)="toggleSideMenu()"></div>
+        </ng-container>
+
+
+        <div class="navbar-header pull-right">
+
+            <form class="navbar-form navbar-left" novalidate name="globalsearch" style="display: none;">
+                <div class="input-group search-box search-box-head">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            <span class="fa fa-bars"></span>
+                        </button>
+                        <ul class="dropdown-menu widget">
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == 1}">
+                                <a href="javascript:void(0)" (click)="search(1 , 'Job#')">Project#</a>
+                            </li>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == 2}">
+                                <a href="javascript:void(0)" (click)="search(2, 'Application#')">Application#</a>
+                            </li>
+                            <ng-container *ngIf="!isCustomerLoggedIn">
+                                <li [ngClass]="{'selectedGlobalType' : globalSearchType == 11}">
+                                    <a href="javascript:void(0)" (click)="search(11 , 'Tracking#')">Tracking#</a>
+                                </li>
+                            </ng-container>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == 12}">
+                                <a href="javascript:void(0)" (click)="search(12, 'Violation#')">Violation#</a>
+                            </li>
+                            <ng-container *ngIf="!isCustomerLoggedIn">
+                                <li [ngClass]="{'selectedGlobalType' : globalSearchType == 3}">
+                                    <a href="javascript:void(0)" (click)="search(3, 'RFP#')">Proposal#</a>
+                                </li>
+                            </ng-container>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == 4}">
+                                <a href="javascript:void(0)" (click)="search(4, 'Job Address')">Project Address</a>
+                            </li>
+                            <ng-container *ngIf="!isCustomerLoggedIn">
+                                <li [ngClass]="{'selectedGlobalType' : globalSearchType == 5}">
+                                    <a href="javascript:void(0)" (click)="search(5, 'Contact name')">Contact name</a>
+                                </li>
+                                <li [ngClass]="{'selectedGlobalType' : globalSearchType == 6}">
+                                    <a href="javascript:void(0)" (click)="search(6 ,'Company name')">Company name</a>
+                                </li>
+                            </ng-container>
+                            <li [ngClass]="{'selectedGlobalType' : globalSearchType == 7}">
+                                <a href="javascript:void(0)" (click)="search(7, 'Special place name')">Special Place
+                                    Name</a>
+                            </li>
+                            <ng-container *ngIf="!isCustomerLoggedIn">
+                                <li [ngClass]="{'selectedGlobalType' : globalSearchType == 8}">
+                                    <a href="javascript:void(0)" (click)="search(8, 'Transmittal#')">Transmittal#</a>
+                                </li>
+                                <li [ngClass]="{'selectedGlobalType' : globalSearchType == 9}">
+                                    <a href="javascript:void(0)" (click)="search(9, 'Zone District')">Zone District</a>
+                                </li>
+                                <li [ngClass]="{'selectedGlobalType' : globalSearchType == 10}">
+                                    <a href="javascript:void(0)" (click)="search(10, 'Overlay')">Overlay</a>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </div>
+                    <input class="form-control search-area" (keyup.enter)="globalSearch()" type="text"
+                           placeholder="Project#" [(ngModel)]="globalSearchText" name="globalSearchText">
+                    <div class="input-group-btn search-btn">
+                        <button type="button" class="btn btn-default" (click)="globalSearch()">
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <ul class="nav navbar-nav">
+                <ng-container *ngIf="isJobHeaderShow">
+                    <li *ngIf="!isCustomerLoggedIn" class="top-header-nav" (click)="openJobProgressionModal()">
+                        <img src="./assets/images/bulb_icon.svg" width="24px" tooltip="Project Highlights">
+                    </li>
+                    <li *ngIf="!isCustomerLoggedIn" class="top-header-nav left">
+                        <!-- <span class="material-symbols-outlined cursor-pointer" tooltip="Note">text_snippet</span> -->
+                        <span class="material-symbols-outlined cursor-pointer" *ngIf="showAddTimeNote"
+                              (click)="openModalAddTimeNotes(addtimenotes)" tooltip="Time Note">overview</span>
+                    </li>
+                </ng-container>
+                <li class="notif-dropdown dropdown">
+                    <label class="dropdown-toggle" data-toggle="dropdown">
+                        <a (click)="getBadgeList()" tooltip="Notification">
+                            <span class="fa fa-bell-o"></span>
+                            <i class="badge"></i>
+                        </a>
+                    </label>
+                    <div *ngIf="badgeList?.length>0" class="dropdown-menu dropdown-menu-right">
+                        <ul class="d-block">
+                            <li *ngFor="let notification of badgeList; index as j" class="not-content"
+                                id="{{notification.id}}">
+                                <span class="pointer" [innerHTML]="notification.notificationMessage"
+                                      (click)="redirectFromNotification(j,$event,notification.notificationMessage)">
+                                </span>
+
+                                <br/>
+                                <span class="modify">{{
+                                    notification.notificatoinDate |date :'MM/dd/yyyy, h:mm
+                                      a'
+                                    }}</span>
+                                <i class="cross-icon" (click)="deleteNotification(notification.id ,$event)">&times;</i>
+                            </li>
+                        </ul>
+                        <button *ngIf="badgeList?.length>0" class="btn btn-panel {{moreBtn}}"
+                                (click)="getAllNotification()">MORE
+                        </button>
+                    </div>
+                </li>
+                <ng-container *ngIf="isJobHeaderShow">
+                    <li class="dropdown user-dropdown" style="margin-top: 9px;" dropdown>
+                        <label class="dropdown-toggle" data-toggle="dropdown">
+                            <a>
+                                <i class="material-symbols-rounded bold" tooltip="More" style="color: #6a6a6a;"
+                                   aria-hidden="true">more_vert</i>
+                            </a>
+                        </label>
+                        <div class="dropdown-menu">
+                            <ul class="d-block">
+                                <li *ngIf="!isCustomerLoggedIn" class="{{showJobAddBtn}}">
+                                    <a *ngIf="jobDetail?.status == 1" (click)="openAddJobModal(formJob)">Edit
+                                        Project</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn" class="{{showJobAddBtn}}">
+                                    <a *ngIf="jobDetail?.status == 1" [ngClass]="statusData.job_on_hold"
+                                       (click)="changeTheStatusOnReason(2,'swap','on-hold')">Put Project on Hold</a>
+                                    <a *ngIf="jobDetail?.status == 2" [ngClass]="statusData.job_in_progress"
+                                       (click)="changeTheStatusOnReason(1,'swap','In-progress')">Put Project
+                                        In-Progress</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn" class="{{showJobAddBtn}}">
+                                    <a *ngIf="jobDetail?.status == 1" [ngClass]="statusData.job_completed"
+                                       (click)="changeTheStatusOnReason(3,'','Completed')">Project Completed</a>
+                                    <a *ngIf="jobDetail?.status == 3" [ngClass]="statusData.job_re_open"
+                                       (click)="changeTheStatusOnReason(1,'Notswap','Re-open')">Re-Open</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn" class="{{showTaskAddBtn}}">
+                                    <a *ngIf="jobDetail?.status == 1" (click)="openModalFormCreateTask(addtask)">Create
+                                        Task</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn" class="hide">
+                                    <a (click)="downloadPdf()">Download Proposal</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn" class="hide">
+                                    <a>Add Time Note</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn" class="{{showJobTransmittalBtn}}">
+                                    <a *ngIf="jobDetail?.status == 1"
+                                       (click)="openCreateTransmittalModal(addtransmittal,'',this.idJob)">Send
+                                        Email</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn" class="{{showGenerateLabelBtn}}">
+                                    <a (click)="generateLabel(jobDetail?.id)"
+                                       *ngIf="jobDetail?.status == 1">​​​​​​​Generate Project Label</a>
+                                </li>
+                                <li>
+                                    <a (click)="viewOnBis(jobDetail?.binNumber)">View On BIS</a>
+                                </li>
+                                <li class="{{showGenerateLabelBtn}}">
+                                    <a (click)="viewOnDob()">​​​​​​​View on DOB NOW</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn">
+                                    <a (click)="onHistory()">History</a>
+                                </li>
+                                <li *ngIf="!isCustomerLoggedIn" class="{{showJobDeleteBtn}}">
+                                    <a>Delete Project</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+
+        <ng-container *ngIf="isJobHeaderShow">
+            <div class="address">
+                {{ jobDetail?.rfpAddress?.houseNumber }} {{ jobDetail?.rfpAddress?.street }},
+                {{ jobDetail?.borough?.description }}
+                {{ jobDetail?.rfpAddress?.zipCode }}
+                <ng-container *ngIf="jobDetail?.specialPlace">
+                    |
+                </ng-container>
+                {{ jobDetail?.specialPlace }}
+            </div>
+        </ng-container>
+    </div>
+
+
+</nav>
+
+<ng-template #viewtask>
+    <div notification-task [modalRef]="modalRef" [idTask]="idTask" [idJob]="idJob" [redirectionURL]="redirectionURL">
+    </div>
+</ng-template>
+
+
+<ng-template #addtask>
+    <div add-task [addtask]="addtask" [modalRef]="modalRef" [idJob]="jobDetail.id" [frommodeule]="frommodeule"
+         [isNew]="true" [isHeader]="true"></div>
+</ng-template>
+<ng-template #formJob>
+    <div form-job [job]="jobDetail" [modalRefJob]="modalRef" [onSave]="onSave" [isAddressDisable]="isAddressDisabled"
+         [isReAssign]="isReAssigned"></div>
+</ng-template>
+<ng-template #addtransmittal>
+    <div add-transmittal [modalRef]="modalRef" [idJob]="jobDetail.id" [jobObj]="jobDetail" [isHeader]="true"></div>
+</ng-template>
+<ng-template #addreason>
+    <div add-reason [modalRef]="modalRef" [idJob]="jobDetail.id" [jobObj]="jobDetail"
+         [changeStatusFromReason]="changeStatusFromReason" [statusToSet]="statusToSet"
+         (EventToFire)="EventForChangingTheStatus($event)"></div>
+</ng-template>
+<ng-template #addtimenotes>
+    <div add-time-notes [idJob]="jobDetail?.id" [modalRef]="modalRef" [reload]="reload"></div>
+</ng-template>
+<ng-template #projectAddressViewModal>
+    <div class="modal-custom-content" cdkDrag>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">Project Address</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="column-data clearfix">
+                <p *ngIf="jobDetail?.rfpAddress.borough">
+                    <label>BOROUGH</label>
+                    <span>{{ jobDetail?.rfpAddress.borough.description }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.houseNumber">
+                    <label>HOUSE NUMBER</label>
+                    <span>{{ jobDetail?.rfpAddress.houseNumber }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.street">
+                    <label>STREET</label>
+                    <span>{{ jobDetail?.rfpAddress.street }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.zipCode">
+                    <label>ZIP</label>
+                    <span>{{ jobDetail?.rfpAddress.zipCode }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.block">
+                    <label>BLOCK</label>
+                    <span>{{ jobDetail?.rfpAddress.block }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.lot">
+                    <label>LOT</label>
+                    <span>{{ jobDetail?.rfpAddress.lot }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.binNumber">
+                    <label>BIN#</label>
+                    <span>{{ jobDetail?.rfpAddress.binNumber }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.comunityBoardNumber">
+                    <label>COMMUNITY BOARD#</label>
+                    <span>{{ jobDetail?.rfpAddress.comunityBoardNumber }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.zoneDistrict">
+                    <label>ZONE DISTRICT(S)</label>
+                    <span>{{ jobDetail?.rfpAddress.zoneDistrict }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.overlay">
+                    <label>OVERLAY(S)</label>
+                    <span>{{ jobDetail?.rfpAddress.overlay }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.specialDistrict">
+                    <label>SPECIAL DISTRICT(S)</label>
+                    <span>{{ jobDetail?.rfpAddress.specialDistrict }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.map">
+                    <label>MAP</label>
+                    <span>{{ jobDetail?.rfpAddress.map }}</span>
+                </p>
+
+                <p *ngIf="jobDetail?.rfpAddress.nonProfit">
+                    <label>NON-PROFIT</label>
+                    <span>{{ jobDetail?.rfpAddress.nonProfit ? "Yes" : "No" }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.addressType">
+                    <label>ADDRESS TYPE</label>
+                    <span>{{ jobDetail?.rfpAddress.addressType.name }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.company">
+                    <label>COMPANY</label>
+                    <span>{{ jobDetail?.rfpAddress.company.name }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.ownerContact">
+                    <label>OWNER</label>
+                    <span>
+                        {{
+                        jobDetail?.rfpAddress.prefix ?
+                          jobDetail?.rfpAddress.ownerContact.prefix.name : ""
+                        }}
+                        {{ jobDetail?.rfpAddress.ownerContact.firstName }}
+                        {{ jobDetail?.rfpAddress.ownerContact.lastName }}
+                    </span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.ownerType">
+                    <label>OWNER TYPE</label>
+                    <span>
+                        {{ jobDetail?.rfpAddress.ownerType.name }}
+                    </span>
+                </p>
+
+
+                <p *ngIf="jobDetail?.rfpAddress.secondOfficerCompany">
+                    <label>2nd OFFICER COMPANY</label>
+                    <span>{{ jobDetail?.rfpAddress.secondOfficerCompany.name }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.secondOfficer">
+                    <label>2nd OFFICER CONTACT</label>
+                    <span>{{
+                        jobDetail?.rfpAddress.secondOfficer.firstName ?
+                          jobDetail?.rfpAddress.secondOfficer.firstName : ''
+                        }}
+                        {{
+                        jobDetail?.rfpAddress.secondOfficer.lastName
+                          ? jobDetail?.rfpAddress.secondOfficer.lastName : ''
+                        }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.occupancyClassification">
+                    <label>OCCUPANCY
+                        CLASSIFICATION{{
+                        jobDetail?.rfpAddress.isOcupancyClassification20082014 ?
+                          "(2008/2014)" : ""
+                        }}</label>
+                    <span>{{ jobDetail?.rfpAddress.occupancyClassification.description }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.constructionClassification">
+                    <label>CONSTRUCTION
+                        CLASSIFICATION {{
+                        jobDetail?.rfpAddress.isConstructionClassification20082014
+                          ? "(2008/2014)"
+                          : ""
+                        }}</label>
+                    <span>{{ jobDetail?.rfpAddress.constructionClassification.description }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.multipleDwellingClassification">
+                    <label>MULTIPLE DWELLING CLASSIFICATION</label>
+                    <span>{{ jobDetail?.rfpAddress.multipleDwellingClassification.description }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.primaryStructuralSystem">
+                    <label>PRIMARY STRUCTURAL SYSTEM</label>
+                    <span>{{ jobDetail?.rfpAddress.primaryStructuralSystem.description }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.structureOccupancyCategory">
+                    <label>STRUCTURE OCCUPANCY CATEGORY</label>
+                    <span>{{ jobDetail?.rfpAddress.structureOccupancyCategory.description }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.seismicDesignCategory">
+                    <label>SEISMIC DESIGN CATEGORY</label>
+                    <span>{{ jobDetail?.rfpAddress.seismicDesignCategory.description }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.stories">
+                    <label>STORIES</label>
+                    <span>{{ jobDetail?.rfpAddress.stories }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.height">
+                    <label>HEIGHT (
+                        <i>INCH</i>)</label>
+                    <span>{{ jobDetail?.rfpAddress.height }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.feet">
+                    <label>HEIGHT (
+                        <i>FEET</i>)</label>
+                    <span>{{ jobDetail?.rfpAddress.feet }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.dwellingUnits">
+                    <label>DWELLING UNITS</label>
+                    <span>{{ jobDetail?.rfpAddress.dwellingUnits }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.grossArea">
+                    <label>GROSS AREA</label>
+                    <span>{{ jobDetail?.rfpAddress.grossArea }}</span>
+                </p>
+                <p *ngIf="jobDetail?.rfpAddress.streetLegalWidth">
+                    <label>STREET LEGAL WIDTH</label>
+                    <span>{{ jobDetail?.rfpAddress.streetLegalWidth }}</span>
+                </p>
+                <p>
+                    <label>LANDMARK</label>
+                    <span>{{ jobDetail?.rfpAddress.isLandmark ? "Yes" : "No" }}</span>
+                </p>
+                <p>
+                    <label>ENVIRONMENTAL RESTRICTIONS</label>
+                    <span>{{ jobDetail?.rfpAddress.isLittleE ? "Yes" : "No" }}</span>
+                </p>
+                <p>
+                    <label>TIDAL WETLANDS MAP</label>
+                    <span>{{ jobDetail?.rfpAddress.tidalWetlandsMapCheck ? "Yes" : "No" }}</span>
+                </p>
+                <p>
+                    <label>COASTAL EROSION HAZARD AREA MAP</label>
+                    <span>{{
+                        jobDetail?.rfpAddress.coastalErosionHazardAreaMapCheck ? "Yes" :
+                          "No"
+                        }}</span>
+                </p>
+                <p>
+                    <label>SPECIAL FLOOD HAZARD AREA</label>
+                    <span>{{
+                        jobDetail?.rfpAddress.specialFloodHazardAreaCheck ? "Yes" :
+                          "No"
+                        }}</span>
+                </p>
+                <p>
+                    <label>FRESHWATER WETLANDS MAP</label>
+                    <span>{{
+                        jobDetail?.rfpAddress.freshwaterWetlandsMapCheck ? "Yes" :
+                          "No"
+                        }}</span>
+                </p>
+                <p>
+                    <label>BSA Decision</label>
+                    <span>{{ jobDetail?.rfpAddress.isBSADecision ? "Yes" : "No" }}</span>
+                </p>
+                <p>
+                    <label>SRO Restricted</label>
+                    <span>{{ jobDetail?.rfpAddress.sroRestrictedCheck ? "Yes" : "No" }}</span>
+                </p>
+                <p>
+                    <label>Loft Law</label>
+                    <span>{{ jobDetail?.rfpAddress.loftLawCheck ? "Yes" : "No" }}</span>
+                </p>
+                <p>
+                    <label>City Owned</label>
+                    <span>{{ jobDetail?.rfpAddress.cityOwnedCheck ? "Yes" : "No" }}</span>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white pull-right"
+                    (click)="modalRef.hide();loading=false">Cancel
+            </button>
+        </div>
+    </div>
+
+</ng-template>
+
+<!-- Create Proposal progression note Popup-->
+<ng-template #jobprogressionnote>
+    <div add-job-progression-note [idJob]="jobDetail.id" [modalRef]="modalRef"></div>
+</ng-template>
+
+<!-- Violation Details -->
+<ng-template #viewViolation>
+    <div view-violation [modalRef]="modalRef" [id]="idViolation" [isFromGlobalSearch]="true"
+         [isGetBySummonsNumber]="true" [violationType]="'AOTH Violation'"></div>
+</ng-template>
+
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

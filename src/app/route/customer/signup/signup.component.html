@@ -1,0 +1,91 @@
+<div class="rpo-login">
+  <div class="container-box">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-5 welcome-txt">
+          <div>
+            <img class="logo" src="../../assets/snap_cor_logo_white.svg" />
+            <h2>Welcome to <br />SnapCor</h2>
+            <p>
+              Sign-Up for your SnapCor account here to start managing your projects.
+            </p>
+          </div>
+        </div>
+        <div class="col-sm-7 mx-auto login-box">
+          <div class="form-container">
+            <form [formGroup]="signUpForm">
+              <div class="login-title">
+                <span>Sign Up</span>
+              </div>
+
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <label>Email ID</label>
+                    <input type="email" name="username" placeholder="Enter your email ID" class="form-control"
+                      formControlName="email" />
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter your Password" class="form-control" name="password"
+                      formControlName="password" [ngClass]="{
+                        'is-invalid':
+                          signUpFormControl.password.touched &&
+                          signUpFormControl.password.errors
+                      }" />
+                    <div *ngIf="
+                        signUpFormControl.password.touched &&
+                        signUpFormControl.password.errors
+                      " class="invalid-feedback">
+                      <div *ngIf="signUpFormControl.password.errors.required">
+                        {{ errorMessage.requirePassword }}
+                      </div>
+                      <div *ngIf="
+                          signUpFormControl.password.errors?.maxlength && !signUpFormControl.password.errors.required
+                        ">
+                        {{ errorMessage.maxLengthNewPassword }}
+                      </div>
+                      <div *ngIf="
+                          signUpFormControl.password.errors?.minlength && !signUpFormControl.password.errors.required
+                        ">
+                        {{ errorMessage.minLengthNewPassword }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" formControlName="countinueAgree" />
+                        By Signing up I agree with Snapcor's
+                        <a class="cursor-pointer" (click)="openUrlInNewTab('terms-and-conditions')">Terms &
+                          Conditions</a>
+                        <i class="input-helper"></i>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" name="go" class="btn btn-blue" [disabled]="signUpForm.invalid"
+                (click)="signUpClickEvent()">
+                Sign Up
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="copyRight">
+    &copy; 2023 SnapCor<span class="trademark">®</span> Inc. All Rights Reserved.
+  </div>
+</div>
+
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

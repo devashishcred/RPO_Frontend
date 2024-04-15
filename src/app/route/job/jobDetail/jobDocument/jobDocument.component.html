@@ -1,0 +1,43 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-12 pt15">
+      <div class="component-body">
+        <h4 class="component-title pull-left mr-2">Project Documents</h4>
+        <div class="search-area">
+          <div class="search middle pull-left">
+            <div class="inner-addon left-addon">
+              <em class="icon fa fa-search"></em>
+              <input class="form-control" type="text" placeholder="Search Project Documents" [(ngModel)]="srch" (ngModelChange)="search($event)">
+            </div>
+          </div>
+          <button class="btn btn-panel pull-right no-padding {{showdocumentAddBtn}}" style="margin-right: 10px;" (click)="openDropBoxFolder(jobId)"
+          *ngIf="showdocumentAddBtn !='hide'">Open in Dropbox</button>
+          <button class="btn btn-panel pull-right no-padding {{showdocumentAddBtn}}" (click)="openModalAddJobDocument(addJobDocument,jobId)"
+            *ngIf="showdocumentAddBtn !='hide'">Add Project Document</button>
+        </div>
+        <div class="jobDocument">
+          <table id="dt-jobDocument" class="display" style="width:100%"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+<ng-template #addJobDocument>
+  <div add-job-document [modalRef]="modalRef" (reload)="reload()" [DocumentId]="DocumentId" [DocumentObj]="DocumentObj" [idJob]="jobId"
+    [isClone]=isClone></div>
+</ng-template>
+<ng-template #updateJobDocument>
+  <div update-job-document [modalRef]="modalRef" (reload)="reload()" [idJob]="jobId" [DocumentId]="DocumentId" [DocumentObj]="DocumentObj">
+  </div>
+</ng-template>
+
+<ng-template #pullpermit>
+  <div pull-permit [modalRef]="modalRef" [reload]="reload" [idJob]="jobId" [DocumentId]="DocumentId" [pullpermitData]="PullpermitData"
+    [documentCode]="selectedDocumentCode"></div>
+</ng-template>

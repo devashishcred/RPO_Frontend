@@ -1,0 +1,201 @@
+<div class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn"  cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">Application Details </h4>
+    </div>
+    <!-- <div class="heading">
+            <h4>{{PropertyDetails.CrossStreet1 + PropertyDetails.HouseNo}} | MANHATTAN {{PropertyDetails.Zip }} | BIN#  {{PropertyDetails.Zip }} </h4>
+    </div> -->
+  
+    <div class="modal-body pt15" *ngIf="PropertyDetails"> 
+        <!-- <div class="row  form-group">
+            <div class="col-sm-12">
+                <label class="title">Alternate Addresses:</label>
+                <span>{{PropertyDetails.CrossStreet1 + PropertyDetails.CrossStreet1Numbers}}</span>
+            </div>
+        </div> -->
+        <div class="row task-row">
+           
+            <div class="col-sm-7 column-data view-det">
+
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label class="block">Application filing number</label>
+                        <span>{{PropertyDetails.job_filing_number}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label class="block">filing status</label>
+                        <span>{{PropertyDetails.filing_status}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label  class="block">job type</label>
+                        <span>{{PropertyDetails.job_type}}</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label class="block">house no</label>
+                        <span>{{PropertyDetails.house_no}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label class="block">street name</label>
+                        <span>{{PropertyDetails.street_name}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label  class="block">borough</label>
+                        <span>{{PropertyDetails.borough}}</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label class="block">applicant first name</label>
+                        <span>{{PropertyDetails.applicant_first_name}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label class="block">applicant last name</label>
+                        <span>{{PropertyDetails.applicant_last_name}}</span>
+                    </div>
+                    <!-- <div class="col-sm-4" >
+                        <label  class="block">Vacant</label>
+                       
+                        <span>{{PropertyDetails.Vacant}}</span>
+                    </div> -->
+                </div>
+                <!-- <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label class="block">Health Area</label>
+                        <span>{{PropertyDetails.HealthArea}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label class="block">Census Tract</label>
+                        <span>{{PropertyDetails.CensusTract}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label  class="block">DOB Building Remarks</label>
+                        <span>{{PropertyDetails.DOBBuildingRemarks}}</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label class="block">Special Status</label>
+                        <span>{{PropertyDetails.SpecialStatus}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label class="block">Local Law</label>
+                        <span>{{PropertyDetails.LocalLaw}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label  class="block">Loft Law</label>
+                        <span>{{PropertyDetails.LoftLaw}}</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label class="block">SRO Restricted</label>
+                        <span>{{PropertyDetails.SRORestricted}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label class="block">TA Restricted</label>
+                        <span>{{PropertyDetails.TARestricted}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label  class="block">UB Restricted</label>
+                        <span>{{PropertyDetails.UBRestricted}}</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label class="block">Environmental Restrictions</label>
+                        <span>{{PropertyDetails.EnvironmentalRestrictions}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label class="block">Grandfathered Sign</label>
+                        <span>{{PropertyDetails.GrandfatheredSign}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label  class="block">Legal Adult Use</label>
+                        <span>{{PropertyDetails.LegalAdultUse}}</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <label class="block">City Owned</label>
+                        <span> {{PropertyDetails.CityOwned}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label class="block">Additional BINs for Building</label>
+                        <span>{{PropertyDetails.AdditionalBINsforBuilding}}</span>
+                    </div>
+                    <div class="col-sm-4" >
+                        <label  class="block">Special District</label>
+                        <span>{{PropertyDetails.SpecialDistrict}}</span>
+                    </div>
+                </div> -->
+            </div>
+            
+        </div>
+        <!-- <div class="property">
+            <div class="row  form-group ">
+                <div class="col-sm-12">
+                    <label class="title">This property is located in an area that may be affected by the following:</label>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-sm-6">
+                    <label class="title_text">Tidal Wetlands Map Check:</label>
+                </div>
+                <div class="col-sm-6" >
+                    <span>{{PropertyDetails.TidalWetlands === 'Y'? 'Yes': 'No'}}</span>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-sm-6">
+                    <label class="title_text">Freshwater Wetlands Map Check:</label>
+                </div>
+                <div class="col-sm-6" >
+                    <span>{{PropertyDetails.FreshwaterWetlands === 'Y'? 'Yes': 'No'}}</span>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-sm-6">
+                    <label class="title_text">Coastal Erosion Hazard Area Map Check:</label>
+                </div>
+                <div class="col-sm-6" >
+                    <span>{{PropertyDetails.CoastalErosionHazardArea === 'Y'? 'Yes': 'No'}}</span>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-sm-6">
+                    <label class="title_text">Special Flood Hazard Area Check:</label>
+                </div>
+                <div class="col-sm-6" >
+                    <span>{{PropertyDetails.SpecialFloodHazardArea === 'Y'? 'Yes': 'No'}}</span>
+                </div>
+            </div>
+        </div>
+       <div class="department">
+        <div class="row form-group">
+            <div class="col-sm-6">
+                <label class="title_text">Department of Finance Building Classification:</label>
+            </div>
+            <div class="col-sm-6" >
+                <span>{{PropertyDetails.VlFinaOccpncy}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="title_text">Please Note:</label>
+                <span>The Department of Finance's building classification information shows a building's tax status, which may not be the same as the legal use of the structure. To determine the legal use of a structure, research the records of the Department of Buildings.</span>
+            </div>
+        </div>
+       </div> -->
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

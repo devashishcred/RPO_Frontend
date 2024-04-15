@@ -1,0 +1,55 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #addMilestoneForm="ngForm" novalidate>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">Add Billing Point</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <input type="text" name="mileStoneName" [(ngModel)]="tmpMilestone.name" placeholder="Billing Point Name*" #mileStoneName="ngModel" class="form-control"
+                           required/>
+                    <div class="error-message pl0">
+                        <div *ngIf="mileStoneName.errors && (mileStoneName.dirty || mileStoneName.touched)">
+                            {{ errorMsg.milestoneName }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <input type="text" name="mileStoneCost" [(ngModel)]="tmpMilestone.value" (keypress)="isNumber($event);" placeholder="Cost ($)*"
+                           maxlength="9" #mileStoneCost="ngModel" class="form-control" required/>
+                    <div class="error-message pl0">
+                        <div *ngIf="(tmpMilestone.value<1 || tmpMilestone.value=='' || tmpMilestone.value==null) && (mileStoneCost.dirty || mileStoneCost.touched)">
+                            {{ errorMsg.requriredCost }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <angular2-multiselect [data]="services" name="mileStoneServices" [(ngModel)]="tmpMilestone.jobMilestoneServices" [settings]="dropdownSettings"
+                                          (onSelect)="onItemSelect()" (onDeSelect)="OnItemDeSelect()" (onDeSelectAll)="onDeSelectAll()" (onSelectAll)="onSelectAll()">
+                    </angular2-multiselect>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-blue {{showMilestoneAddBtn}}" id="addMilestoneBtn"
+                      (click)="addMileStone(addMilestoneForm)">Save</button> -->
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" (click)="addMileStone(addMilestoneForm)" *ngIf="!mileStoneeID" [disabled]="!tmpMilestone.name || !tmpMilestone.value || tmpMilestone.value <1">Save</button>
+            <button type="button" class="btn btn-blue" (click)="updateMilestone(tmpMilestone , mileStoneeID)" *ngIf="mileStoneeID" [disabled]="!tmpMilestone.name || !tmpMilestone.value || tmpMilestone.value <1">Update</button>
+
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

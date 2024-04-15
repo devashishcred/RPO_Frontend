@@ -1,0 +1,32 @@
+::ng-deep .modal-body.clearfix {
+  background-color: #fff !important;
+  top: 120px;
+}
+
+.vert {
+  color: #1d971d;
+  font-size: 65px;
+}
+
+.submit-comment {
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  h2 {
+    color: #1d971d;
+    margin: 0;
+    font-size: 26px;
+    font-weight: bold;
+  }
+  p {
+    font-size: 18px;
+    max-width: 650px;
+    text-align: center;
+  }
+  &.open {
+    display: flex;
+  }
+}

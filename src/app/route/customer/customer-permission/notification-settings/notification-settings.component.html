@@ -1,0 +1,64 @@
+<div class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">Notification Settings</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+        <form [formGroup]="formData">
+            <div class="row">
+                <div class="col-md-6 n-settings">
+                    <span for="name">Send New Project Invite Email Notification</span>
+                    <div class="button-switch">
+                        <input class="switch" id="primary-switch" type="checkbox"
+                            formControlName="projectAccessEmail" />
+                        <label class="lbl-off" for="primary-switch"></label>
+                        <label class="lbl-on" for="primary-switch"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 n-settings">
+                    <span for="name">Send New Project Invite InApp Notification</span>
+                    <div class="button-switch">
+                        <input class="switch" id="primary-switch" type="checkbox"
+                            formControlName="projectAccessInApp" />
+                        <label class="lbl-off" for="primary-switch"></label>
+                        <label class="lbl-on" for="primary-switch"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 n-settings">
+                    <span for="name">Send Violation Email Notification</span>
+                    <div class="button-switch">
+                        <input class="switch" id="primary-switch" type="checkbox" formControlName="violationEmail" />
+                        <label class="lbl-off" for="primary-switch"></label>
+                        <label class="lbl-on" for="primary-switch"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 n-settings">
+                    <span for="name">Send Violation InApp Notification</span>
+                    <div class="button-switch">
+                        <input class="switch" id="primary-switch" type="checkbox" formControlName="violationInapp" />
+                        <label class="lbl-off" for="primary-switch"></label>
+                        <label class="lbl-on" for="primary-switch"></label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-blue pull-right" (click)="onSubmit()">Save</button>
+        <button type="button" class="btn btn-white pull-right" (click)="close()">Cancel</button>
+    </div>
+</div>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

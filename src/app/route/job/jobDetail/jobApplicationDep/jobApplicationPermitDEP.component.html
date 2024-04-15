@@ -1,0 +1,25 @@
+<div class="search-area">
+    <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+            <i class="icon fa fa-search"></i>
+            <input class="form-control" type="text" [(ngModel)]="searchpermit" placeholder="Search Work Permit" (ngModelChange)="searchPermit($event)"
+            />
+        </div>
+    </div>
+    <button class="btn btn-panel pull-right no-padding {{btnShowHide}} {{showJobApplicationAddBtn}} {{showBtnStatus}}" *ngIf="isAppData && !isCustomerLoggedIn" (click)="openModalFormAddPermit(formAddDEPPermit)">Add Permit</button>
+    
+</div>
+<div class="overflow-table jobDepWorkPermitApplication">
+    <table id="dt-aplication-permit" class="display permit-table"  style="width:100%"></table>
+</div>
+
+<ng-template #formAddDEPPermit>
+    <div form-add-permit-dep [formAddPermit]="recformAddPermit" [modalRef]="modalRef" [onSave]="onSave" [idApplicationNumber]="idApplicationNumber" [idApp]="idApp"  [isDep]="isDep"
+        [appType]="appType" [reload]="reload" [idJob]="idJob" [idJobAppObject]="idJobApp" [isNew]="isNew" [totalCost]="totalCost"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>

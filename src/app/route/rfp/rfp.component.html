@@ -1,0 +1,34 @@
+<div class="rpo-rfp rpo-component">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left mr-2">Proposals</h2>
+            <div class="pull-left search middle">
+                <div class="inner-addon left-addon">
+                    <i class="icon fa fa-search"></i>
+                    <input type="text" class="form-control" placeholder="Search Proposals" [(ngModel)]="srch" (ngModelChange)="search($event)" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-panel pull-right middle  {{showRfpAddBtn}}" (click)="redirectToAddRfp()">Add Proposal</button>
+        </div>
+    </div>
+    <div class="component-body">
+        <table id="dt-rfp" class="display"  style="width:100%"></table>
+    </div>
+</div>
+<!-- View Create Task Popup -->
+<ng-template #addtask>
+    <div add-task [addtask]="addtask"  [modalRef]="modalRef" [isNew]="true" [idRfp]="idRfp" [idrfpContact]="idrfpConatct" [reload]="reload"></div>
+</ng-template>
+<!-- View Create Send Email -->
+<ng-template #sendemail>
+    <div send-email [sendemail]="sendemail"  [modalRef]="modalRef" [idRfp]="idRfp" [openFromRfp]="true" [from]="from"></div>
+</ng-template>
+<!-- Create Project Popup-->
+<ng-template #formJob>
+    <div form-job [job]="jobObj" [modalRefJob]="modalRefJob" [rfpObj]="rfpObj" [fromRFP]="true"></div>
+</ng-template>
+
+<!-- Create Proposal progression note Popup-->
+<ng-template #rfpprogressionnote>
+    <div add-rfp-progression-note [idRfp]="idRfp" [modalRef]="modalRef"></div>
+</ng-template>

@@ -1,0 +1,77 @@
+import { State } from './state';
+import { AddressType, Address } from './address';
+import { Company } from './company';
+import { Contact } from './contact';
+import {
+  occupancyClasifications,
+  constructionClassifications,
+  multipleDwellingClassifications,
+  structureOccupancyCategories,
+  primaryStructuralSystems,
+  seismicDesignCategories
+} from './classifications';
+import { borough } from './borough';
+
+export interface rfpAddress {
+
+  id: number,
+  idBorough: number,
+  borough: borough,
+  houseNumber: string,
+  street: string,
+  zipCode: string,
+  block: string,
+  lot: string,
+  binNumber: string,
+  comunityBoardNumber: string,
+  zoneDistrict: string,
+  overlay: string,
+  specialDistrict: string,
+  map: string,
+  idAddressType: number,
+  addressType: AddressType,
+  idCompany: 0,
+  company: Company,
+  nonProfit: boolean,
+  idOwnerType: number,
+  idOwnerContact: number,
+  ownerContact: Contact,
+  title: string,
+  idOccupancyClassification: number,
+  occupancyClassification: occupancyClasifications,
+  isOcupancyClassification20082014: boolean,
+  idConstructionClassification: number,
+  constructionClassification: constructionClassifications,
+  isConstructionClassification20082014: boolean,
+  idMultipleDwellingClassification: number,
+  multipleDwellingClassification: multipleDwellingClassifications,
+  idPrimaryStructuralSystem: number,
+  primaryStructuralSystem: primaryStructuralSystems,
+  idStructureOccupancyCategory: number,
+  structureOccupancyCategory: structureOccupancyCategories,
+  idSeismicDesignCategory: number,
+  seismicDesignCategory: seismicDesignCategories,
+  stories: number,
+  height: number,
+  feet: number,
+  dwellingUnits: number,
+  grossArea: string,
+  streetLegalWidth: number,
+  isLandmark: boolean,
+  isBSADecision: boolean,
+  isLittleE: boolean,
+  freshwaterWetlandsMapCheck: string,
+  specialFloodHazardAreaCheck: string,
+  tidalWetlandsMapCheck: string,
+  coastalErosionHazardAreaMapCheck: string,
+  idSecondOfficerCompany: number,
+  idSecondOfficer: number,
+  outsideNYC: string;
+  cityOwnedCheck: boolean,
+  environmentalRestrictionsCheck: boolean,
+  sroRestrictedCheck: boolean,
+  loftLawCheck: boolean,
+  lastModifiedByEmployeeName?: string,
+  jobDetail?: any,
+  prefix: any;
+}

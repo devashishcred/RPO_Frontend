@@ -1,0 +1,29 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left">Project Time Note Categories</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showTimeNoteCategoryAddBtn}}" (click)="openModalForm(jobtimenotecategoriesform,null,true)">Add Project Time Note Category</button>
+        <div class="pull-right search middle">
+            <div class="inner-addon right-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Project Time Note Category" [(ngModel)]="search" (ngModelChange)="searchJobTimenoteCategories(search)"
+            />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-JobContact-types" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #jobtimenotecategoriesform>
+    <div add-jobtimenote-categories  [modalRef]="modalRef" [reload]="reload" [JobTimenoteCategoriesId]="JobTimenoteCategoriesId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

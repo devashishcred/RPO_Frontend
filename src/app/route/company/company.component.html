@@ -1,0 +1,79 @@
+<div class="rpo-Company rpo-component" [ngStyle]="{'display': !this.isConsulting ? 'none' : ''}">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left mr-2">Companies</h2>
+            <div class="pull-left search middle company-search">
+                <div class="inner-addon left-addon">
+                    <i class="icon fa fa-search"></i>
+                    <input type="text" class="form-control" placeholder="Search Company" [(ngModel)]="srch" (blur)="search(srch)"
+                           (keydown.enter)="$event.target.blur()"/>
+                </div>
+                <div class="border-bottom select-company pr-2">
+                    <angular2-multiselect [data]="dropdownList" name="selectCompType" [(ngModel)]="tmpCmpType" [settings]="dropdownSettings"
+                                          (onOpen)='showApplyClearButtons = true' (onClose)="showApplyClearButtons = false;">
+                        <!-- (onOpen)='showApplyClearButtons = true' (onClose)="showApplyClearButtons = false; clear();"> -->
+                        <!-- 
+                            (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)" 
+                            (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)" -->
+                    </angular2-multiselect>
+                    <div class="dropdown">
+                        <div class="dropdown-menu">
+                            <div class="container-fluid">
+                            </div>
+                        </div>
+                        <div class="static-btn" *ngIf="showApplyClearButtons">
+                            <button type="button" (click)="applyCompanyTypesFilter(tmpCmpType)"> Apply</button>
+                            <button type="button" (click)='clearCompanyTypes()'> Clear</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <export-widget (onExportClick)="exportData($event)" customClassApply='{{showCompanyExportBtn}}'></export-widget>
+
+            <button type="button" class="btn btn-panel pull-right middle {{showCompanyAddBtn}}" (click)="openModal(formCompany)">Add Company</button>
+        </div>
+    </div>
+
+
+    <div class="component-body">
+        <table id="dt-company" class="display" style="width:100%"></table>
+    </div>
+
+    <!-- <ng-template #formCompany>
+        <div form-company [company]="rec" [modalRef]="modalRef" [onSave]="onSave"></div>
+    </ng-template> -->
+    <ng-template #formCompany>
+        <div form-company [company]="rec" [modalRef]="modalRef" [onSave]="onSave"></div>
+    </ng-template>
+
+    <ng-template #formContact>
+        <div form-contact [contact]="contactDetail" [modalRef]="modalRef" [idCompany]="contactRec.idCompany" [onSave]="onSave"></div>
+    </ng-template>
+</div>
+
+<ng-template #addtask>
+    <div add-task [addtask]="addtask" [idCompany]="idCompany" [frommodeule]="frommodeule" [modalRef]="modalRef" [isNew]="true"
+         [reload]="reload"></div>
+</ng-template>
+<ng-template #progressionnote>
+    <div add-progression-note [progressionNote]="progressionNote" [modalRef]="modalRef" [reload]="reload"></div>
+</ng-template>
+<ng-template #formJob>
+    <div form-job [job]="jobOfContact" [modalRefJob]="modalRef" [onSave]="onSave"></div>
+</ng-template>
+<!-- View Create Send Email -->
+<ng-template #sendemail>
+    <div send-email [sendemail]="sendemail" [modalRef]="modalRef" [idCompany]="idCompany" [openFromCompany]="true"></div>
+</ng-template>
+<!-- Get Info -->
+<ng-template #getinfo>
+    <div get-info-company [modalRef]="modalRef" [idCompany]="idCompany" [onSave]="onSave"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

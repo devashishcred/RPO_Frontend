@@ -1,0 +1,74 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+
+      <h2 class="component-title pull-left mr-2">
+        <!-- {{filter.permitCode}} Permit Expiry Report -->
+        Permit Reports
+      </h2>
+      <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search" [(ngModel)]="srch"
+            (ngModelChange)="searchJob(srch)" />
+        </div>
+      </div>
+      <!-- customClassApply='{{showExportBtn}}' -->
+      <!-- <span class="dropdown-toggle" data-toggle="dropdown">
+        <a href="javascript:void(0)" type="button" class="adv-search pull-right middle ml10"  >
+          <i class="fa fa-envelope fa-lg"></i>
+      </a>
+      </span>
+      <ul class="dropdown-menu widget dropdown-menu-right">
+        <li>
+          <a href="javascript:void(0)" (click)='selectJobModal(addRelatedJob)'>
+              <i class="fa fa-file-pdf-o fa-lg"></i>    
+            Email + PDF
+          </a>
+          </li>
+        <li>
+            <a href="javascript:void(0)" (click)='selectJobModal(addRelatedJob)'>
+                <i class="fa fa-file-excel-o fa-lg"></i>  
+              Email + Excel
+            </a>
+        </li>
+      </ul> -->
+      <!-- </div> -->
+      <ng-container *ngIf="!isCustomerLoggedIn">
+        <ng-container *ngIf="showExportBtn == 'show'">
+          <export-xls-pdf-widget (onExportClick)="exportClick($event)" showEmailOptions="true" [disabled]='disableExport'
+            customClassApply='{{showExportBtn}}'>
+          </export-xls-pdf-widget>
+        </ng-container>
+        <a href="javascript:void(0)" tooltip="Reset" class="pull-left mt-12 material-icon" (click)="clearSort()">
+          <i class="material-symbols-rounded">cached</i>
+        </a>
+        <a href="javascript:void(0)" tooltip="Advanced Search" class="pull-left mt-12 material-icon"
+          (click)="openModalAdvanceSearch(permitReportAdvanceSearch)">
+          <img src="./assets/images/filter_icon.svg" width="24px">
+        </a>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="component-body overflow-hidden">
+    <table id="dt-dob-permit-report" class="display" style="width:100%"></table>
+  </div>
+</div>
+
+<ng-template #permitReportAdvanceSearch>
+  <div permit-report-advance-search [modalRefAdvanceSearch]="modalRefAdvanceSearch"
+    (reloadAdvanceSearch)="reloadAdvanceSearch($event)" [filledFilter]="filter" [isFromCOC]="false"
+    [isSearchFromAddress]="isSearchFromAddress"></div>
+</ng-template>
+<ng-template #addRelatedJob>
+  <div add-related-job [modalRef]="modalRef" [fromRfp]='true' [fromReports]="true" [receiveJobId]="receiveJobId"></div>
+</ng-template>
+
+<ng-template #addtransmittal>
+  <div add-transmittal [modalRef]="modalRef" [idJob]="idJob" [jobObj]="jobDetail"></div>
+</ng-template>
+
+<ng-template #jobSelect>
+  <app-job-list [modalRef]="modalRefJobSelect" [reportDocument]='reportDocument'></app-job-list>
+</ng-template>

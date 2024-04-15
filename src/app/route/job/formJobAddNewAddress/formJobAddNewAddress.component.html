@@ -1,0 +1,363 @@
+<div class="modal-custom-content" cdkDrag>
+<form (submit)="saveRfpAddress()" #formJobAddNewAddress="ngForm">
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">{{isNew ? 'Add New' : 'Edit'}} Address Details</h4>
+    </div>
+
+    <div class="modal-body pt0 pb0">
+        <div class="modify mt10 mb10 text-red">{{isNew ? '' : 'Changing the address will change project address in proposals and Projects.'}}</div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                <label>Borough*</label>
+                <ng-select name="idBorough" [items]="boroughs" bindLabel="description" bindValue="id" placeholder="Borough" [(ngModel)]="rfpAddressRec.idBorough"
+                    (change)="setContact()" #idBorough="ngModel" required (ngModelChange)="checkBisAddressInfo('formChanged')">
+                </ng-select>
+            </div>
+            <div class="col-md-2" *ngIf="isOutsideNYC"> 
+                <label>Borough Name*</label>
+                <input class="form-control" name="outsideNYC" [(ngModel)]="rfpAddressRec.outsideNYC" placeholder="BroughName#" #outsideNYC="ngModel"
+                [required]="isOutsideNYC"  (ngModelChange)="checkBisAddressInfo('formChanged')"/>
+                <div class="error-message pl0" *ngIf="outsideNYC.errors && (outsideNYC.dirty || outsideNYC.touched)">
+                    {{errorMsg.requireBoroughName}}
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label>House#*</label>
+                <input class="form-control" name="houseNumber" [(ngModel)]="rfpAddressRec.houseNumber" placeholder="House#" #houseNumber="ngModel"
+                    required (ngModelChange)="checkBisAddressInfo('formChanged')" />
+            </div>
+            <div class="col-md-4">
+                <label>Street Name*</label>
+                <input class="form-control" name="street" [(ngModel)]="rfpAddressRec.street" placeholder="Street Name" #street="ngModel"
+                    required (ngModelChange)="checkBisAddressInfo('formChanged')" />
+            </div>
+            <div class="col-md-2">
+                <label class="block">&nbsp;</label>
+                <button type="button" class="btn btn-blue no-padding" [disabled]="!displayGetInfo" (click)="getBisAddressInfo()">Get Info</button>
+            </div>
+            <div class="error-message">
+                <div *ngIf="idBorough.errors && (idBorough.dirty || idBorough.touched)">
+                    {{errorMsg.requireBorough}}
+                </div>
+                <div *ngIf="houseNumber.errors && (houseNumber.dirty || houseNumber.touched)">
+                    {{errorMsg.requireHouseNumber}}
+                </div>
+                <div *ngIf="street.errors && (street.dirty || street.touched)">
+                    {{errorMsg.requireStreet}}
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                <label>Zip</label>
+                <input class="form-control" name="zipCode" [(ngModel)]="rfpAddressRec.zipCode" placeholder="Zip" maxlength="5" minlength="5"
+                    pattern="[0-9]{1,5}" #zipCode="ngModel" />
+            </div>
+            <div class="col-md-2">
+                <label>Block</label>
+                <input class="form-control" name="block" [(ngModel)]="rfpAddressRec.block" placeholder="Block" />
+            </div>
+            <div class="col-md-2">
+                <label>Lot</label>
+                <input class="form-control" name="lot" [(ngModel)]="rfpAddressRec.lot" placeholder="Lot" />
+            </div>
+            <div class="col-md-2">
+                <label>Bin#</label>
+                <input class="form-control" name="binNumber" [(ngModel)]="rfpAddressRec.binNumber" placeholder="Bin#" />
+            </div>
+            <div class="col-md-4">
+                <label>Community Board</label>
+                <input class="form-control" name="comunityBoardNumber" [(ngModel)]="rfpAddressRec.comunityBoardNumber" placeholder="Community Board"
+                />
+            </div>
+            <div *ngIf="zipCode.errors && (zipCode.dirty || zipCode.touched)" class="error-message">
+                {{errorMsg.companyZipCode}}
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-3">
+                <label>Zone District(s)</label>
+                <input class="form-control" name="zoneDistrict" [(ngModel)]="rfpAddressRec.zoneDistrict" placeholder="Zone District(s)" />
+            </div>
+            <div class="col-md-3">
+                <label>Overlay(s)</label>
+                <input class="form-control" name="overlay" [(ngModel)]="rfpAddressRec.overlay" placeholder="Overlay(s)" />
+            </div>
+            <div class="col-md-3">
+                <label>Special District(s)</label>
+                <input class="form-control" name="specialDistrict" [(ngModel)]="rfpAddressRec.specialDistrict" placeholder="Special District(s)"
+                />
+            </div>
+            <div class="col-md-3">
+                <label>Map</label>
+                <input class="form-control" name="map" [(ngModel)]="rfpAddressRec.map" placeholder="Map" />
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label>Owner Type</label>
+                <ng-select name="idOwnerType" [items]="ownerTypes" bindLabel="itemName" bindValue="id" placeholder="Owner Type" [(ngModel)]="rfpAddressRec.idOwnerType"
+                    #idOwnerType="ngModel" (change)="set2ndOfficer()">
+                </ng-select>
+            </div>
+            <div class="col-md-4">
+                <label class="block">
+                    Company
+                    <div class="checkbox pull-right mt0 mb0 form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="nonProfit" [(ngModel)]="rfpAddressRec.nonProfit" /> Non-Profit
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                </label>
+                <ng-select name="idCompany" [items]="companies" bindLabel="name" bindValue="id" placeholder="Company" [(ngModel)]="rfpAddressRec.idCompany"
+                    (change)="getContacts('mainCompany')" #idCompany="ngModel">
+                </ng-select>
+            </div>
+            <div class="col-md-4">
+                <label>Owner </label>
+                <ng-select name="idOwnerContact" [items]="contacts" bindLabel="itemName" bindValue="id" placeholder="Owner" [(ngModel)]="rfpAddressRec.idOwnerContact"
+                    (change)="setContact()" #idOwnerContact="ngModel">
+                </ng-select>
+            </div>
+        </div>
+
+        <div class="row form-group" *ngIf="isSecondOfficerRequire">
+            <div class="col-md-6">
+                <label>2nd Officer Company</label>
+                <ng-select name="idSecondOfficerCompany" [items]="companies" bindLabel="name" bindValue="id" placeholder="2nd Officer Company" [(ngModel)]="rfpAddressRec.idSecondOfficerCompany"
+                 #idSecondOfficerCompany="ngModel" (change)="getContacts('secondCompany')">
+                </ng-select>
+            </div>
+            <div class="col-md-6">
+                <label>2nd Officer Contact</label>
+                <ng-select name="idSecondOfficer" [items]="Secondcontacts" bindLabel="itemName" bindValue="id" placeholder="2nd Officer Contact" [(ngModel)]="rfpAddressRec.idSecondOfficer"
+                    #idSecondOfficer="ngModel">
+                </ng-select>
+            </div>
+        </div>
+
+
+        <div class="classify-info">
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label class="block">
+                        Occupancy Classification
+                        <div class="checkbox pull-right form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="isOcupancyClassification20082014" [(ngModel)]="rfpAddressRec.isOcupancyClassification20082014"
+                                    (change)="setOccupancyDropDown()" /> 2008/2014
+                                    <i class="input-helper"></i>
+                                </label>
+                        </div>
+                    </label>
+                    <ng-select name="idOccupancyClassification" [items]="occuClassifications" bindLabel="itemName" bindValue="id" placeholder="Occupancy Classification"
+                        [(ngModel)]="rfpAddressRec.idOccupancyClassification" (change)="setOccupancyClassification()">
+                    </ng-select>
+                </div>
+                <div class="col-md-4">
+                    <label class="block">
+                        Construction Classification
+                        <div class="checkbox pull-right form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="isConstructionClassification20082014" [(ngModel)]="rfpAddressRec.isConstructionClassification20082014"
+                                    (change)="setConstructorDropDown()" /> 2008/2014
+                                    <i class="input-helper"></i>
+                                </label>
+                        </div>
+                    </label>
+
+                    <ng-select name="idConstructionClassification" [items]="constructionClassifications" bindLabel="itemName" bindValue="id"
+                        placeholder="Construction Classification" [(ngModel)]="rfpAddressRec.idConstructionClassification" (change)="setConstructionClassifications()">
+                    </ng-select>
+                </div>
+
+                <div class="col-md-4">
+                    <label>Multiple Dwelling Classification</label>
+                    <ng-select name="idMultipleDwellingClassification" [items]="multipleDwellingClassifications" bindLabel="itemName" bindValue="id"
+                        placeholder="Multiple Dwelling Classification" [(ngModel)]="rfpAddressRec.idMultipleDwellingClassification"
+                        (change)="setmultipleDwellingClassifications()">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label>Primary Structural System</label>
+                    <ng-select name="idPrimaryStructuralSystem" [items]="primaryStructuralSystems" bindLabel="description" bindValue="id" placeholder="Primary Structural System"
+                        [(ngModel)]="rfpAddressRec.idPrimaryStructuralSystem" (change)="setprimaryStructuralSystems()">
+                    </ng-select>
+                </div>
+                <div class="col-md-4">
+                    <label>Structure Occupancy Category</label>
+                    <ng-select name="idStructureOccupancyCategory" [items]="structureOccupancyCategories" bindLabel="itemName" bindValue="id"
+                        placeholder="Structure Occupancy Category" [(ngModel)]="rfpAddressRec.idStructureOccupancyCategory" (change)="setstructureOccupancyCategories()">
+                    </ng-select>
+                </div>
+                <div class="col-md-4">
+                    <label>Seismic Design Category</label>
+
+                    <ng-select name="idSeismicDesignCategory" [items]="seismicDesignCategories" bindLabel="itemName" bindValue="id" placeholder="Seismic Design Categories"
+                        [(ngModel)]="rfpAddressRec.idSeismicDesignCategory">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">
+                    <label>Stories</label>
+                    <input type="text" class="form-control" name="stories" [(ngModel)]="rfpAddressRec.stories" placeholder="Stories" />
+                </div>
+                <div class="col-sm-2">
+                    <label>Height (
+                        <i>inch</i> )
+                    </label>
+                    <input type="text" class="form-control" name="height" [(ngModel)]="rfpAddressRec.height" placeholder="Height (inch)" />
+                </div>
+                <div class="col-sm-2">
+                    <label>Height (
+                        <i>feet</i> )
+                    </label>
+                    <input type="text" class="form-control" name="feet" [(ngModel)]="rfpAddressRec.feet" placeholder="Height (feet)" />
+                </div>
+                <div class="col-sm-2">
+                    <label>Dwelling Units</label>
+                    <input type="text" class="form-control" name="dwellingUnits" [(ngModel)]="rfpAddressRec.dwellingUnits" placeholder="Dwelling Units"
+                    />
+                </div>
+                <div class="col-sm-2">
+                    <label>Gross Area</label>
+                    <input type="text" class="form-control" name="grossArea" [(ngModel)]="rfpAddressRec.grossArea" placeholder="Gross Area" />
+                </div>
+                <div class="col-sm-2">
+                    <label>Street Legal width</label>
+                    <input type="text" class="form-control" name="streetLegalWidth" [(ngModel)]="rfpAddressRec.streetLegalWidth" placeholder="Street Legal width"
+                    />
+                </div>
+            </div>
+            <div class="row form-group pb0 mb0">
+                <div class="add-checkbox clearfix">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="isLandmark" [(ngModel)]="rfpAddressRec.isLandmark" /> Landmark
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="isLittleE" [(ngModel)]="rfpAddressRec.isLittleE" /> Environmental Restrictions
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="tidalWetlandsMapCheck" [(ngModel)]="rfpAddressRec.tidalWetlandsMapCheck" /> Tidal Wetlands Map
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="coastalErosionHazardAreaMapCheck" [(ngModel)]="rfpAddressRec.coastalErosionHazardAreaMapCheck"
+                                /> Coastal Erosion Hazard Area Map
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="specialFloodHazardAreaCheck" [(ngModel)]="rfpAddressRec.specialFloodHazardAreaCheck" /> Special Flood Hazard Area
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="freshwaterWetlandsMapCheck" [(ngModel)]="rfpAddressRec.freshwaterWetlandsMapCheck" /> Freshwater Wetlands Map
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row form-group pb0 mb0">
+                <div class="add-checkbox clearfix">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="isBSADecision" [(ngModel)]="rfpAddressRec.isBSADecision" />BSA Decision
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="sroRestrictedCheck" [(ngModel)]="rfpAddressRec.sroRestrictedCheck" />SRO Restricted
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-2 form-check">
+                        <label class="checkbox form-check-label">
+                            <input type="checkbox" class="form-check-input" name="environmentalRestrictionsCheck" [(ngModel)]="rfpAddressRec.environmentalRestrictionsCheck" />Environmental Restrictions
+                            <i class="input-helper"></i>
+                        </label>
+                    </div> -->
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="loftLawCheck" [(ngModel)]="rfpAddressRec.loftLawCheck" />Loft Law
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <label class="checkbox form-check-label">
+                                <input type="checkbox" class="form-check-input" name="cityOwnedCheck" [(ngModel)]="rfpAddressRec.cityOwnedCheck" />City Owned
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="modify text-left" *ngIf="rfpAddressRec.lastModifiedByEmployeeName">
+                    Last modified by {{rfpAddressRec.lastModifiedByEmployeeName}} on {{rfpAddressRec.lastModifiedDate | date:'MM/dd/yyyy h:mm a'}}
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-blue pull-right" [disabled]="!formJobAddNewAddress.form.valid">Save</button>
+                <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<!-- Get Info Popup -->
+<ng-template #viewAddressList>
+    <div view-address-list [isAnomalyBin]="isAnomalyBin" [modalRefAddress]="modalRefAddress" [addressList]="addressList" (updateFormFieldsFromGetInfo)="updateFormFieldsFromGetInfo($event)"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

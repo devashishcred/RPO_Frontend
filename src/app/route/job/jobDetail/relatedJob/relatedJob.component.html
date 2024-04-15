@@ -1,0 +1,35 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-12 pt15">
+      <div class="component-body">
+        <h4 class="component-title pull-left mr-2">Related Projects</h4>
+        <div class="search-area">
+          <div class="search middle pull-left">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input class="form-control" type="text" placeholder="Search Poject" [(ngModel)]="srch" (ngModelChange)="search(srch)">
+            </div>
+          </div>
+          <button class="btn btn-panel pull-right no-padding {{showBtnStatus}}" (click)="openModalAddRelatedJob(addRelatedJob,null)">Add Related Project</button>
+          <div class="work-status permit-status pull-right">
+            <label>
+              <span class="green"></span>In Progress
+            </label>
+            <label>
+              <span class="grey"></span>Completed
+            </label>
+            <label>
+                <span class="red"></span>On Hold
+            </label>
+        </div>
+        </div>
+        <div class="relatedJob">
+          <table id="dt-relatedJob" class="display"  style="width:100%"></table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #addRelatedJob>
+  <div add-related-job [addRelatedJob]="recRelatedJob" [modalRef]="modalRef" [idJob]="idJob" [onSave]="onSave"  [reload]="reload"></div>
+</ng-template>

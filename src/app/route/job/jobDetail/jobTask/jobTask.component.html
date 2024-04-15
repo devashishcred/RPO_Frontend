@@ -1,0 +1,63 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-12 pt15">
+      <div class="component-body">
+        <h4 class="component-title pull-left mr-2">Tasks</h4>
+        <div class="search-area">
+          <div class="search middle pull-left">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input class="form-control" type="text" placeholder="Search Task" [(ngModel)]="srch" (ngModelChange)="search($event)">
+            </div>
+          </div>
+          <button class="btn btn-panel pull-right no-padding {{btnShowHide}} {{showTaskAddBtn}}" (click)="openModalForm(addtask, null, 'JobModule')">Create Task</button>
+          <div class="work-status permit-status pull-right">
+            <label>
+              <span class="red"></span>Overdue
+            </label>
+            <label>
+              <span class="orange"></span>Due today
+            </label>
+            <label>
+              <span class="blue"></span>Due tomorrow
+            </label>
+            <label>
+              <span class="yellow"></span>Due in 5 days
+            </label>
+            <label>
+              <span class="green"></span>Due after 5 days
+            </label>
+            <label>
+              <span class="grey"></span>Unattainable/ Completed
+            </label>
+          </div>
+        </div>
+        
+        <div class="taskDocument">
+          <table id="dt-task" class="display"  style="width:100%"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+<ng-template #addtask>
+  <div add-task [addtask]="addtask" [modalRef]="modalRef" [idJob]="jobId"[frommodeule]="frommodeule" [isNew]="isNew" [idTaskType]='idTaskType' [idTask]="idTask" [reload]="reload"></div>
+</ng-template>
+<ng-template #progressionnote>
+  <div add-progression-note [progressionNote]="progressionNote" [modalRef]="modalRef" [idTask]="idTask" [reload]="reload" [fromTask]="true"></div>
+</ng-template>
+<ng-template #reminder>
+  <div add-reminder [reminder]="reminder" [modalRef]="modalRef" [idTask]="idTask" [reload]="reload"></div>
+</ng-template>
+<ng-template #viewtask>
+    <div view-task [modalRef]="modalRef" [idTask]="idTask"></div>
+</ng-template>
+<ng-template #addtransmittal>
+  <div add-transmittal [modalRef]="modalRef" [idTask]="idTask"  [idJob]="jobId" [jobObj]="jobDetail"></div>
+</ng-template>

@@ -1,0 +1,38 @@
+<div class="content-area">
+  <div class="row">
+    <div class="col-sm-6 left-area" *ngIf="jobDetail">
+      <div class="component-body">
+        <h4 class="component-title">Applications</h4>
+        <job-application-second-dob></job-application-second-dob>
+      </div>
+      <!-- <div class="search-area">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input class="form-control" type="text" placeholder="Search Application" [(ngModel)]="srch" (ngModelChange)="search($event)">
+        </div>
+        <button class="btn btn-panel no-padding {{btnShowHide}} {{showJobApplicationAddBtn}}" (click)="openModalFormAddApplication(formAddApplication)">Add Application</button>
+      </div> -->
+      <!-- <div class="component-body overflow-table">
+        <table  id="dt-aplication" class="display"  style="width:100%"></table>
+      </div> -->
+    </div>
+    
+    <div class="col-sm-6 right-area" *ngIf="jobDetail">
+      <div class="component-body">
+        <h4>Work Permits</h4>
+        <job-work-permit [jobDetail]="jobDetail"></job-work-permit>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #viewdob>
+  <div view-dob [modalRef]="modalRef" [jobId]="jobNum"></div>
+</ng-template>
+<ng-template #formAddApplication>
+  <div form-add-application [formAddApplication]="recformAddApplication" [modalRef]="modalRef" [onSave]="onSave" [idJob]="idJob"
+    [selectedJobType]="selectedJobType" [idJobApp]="idJobApp" [reload]="reload"></div>
+</ng-template>
+
+
+
+  

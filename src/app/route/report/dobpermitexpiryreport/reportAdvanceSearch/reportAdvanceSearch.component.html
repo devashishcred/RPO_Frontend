@@ -1,0 +1,120 @@
+<div class="modal-custom-content" cdkDrag>
+  <form (submit)="save()" ngNativeValidate>
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">Advanced Search</h4>
+      <a href="javascript:void(0)" class="clear-search link-blue" (click)="clearSearch()">Clear Filter</a>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="form-advance-search">
+        <div class="row">
+          <div class="col-sm-12">
+            <form>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Project Status</label>
+                  <select name="status" [(ngModel)]="filter.status" class="form-control" (change)="setJobsPerStatus()">
+                    <!-- <option value="null">Project Status</option> -->
+                    <option value="null">All</option>
+                    <option value="1">InProgress</option>
+                    <option value="2">On Hold</option>
+                    <option value="3">Completed</option>
+                  </select>
+                </div>
+                <div class="col-sm-6">
+                  <label for="">Project#</label>
+                  <angular2-multiselect [data]="jobList" name="jobId" [(ngModel)]="filter.jobId" [settings]="dropdownJobListSettings" (onSelect)="onItemSelect($event)"
+                    (onDeSelect)="OnItemDeSelect($event,'job')" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event,'Project')"
+                    #jobId="ngModel">
+                  </angular2-multiselect>
+                </div>
+  
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Project Type</label>
+                  <select name="permitCode" [(ngModel)]="filter.permitCode" class="form-control" (change)="setResponsibility()">
+                    <option value="DOB">DOB</option>
+                    <option value="DOT">DOT</option>
+                    <option value="DEP">DEP</option>
+                    <option value="AHV">AHV</option>
+                    <option value="TCO">TCO</option>
+                  </select>
+                </div>
+                <div class="col-sm-6" *ngIf="projectManagerList?.length>0">
+                  <label>Project Manager</label>
+                  <angular2-multiselect [data]="projectManagerList" name="projectManager" [(ngModel)]="filter.projectManager" [settings]="dropdownProjectManagerListSettings"
+                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event,'pm')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'pm')" #projectManager="ngModel">
+                  </angular2-multiselect>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6" *ngIf="companies?.length>0">
+                  <label for="">Company</label>
+                  <ng-select name="idCompany" [items]="companies" bindLabel="name" bindValue="id" placeholder="Company" [(ngModel)]="filter.idCompany"
+                    (change)="setContacts()" #idCompany="ngModel">
+                  </ng-select>
+                </div>
+                <div class="col-md-6" *ngIf="contacts?.length>0">
+                  <label>Contact</label>
+                  <angular2-multiselect [data]="contacts" name="contact" [(ngModel)]="filter.contact" [settings]="dropdownContactListSettings"
+                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event,'contact')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'contact')" #contact="ngModel">
+                  </angular2-multiselect>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="">Expiry Date From</label>
+                  <div datetime-picker pastOrFuture="setRangePicker" idForRangeDate="expiresToDate" class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="expiresFromDate" type="text" name="expiresFromDate" [(ngModel)]="filter.expiresFromDate" class="form-control"
+                    />
+                  </div>
+                </div>
+  
+                <div class="col-sm-6">
+                  <label for="">Expiry Date To</label>
+                  <div datetime-picker pastOrFuture="setEndDateForRangePicker" id="expiresToDate" [customMinDate]="filter.expiresFromDate"
+                    class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="expiresToDate" [(ngModel)]="filter.expiresToDate" type="text" name="expiresToDate" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-6">
+                    <label>Borough</label>
+                    <angular2-multiselect [data]="boroughList" name="borough" [(ngModel)]="filter.borough" [settings]="dropdownBoroughListSettings"
+                      (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event,'borough')" (onSelectAll)="onSelectAll($event)"
+                      (onDeSelectAll)="onDeSelectAll($event,'borough')" #contact="ngModel">
+                    </angular2-multiselect>
+                </div>
+                <div class="col-sm-6" *ngIf = "filter.permitCode == 'DOB'">
+                  <label>Responsible Party</label>
+                   <angular2-multiselect [data]="respList" name="responsibility" [(ngModel)]="filter.responsibility" [settings]="dropdownResponsibilityListSettings"
+                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event,'responsibility')" (onSelectAll)="onSelectAll($event)"
+                    (onDeSelectAll)="onDeSelectAll($event,'responsibility')" #contact="ngModel">
+                  </angular2-multiselect> 
+              </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRefAdvanceSearch.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" (click)="searchJobs()">Search</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

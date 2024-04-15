@@ -1,0 +1,28 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">Task Types</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showTaskTypeAddBtn}}" (click)="openModalForm(addTaskTypeForm,null,true)">Add Task Type</button>
+        <div class="pull-left search middle">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Task Type" [(ngModel)]="search" (ngModelChange)="searchTaskType(search)" />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-task-types" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #addTaskTypeForm>
+    <div add-task-type  [modalRef]="modalRef" [reload]="reload" [taskTypeId]="taskTypeId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

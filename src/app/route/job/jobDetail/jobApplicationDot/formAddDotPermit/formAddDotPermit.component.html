@@ -1,0 +1,186 @@
+<div class="modal-custom-content" cdkDrag>
+  <form ngNativeValidate name="formWorkPermit" #formWorkPermit="ngForm">
+    <div class="permit-content">
+      <div class="modal-header"cdkDragHandle>
+        <button type="button" class="close close-icn"  cdkDragHandle>
+          <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">{{ jobPermit.id?'Edit':'Add'}} Work Permit</h4>
+      </div>
+      <div class="modal-body pt15 pb0">
+        <div class="form-add-permit">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row form-group">
+                <div class="col-sm-4">
+                  <label for="Type">Type</label>
+                  <input type="text" name="applicationType" [(ngModel)]="jobPermit.jobApplicationTypeName" readonly="readonly" disabled="disabled"
+                    class="form-control" placeholder="Type" />
+                </div>
+                <div class="col-sm-4">                
+                  <label for="Application">Tracking#</label>
+                  <input type="text" name="idApplicationNumber" [(ngModel)]="jobPermit.applicationNumber" readonly="readonly" disabled="disabled"
+                    class="form-control" placeholder="Tracking#" />
+                </div>
+                <div class="col-sm-4">
+                  <label for="StreetOn">Street On</label>
+                  <input type="text" name="streetOn" [(ngModel)]="jobPermit.streetWorkingOn" readonly="readonly" disabled="disabled" class="form-control" placeholder="Street On"
+                  />
+                </div>
+              </div>
+  
+  
+              <div class="row form-group">
+                <div class="col-sm-4">
+                  <label for="streetFrom">Street From</label>
+                  <input type="text" name="streetFrom" [(ngModel)]="jobPermit.streetFrom" readonly="readonly" disabled="disabled" class="form-control"
+                  placeholder="Street From" />
+                </div>
+                <div class="col-sm-4">
+                  <label for="streetTo">Street To</label>
+                  <input type="text" name="streetTo" [(ngModel)]="jobPermit.streetTo" readonly="readonly" disabled="disabled" class="form-control" placeholder="Street To"
+                  />
+                </div>
+              </div>
+  
+              <div class="row form-group">
+                <div class="col-sm-6">
+                  <label for="Type">Work/Permit type*</label>
+                  <input class="form-control" type="text" name="permitType" placeholder="Work/Permit Type" [(ngModel)]="jobPermit.permitType"
+                  #permitType="ngModel" required />
+                  <div class="error-message pl0">
+                    <div *ngIf="permitType.errors && (permitType.dirty || permitType.touched)">
+                      {{errorMsg.requireJobWorkPermitType}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <label for="code">Code</label>
+                  <input type="text" placeholder="Code" name="code" class="form-control" [(ngModel)]="jobPermit.code"
+                  />
+                </div>
+              </div>
+  
+              <div class="row form-group date-row">
+  
+                <div class="col-sm-3">
+                  <label for="filed">Filed on</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="filed" type="text" name="filed" class="form-control" [(ngModel)]="jobPermit.filed" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <label for="issued">Issued on</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="issued" type="text" name="issued" class="form-control" [(ngModel)]="jobPermit.issued" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <label for="expires">Expiry date</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="expires" type="text" name="expires" class="form-control" [(ngModel)]="jobPermit.expires" />
+                  </div>
+                  <div class="error-message pl0">
+                    <div *ngIf="jobPermit.expires && (getTheDateObject(jobPermit.issued) > getTheDateObject(jobPermit.expires))">
+                      {{errorMsg.requiredExpiryDateSmaller}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <label for="signOff">Signed-off on</label>
+                  <div datetime-picker class="inner-addon right-addon input-group">
+                    <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                    <input id="signOff" type="text" name="signOff" class="form-control" [(ngModel)]="jobPermit.signedOff" />
+                    <div class="error-message pl0">
+                      <div *ngIf="jobPermit.signedOff && (getTheDateObject(jobPermit.filed) > getTheDateObject(jobPermit.signedOff))">
+                        {{errorMsg.requiredSignOffDateSmaller}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-4">
+                  <label for="">Permit#*</label>
+                  <input class="form-control" type="text" name="permitNumber" placeholder="Permit#" [(ngModel)]="jobPermit.permitNumber" required
+                    #permitNumber="ngModel" />
+                  <div class="error-message pl0">
+                    <div *ngIf="permitNumber.errors && (permitNumber.dirty || permitNumber.touched)">
+                      {{errorMsg.requirePermitNumber}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="">Previous Permit#</label>
+                  <input class="form-control" type="text" name="previousPermitNumber" placeholder="Previous Permit#" [(ngModel)]="jobPermit.previousPermitNumber"
+                  />
+                </div>
+                <div class="col-sm-4">
+                  <label for="">Renewal Fee</label>
+                  <input class="form-control" type="text" name="renewalFee" placeholder="Renewal Fee" [(ngModel)]="jobPermit.renewalFee" (keypress)="isDecimal($event)"
+                  />
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-sm-4">
+                  <label for="">For Purpose Of</label>
+                  <input class="form-control" type="text" name="forPurposeOf" placeholder="For Purpose Of" [(ngModel)]="jobPermit.forPurposeOf"
+                  />
+                </div>
+                <div class="col-sm-4" *ngIf="jobPermit.code == '0204'">
+                  <label for="">Equipment Type</label>
+                  <input class="form-control" type="text" name="equipmentType" placeholder="Equipment Type" [(ngModel)]="jobPermit.equipmentType"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <label for="description">Work Description</label>
+                  <textarea class="form-control" rows="3" placeholder="Work Description" name="desc" [(ngModel)]="jobPermit.workDescription"></textarea>
+                </div>
+              </div>
+              <div class="mt15" *ngIf="jobPermit.jobWorkPermitHistories?.length > 0">
+                <label for="">Permit History</label>
+                  <div class="scroll-table">
+                    <table class="table table-bordered blue-table mb0">
+                      <thead>
+                        <tr>
+                          <th>New permit</th>
+                          <th>Old permit</th>
+                          <th>Updated date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let history of jobPermit.jobWorkPermitHistories">
+                          <td>{{history.newNumber}}</td>
+                          <td>{{history.oldNumber}}</td>
+                          <td>{{history.createdDate | date: 'MM/dd/yyyy'}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer text-right">
+          <div class="col-sm-7 text-left">
+              <div class="modify" *ngIf="jobPermit.lastModifiedDate && jobPermit.lastModifiedDate">Last modified by {{jobPermit.lastModifiedByEmployeeName ? jobPermit.lastModifiedByEmployeeName : jobPermit.createdByEmployeeName}} on {{jobPermit.lastModifiedDate ?( jobPermit.lastModifiedDate | date :'MM/dd/yyyy, h:mm a')  : (jobPermit.createdDate | date :'MM/dd/yyyy, h:mm a')}}</div>
+            </div>
+        <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+        <button type="submit" class="btn btn-blue" [disabled]="!formWorkPermit.form.valid || jobPermit.expires && (getTheDateObject(jobPermit.issued) > getTheDateObject(jobPermit.expires)) || jobPermit.signedOff && (getTheDateObject(jobPermit.filed) > getTheDateObject(jobPermit.signedOff))"
+          (click)="savePermit()">{{jobPermit.id?'Update':'Save'}}</button>
+      </div>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

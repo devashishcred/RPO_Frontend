@@ -1,0 +1,218 @@
+<div class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left"> {{checklistType}} Export Checklist </h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+        <!-- <div class="row form-group">
+            <div class="col-md-3">
+                <label
+                    style="font-size: 14px; font-weight: 700;display: flex;height: 36px;align-items: center;padding: 0;">Checklist
+                    Type:</label>
+            </div>
+            <div class="col-md-9">
+                <ng-select [items]="listOfchecklistType" bindLabel="label" bindValue="value"
+                    placeholder="Select Checklist Type" [(ngModel)]="checklistType" #document="ngModel"
+                    [clearable]="true" (change)="getDocumentFields()">
+                </ng-select>
+            </div>
+        </div> -->
+
+        <ng-container *ngIf="checklistType == 'General'">
+            <div class="col-md-12" cdkDropList (cdkDropListDropped)="mainGeneralChecklistDrop($event)">
+                <mat-accordion multi>
+                    <mat-expansion-panel class="header" #mapanel1="matExpansionPanel" hideToggle="true"
+                        *ngFor="let application of mainChecklistArray; let i = index;" cdkDrag>
+                        <mat-expansion-panel-header cdkDragHandle>
+                            <mat-panel-title class="h3">
+                                <div class="checkbox form-check">
+                                    <label class="form-check-label nolabel">
+                                        <input type="checkbox" [checked]="application?.checked"
+                                            (click)="onSelectGeneralChechlist(application,i)" class="form-check-input">
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                                <span class="material-symbols-outlined" cdkDragHandle>drag_indicator</span>
+                                <span>{{application.applicationName}}</span>
+                            </mat-panel-title>
+                            <span class="pull-right acts flex-center">
+                                <span class="material-symbols-outlined">expand_circle_down</span>
+                            </span>
+
+                        </mat-expansion-panel-header>
+
+                        <div cdkDropList
+                            (cdkDropListDropped)="dropGeneralGroup($event,application.jobChecklistHeaderId)">
+                            <ng-container *ngFor="let group of application.groups;let groupIndex = index;">
+                                <div cdkDrag>
+                                    <div class="mat-expansion-panel-child">
+                                        <div class="form-check">
+                                            <label class="form-check-label nolabel">
+                                                <input type="checkbox" [checked]="group.checked"
+                                                    (click)="onSelectGeneralChechlist(application,i,group,groupIndex)"
+                                                    class="form-check-input">
+                                                <i class="input-helper"></i>
+                                            </label>
+                                        </div>
+                                        <span class="material-symbols-outlined cursor-pointer"
+                                            cdkDragHandle>drag_indicator</span>
+                                        {{group.checkListGroupName}}
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </mat-expansion-panel>
+
+                </mat-accordion>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="checklistType == 'Composite'">
+            <div class="col-md-12 p0">
+                <div class="header mat-panel">
+                    <div class="h3">
+                        <div class="checkbox form-check">
+                            <label class="form-check-label nolabel">
+                                <input type="checkbox" [disabled]="!mainChecklistArray[0]?.isCOProject" [(ngModel)]="onlyTCOItems" class="form-check-input">
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                        <span class="mat-panel-label">Export only TCO items</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- This is parent composite checkList -->
+            <ng-container *ngIf="mainChecklistArray.length > 0">
+                <ng-container *ngFor="let application of mainChecklistArray; let i = index;">
+                    <ng-container *ngIf="application.isParentCheckList">
+                        <mat-accordion multi>
+                            <mat-expansion-panel class="header selected-checklist" #mapanel1="matExpansionPanel"
+                                hideToggle="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="h3">
+                                        <div class="checkbox form-check">
+                                            <label class="form-check-label nolabel">
+                                                <input type="checkbox" disabled [checked]="application?.checked"
+                                                    (click)="onSelectCompositeChechlist(application,i)"
+                                                    class="form-check-input">
+                                                <i class="input-helper"></i>
+                                            </label>
+                                        </div>
+                                        <!-- <span class="material-symbols-outlined" cdkDragHandle>drag_indicator</span> -->
+                                        <span>CC - {{application.compositeChecklistName}}</span>
+                                    </mat-panel-title>
+                                    <span class="pull-right acts flex-center">
+                                        <span class="material-symbols-outlined">expand_circle_down</span>
+                                    </span>
+
+                                </mat-expansion-panel-header>
+
+                                <div cdkDropList
+                                    (cdkDropListDropped)="dropCompositeGroup($event,application.jobChecklistHeaderId)">
+                                    <ng-container *ngFor="let group of application.groups;let groupIndex = index;">
+                                        <div cdkDrag>
+                                            <div class="mat-expansion-panel-child">
+                                                <div class="form-check">
+                                                    <label class="form-check-label nolabel">
+                                                        <input type="checkbox" disabled [checked]="group.checked"
+                                                            (click)="onSelectCompositeChechlist(application,i,group,groupIndex)"
+                                                            class="form-check-input">
+                                                        <i class="input-helper"></i>
+                                                    </label>
+                                                </div>
+                                                <span class="material-symbols-outlined cursor-pointer"
+                                                    cdkDragHandle>drag_indicator</span>
+                                                {{group.checkListGroupName}}
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+
+            <!-- This is not parent composite checkList -->
+            <div class="col-md-12" cdkDropList (cdkDropListDropped)="mainCompositeChecklistDrop($event)">
+                <ng-container *ngIf="mainChecklistArray.length > 0">
+                    <ng-container *ngFor="let application of mainChecklistArray; let i = index;">
+                        <ng-container *ngIf="!application.isParentCheckList">
+                            <mat-accordion multi>
+                                <mat-expansion-panel class="header" #mapanel1="matExpansionPanel" hideToggle="true"
+                                    cdkDrag>
+                                    <mat-expansion-panel-header cdkDragHandle>
+                                        <mat-panel-title class="h3">
+                                            <div class="checkbox form-check">
+                                                <label class="form-check-label nolabel">
+                                                    <input type="checkbox" [checked]="application?.checked"
+                                                        (click)="onSelectCompositeChechlist(application,i)"
+                                                        class="form-check-input">
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                            </div>
+                                            <span class="material-symbols-outlined" cdkDragHandle>drag_indicator</span>
+                                            <span>{{application.compositeChecklistName}}</span>
+                                        </mat-panel-title>
+                                        <span class="pull-right acts flex-center">
+                                            <span class="material-symbols-outlined">expand_circle_down</span>
+                                        </span>
+                                    </mat-expansion-panel-header>
+
+                                    <div cdkDropList
+                                        (cdkDropListDropped)="dropCompositeGroup($event,application.jobChecklistHeaderId)">
+                                        <ng-container *ngFor="let group of application.groups;let groupIndex = index;">
+                                            <div cdkDrag>
+                                                <div class="mat-expansion-panel-child">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label nolabel">
+                                                            <input type="checkbox" [checked]="group.checked"
+                                                                (click)="onSelectCompositeChechlist(application,i,group,groupIndex)"
+                                                                class="form-check-input">
+                                                            <i class="input-helper"></i>
+                                                        </label>
+                                                    </div>
+                                                    <span class="material-symbols-outlined cursor-pointer"
+                                                        cdkDragHandle>drag_indicator</span>
+                                                    {{group.checkListGroupName}}
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </div>
+
+            <div class="col-md-12 p0">
+                <div class="header mat-panel">
+                    <div class="h3">
+                        <div class="checkbox form-check">
+                            <label class="form-check-label nolabel">
+                                <input type="checkbox" [(ngModel)]="isViolation" class="form-check-input">
+                                <i class="input-helper"></i>
+                            </label>
+                        </div>
+                        <span class="mat-panel-label">Violations</span>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+        <button type="button" class="btn btn-blue" [disabled]="selectedData.length == 0"
+            (click)="onExport()">Export</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

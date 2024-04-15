@@ -1,0 +1,29 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left">Penalty Code</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showPenaltyCodeAddBtn}}" (click)="openModalForm(paneltycodeform,null,true)">Add Penalty Code</button>
+        <div class="pull-right search middle">
+            <div class="inner-addon right-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Penalty Code" [(ngModel)]="search" (ngModelChange)="searchPenaltyCode(search)"
+            />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-penaltycode" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #paneltycodeform>
+    <div add-panelty-code  [modalRef]="modalRef" [reload]="reload" [penaltyCodeId]="penaltyCodeId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

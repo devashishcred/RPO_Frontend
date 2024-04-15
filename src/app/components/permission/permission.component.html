@@ -1,0 +1,189 @@
+<div class="modal-custom-content" cdkDrag>
+
+   <form ngNativeValidate>
+
+      <div class="modal-header" cdkDragHandle>
+         <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+         </button>
+
+         <h4 class="modal-title pull-left">{{header}}</h4>
+
+      </div>
+
+      <div class="modal-body pb0 pt15">
+
+         <div class="form-group" *ngIf="showUserGroup">
+
+            <div class="row">
+
+               <div class="col-md-4">
+                  <label for="name">Name*</label>
+                  <input id="userGroupNames" type="text" name="userGroupNames" [(ngModel)]="userGroupName"
+                     class="form-control" placeholder="User Group Name" #userGroupNames="ngModel" required />
+
+                  <div class="error-message pl0">
+
+                     <div *ngIf="userGroupNames.errors && (userGroupNames.dirty || userGroupNames.touched)">
+                        {{errorMsg.requireUserGroupName}}
+
+                     </div>
+
+                  </div>
+
+               </div>
+
+               <div class="col-md-8">
+                  <label for="description"> Description</label>
+                  <input id="description" placeholder="Description" type="text" name="description"
+                     [(ngModel)]="description" class="form-control" />
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <div class="permission-data">
+
+            <div class="row admin-right-row">
+
+               <div class="col-sm-12">
+
+                  <div class="pull-left">
+
+                     <h4 class="blue-title">permissions</h4>
+
+                  </div>
+
+                  <div class="pull-left">
+
+                     <div class="right-div admin-right">
+
+                        <div class="rights-row">
+                           <label>
+                              <input type="checkbox" id="allPermisionsEmp" name="allPermisionsEmp"
+                                 [(ngModel)]="allPermission" (ngModelChange)="giveAllPermissionValues($event)">
+                              <span class="text-uppercase">
+                                 <i class="fa fa-user"></i>give all permissions
+                              </span>
+                           </label>
+
+                        </div>
+
+                     </div>
+
+                  </div>
+
+               </div>
+
+            </div>
+
+            <div class="row">
+
+               <div class="col-sm-4">
+
+                  <div *ngFor="let option of otherPermission; let i = index">
+
+                     <div class="right-div">
+                        <label class="title">{{option.groupName}}</label>
+
+                        <div class="rights-row">
+                           <label *ngFor="let optionPermission of option.permissions;  let j = index">
+                              <input type="checkbox" id="permission_{{j}}_{{optionPermission.name}}"
+                                 name="permission_{{j}}_{{optionPermission.name}}"
+                                 [(ngModel)]="optionPermission.isChecked"
+                                 (ngModelChange)="checkOtherPermissionValues($event,option.groupName,option.permissions,optionPermission.id,optionPermission)">
+                              <span [ngClass]="{'empView':permission.indexOf(optionPermission.id) != -1}">
+                                 <i
+                                    class="material-symbols-rounded">{{optionPermission?.permissionClass}}</i>{{optionPermission.displayName}}
+                              </span>
+                           </label>
+
+                        </div>
+
+                     </div>
+
+                  </div>
+
+               </div>
+
+               <div class="col-sm-4" *ngIf="empPermission?.length > 0">
+
+                  <div *ngFor="let empOption of empPermission; let e = index">
+
+                     <div class="right-div">
+                        <label class="title">{{empOption.groupName}}</label>
+
+                        <div class="rights-row  employeePermission">
+                           <label *ngFor="let optionEmpPermission of empOption.permissions;  let k = index">
+                              <input type="checkbox" id="emppermission_{{k}}_{{empOption.name}}"
+                                 name="emppermission_{{k}}_{{optionEmpPermission.name}}"
+                                 [(ngModel)]="optionEmpPermission.isChecked"
+                                 (ngModelChange)="checkPermissionValues($event,optionEmpPermission,optionEmpPermission.id,optionEmpPermission.displayName)">
+                              <span [ngClass]="{'empView':permission.indexOf(optionEmpPermission.id) != -1} ">
+                                 <i
+                                    class="material-symbols-rounded">{{optionEmpPermission?.permissionClass}}</i>{{optionEmpPermission.displayName}}
+                              </span>
+                           </label>
+
+                        </div>
+
+                     </div>
+
+                  </div>
+
+               </div>
+
+               <div class="col-sm-4">
+
+                  <div *ngFor="let jobOption of jobPermission; let e = index">
+
+                     <div class="right-div">
+                        <label class="title">{{jobOption.groupName}}</label>
+
+                        <div class="rights-row">
+                           <label *ngFor="let optionJobPermission of jobOption.permissions;  let x = index">
+                              <input type="checkbox" id="jobpermission_{{x}}_{{optionJobPermission.name}}"
+                                 name="jobpermission_{{x}}_{{optionJobPermission.name}}"
+                                 [(ngModel)]="optionJobPermission.isChecked"
+                                 (ngModelChange)="checkPermissionValues($event,optionJobPermission,optionJobPermission.id,optionJobPermission.displayName)">
+                              <span [ngClass]="{'empView':permission.indexOf(optionJobPermission.id) != -1} ">
+                                 <i
+                                    class="material-symbols-rounded">{{optionJobPermission?.permissionClass}}</i>{{optionJobPermission.displayName}}
+                              </span>
+                           </label>
+
+                        </div>
+
+                     </div>
+
+                  </div>
+
+               </div>
+
+            </div>
+
+         </div>
+
+      </div>
+
+      <div class="modal-footer">
+         <button type="button" [disabled]="(this.permission.length == 0)" class="btn btn-blue pull-right"
+            (click)="save()">Save</button>
+         <button type="button" class="btn btn-white pull-right" (click)="cancelBtn()">Cancel</button>
+
+      </div>
+
+   </form>
+</div>
+<div class="lds-css" *ngIf="loading">
+
+   <div class="lds-ripple">
+
+      <div></div>
+
+      <div></div>
+
+   </div>
+</div>

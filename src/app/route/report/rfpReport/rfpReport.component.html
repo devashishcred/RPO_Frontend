@@ -1,0 +1,33 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+
+      <h2 class="component-title pull-left mr-2">Proposal Reports (Open or Not Sent)</h2>
+      <!-- <h2 class="component-title pull-left mr-2">Proposals (Open or not sent to Client) Report</h2> -->
+      <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search Proposals (Open or not sent to Client)" [(ngModel)]="srch" (ngModelChange)="searchRFP(srch)"
+          />
+        </div>
+      </div>
+      <export-xls-pdf-widget (onExportClick)="exportClick($event)" customClassApply='{{showExportBtn}}' ></export-xls-pdf-widget>      
+      <!-- <a href="javascript:void(0)" class="adv-search pull-right" (click)="openModalAdvanceSearch(reportAdvanceSearch)">
+        <i class="fa fa-plus"></i>
+        Advanced Search
+      </a> -->
+      <a href="javascript:void(0)" tooltip="Reset" class="pull-left mt-12 material-icon" (click)="clearSort()">
+        <i class="material-symbols-rounded">cached</i>
+      </a>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-rfp-report" class="display" style="width:100%"></table>
+  </div>
+</div>
+
+<!-- <ng-template #reportAdvanceSearch>
+  <div report-advance-search [modalRefAdvanceSearch]="modalRefAdvanceSearch" (reloadAdvanceSearch)="reloadAdvanceSearch($event)"
+    [filledFilter]="filter" [isFromCOC]="true"></div>
+</ng-template> -->

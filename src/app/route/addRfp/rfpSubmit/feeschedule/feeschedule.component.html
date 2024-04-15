@@ -1,0 +1,26 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #feeschedule="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">Fee Schedule</h4>
+    </div>
+    <div class="modal-body pt15 pb10">
+      <table id="dt-fee-schedule" class="display">
+      </table>
+      <div class="row mt10">
+        <div class="col-sm-6">
+          <label class="blue-anchor" (click)="addService()"><i class="fa fa-plus"></i> Add Service</label>
+        </div>
+        <div class="fee-total text-right">
+          <label><b>{{totalSum | currency:'USD':true}}</b></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white pull-right" (click)="modalRefFee.hide()">Cancel</button>
+    </div>
+  </form>
+</div>

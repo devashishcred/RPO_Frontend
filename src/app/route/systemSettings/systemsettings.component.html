@@ -1,0 +1,20 @@
+<div class="rpo-employee rpo-component">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left">Notification Settings</h2>
+        </div>
+    </div>
+    <div class="component-body overflow-hidden">
+        <table id="dt-settings" class="display"  style="width:100%"></table>
+    </div>
+</div>
+<div>
+    <ng-template #settingsType>
+        <div settings-type [modalRef]="modalRef" [reload]="reload"  [SettingId]="SettingId"></div>
+    </ng-template>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>

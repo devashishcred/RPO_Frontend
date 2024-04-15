@@ -1,0 +1,211 @@
+<div class="rpo-rfpSubmit rpo-component">
+    <div class="row component-header rfp-status">
+        <div class="col-sm-6">
+            <ul class="breadcrumb rfp-bread">
+                <li>
+                    <small>
+                        <a class="pointer" routerLink="/rfp">Proposals</a>
+                    </small>
+                </li>
+                <li *ngIf="rfpNumber">
+                    <a>Proposal# {{rfpNumber}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <ul class="list-inline text-right rfp-md">
+                <li class="modify">
+                    <span *ngIf="createdBy">Created by {{createdBy}}</span>
+                    <span *ngIf="modifiedBy">Last modified by {{modifiedBy}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="component-body">
+        <div class="rpo-wizard">
+            <div class="wizard-head clearfix text-center">
+                <div class="wizard-head-inner">
+                    <div class="wizard-nav">
+                        <div class="stepwizard-step {{showStep1}}"
+                            [ngClass]="(showStep1=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a routerLink="/editSiteInformation/{{id}}">
+                                <i class="fa fa-check-circle"></i>
+                                <p>site information</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep2}}"
+                            [ngClass]="(showStep2=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a routerLink="/projectDetails/{{id}}">
+                                <i class="fa fa-check-circle"></i>
+                                <p>project detail</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep3}}"
+                            [ngClass]="(showStep3=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a routerLink="/scopeReview/{{id}}">
+                                <i class="fa fa-check-circle"></i>
+                                <p>SCOPE REVIEW</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step {{showStep4}}"
+                            [ngClass]="(showStep4=='success')?'clickable':'not-clickable'">
+                            <div class="progress"></div>
+                            <a routerLink="/proposalReview/{{id}}">
+                                <i class="fa fa-check-circle"></i>
+                                <p>PROPOSAL REVIEW</p>
+                            </a>
+                        </div>
+                        <div class="stepwizard-step active">
+                            <div class="progress"></div>
+                            <a routerLink="/rfpSubmit/{{id}}">
+                                <i class="fa fa-check-circle"></i>
+                                <p>SUBMIT</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-body">
+
+                <div class="rfp-submit">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Change Status</label>
+                            <ng-select id="status" name="status" [(ngModel)]="rfpSubmit.idRfpStatus"
+                                       [items]="rfpStatusList" bindLabel="name" bindValue="id" placeholder="Select Status"
+                                       #status="ngModel" (ngModelChange)="changeRfpStatus()" [disabled]="showDisable">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row ex-job">
+                                <div class="col-sm-10">
+                                    <div class="{{showJobAddBtn}}">
+                                        <label *ngIf="!alreadyRFPLinkedWithJob">Link to existing job</label>
+                                        <ul class="list-inline" *ngIf="!alreadyRFPLinkedWithJob">
+                                            <li>
+                                                <ng-select id="linkJob" name="linkJob" [(ngModel)]="linkJobId"
+                                                    [items]="linkTobeJobs" bindLabel="jobNumber" bindValue="id"
+                                                    placeholder="Jobs" #linkJob="ngModel" class="j-id"
+                                                    (ngModelChange)="enableLinkBtn()">
+                                                </ng-select>
+                                            </li>
+                                            <li>
+                                                <input type="text" name="poNumber" id="poNumber" [(ngModel)]="poNumber"
+                                                    placeholder="PO#" class="form-control po">
+                                            </li>
+                                            <li>
+                                                <button class="btn btn-panel small" disabled="{{isTobeLinkJobId}}"
+                                                    (click)="linkRFPWithJob()">Link</button>
+                                            </li>
+                                            <li>
+                                                OR
+                                            </li>
+                                            <li>
+                                                <button class="btn btn-panel small"
+                                                    (click)="openJobModal(formJob)">Create Project</button>
+                                            </li>
+                                        </ul>
+                                        <label class="linked" *ngIf="alreadyRFPLinkedWithJob">
+                                            This proposal is linked with project
+                                            <a href="javascipt::void(0);"
+                                                routerLink="/job/{{this.createdJobId}}/application"
+                                                (click)="setCommonJobData(this.createdJobId)">#{{this.alreadyLinkedJobId}}</a>
+                                        </label>
+                                        <button *ngIf="alreadyRFPLinkedWithJob" class="btn btn-panel small dlink"
+                                            (click)="diLinkJob(poNumber)">Di-Link</button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 text-right">
+                                    <label for="" class="block">&nbsp;</label>
+                                    <button class="btn btn-panel-bordered pull-right" (click)='exit()'> Exit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row footer-area">
+                        <div class="col-sm-3 btn-area">
+                            <button class="btn btn-panel btn-block" (click)="downloadPdf()" [disabled]="showDisable">
+                                <i class="fa fa-file-pdf-o"></i>
+                                <span>Download Proposal</span>
+                            </button>
+                            <button class="btn btn-panel small btn-block mt15" (click)="openModal(sendemail)"
+                                [disabled]="showDisable">
+                                <i class="fa fa-envelope-o"></i>
+                                <span>Send Email</span>
+                            </button>
+                            <a href="javascript:void(0)" class="mt15 btn-block link-blue" (click)="openMailHistory()">
+                                <i class="fa fa-envelope-open-o"></i>
+                                <span> View Email History</span>
+                            </a>
+                        </div>
+                        <div class="col-sm-9">
+                            <!-- Progression Note starts-->
+                            <form #progressNoteForm="ngForm">
+                                <div class="modal-body pt15">
+                                    <textarea class="form-control" name="notes" id="" rows="2"
+                                        [(ngModel)]="addRfpProgressionNote.notes" placeholder="Progression Note"
+                                        #notes="ngModel" required></textarea>
+                                    <div class="error-message pl0" *ngIf="isNewGenrealNote">
+                                        <div *ngIf="notes.errors && (notes.dirty || notes.touched)">
+                                            {{errorMsg.requiredProgressionNote}}
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <button class="btn btn-blue mt10" [disabled]="!progressNoteForm.form.valid"
+                                            (click)="saveProgressionNote()">Add Note</button>
+                                    </div>
+                                    <div *ngIf="exsitingNotes?.length > 0">
+                                        <div class="note-list">
+                                            <div class="single-note"
+                                                *ngFor="let progression of exsitingNotes;  let i = index">
+                                                <p class="desc">
+                                                    <read-more [text]="progression.notes" [maxLength]="250"></read-more>
+                                                </p>
+                                                <p class="users">Added by {{progression.lastModified}} on
+                                                    {{progression.lastModifiedDate|
+                                                    date :'MM/dd/yyyy, h:mm a'}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                            <!-- Progression Note end-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- View Create Send Email -->
+<ng-template #sendemail>
+    <div send-email [sendemail]="sendemail" [modalRef]="modalRef" [idRfp]="id" [openFromRfp]="true" [from]='from'></div>
+</ng-template>
+<!-- Create Project Popup-->
+<ng-template #formJob>
+    <div form-job [job]="jobObj" [modalRefJob]="modalRefJob" [rfpObj]="rfpSubmit" [fromRFP]="true"
+        [alreadyGetLinkedJob]="alreadyGetLinkedJob"></div>
+</ng-template>
+<!-- fee schedule Popup -->
+<ng-template #feeschedule>
+    <div fee-schedule [modalRefFee]="modalRefFee"></div>
+</ng-template>
+
+<ng-template #rfpprogressionnote>
+    <div add-rfp-progression-note [idRfp]="rfpDetail.id" [modalRef]="modalRef"></div>
+</ng-template>
+
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

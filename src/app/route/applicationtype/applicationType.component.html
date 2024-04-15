@@ -1,0 +1,27 @@
+<div class="rpo-verbiages rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <h2 class="component-title pull-left mr-2">Application Type</h2>
+      <button type="button" class="btn btn-panel pull-right middle {{showApplicationTypeAddBtn}}" (click)="openModal(formapplicationtype)">Add Application Type</button>
+      <div class="pull-left search middle">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control pull-right" placeholder="Search Applicatin Type" [(ngModel)]="search" (ngModelChange)="searchApplication(search)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-applicationType" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #formapplicationtype>
+    <div add-application-type [modalRef]="modalRef" [reload]="reload" [applicationTypeId]="applicationTypeId" [isNew]="new"></div>
+  </ng-template>
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

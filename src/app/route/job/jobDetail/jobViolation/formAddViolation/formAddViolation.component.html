@@ -1,0 +1,364 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #addViolationForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{violation.id?'Edit':'Add'}} Violation</h4>
+    </div>
+    <div class="modal-body pt15 pb0">
+      <div class="form-add-violation">
+
+        <div class="row form-group">
+          <div class="col-sm-4">
+            <label for="Type">Summons/Notice#*</label>
+            <div class="summons-num">
+              <div>
+                <input type="text" placeholder="Summons/Notice#" name="summonsNumber" id="summonsNumber"
+                  [(ngModel)]="violation.summonsNumber" [disabled]="disableSummons"
+                  (ngModelChange)="getInfoEnable()" #summonsNumber="ngModel" class="form-control application"
+                  required />
+              </div>
+              <button type="button" class="btn btn-blue no-padding {{disableGetInfo}}" (click)="getViolationInfo()">Get
+                Info</button>
+            </div>
+            <div class="error-message pl0 pr0">
+              <div *ngIf="summonsNumber.invalid && (summonsNumber.dirty || summonsNumber.touched)">
+                <div *ngIf="summonsNumber.errors.required">
+                  {{errorMsg.requiredSummonsNumber}}
+                </div>
+                <div *ngIf="summonsNumber.errors.minlength || summonsNumber.errors.maxlength">
+                  {{errorMsg.requiredSummonsLength}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 flex-center">
+            <label for="" class="block">&nbsp;</label>
+            <a href="http://a820-ecbticketfinder.nyc.gov/GetViolationImage?violationNumber=0{{violation.summonsNumber}}"
+              style="line-height: 40px;margin-top: 25px;" class="link-blue {{disableGetInfo}}" target="_blank">View
+              Image of
+              Summons/Notice</a>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-4">
+            <label>Issue Date</label>
+            <div datetime-picker class="inner-addon right-addon input-group">
+              <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+              <input id="dateIssued" type="text" name="dateIssued" class="form-control"
+                [(ngModel)]="violation.dateIssued" #dateIssued="ngModel"
+                [readOnly]="!violation?.isManually && idViolation" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label>Respondent Name</label>
+            <input type="text" placeholder="Respondent Name" name="respondentName" id="respondentName"
+              [(ngModel)]="violation.respondentName" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+          <div class="col-md-4">
+            <label>Respondent Address</label>
+            <input type="text" placeholder="Respondent Address" name="respondentAddress" id="respondentAddress"
+              [(ngModel)]="violation.respondentAddress" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+
+        </div>
+        <div class="row form-group">
+          <div class="col-md-4">
+            <label>Inspection Location</label>
+            <input type="text" placeholder="Inspection Location" name="inspectionLocation" id="inspectionLocation"
+              [(ngModel)]="violation.inspectionLocation" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+          <div class="col-md-4">
+            <label>Issuing Agency</label>
+            <input type="text" placeholder="Issuing Agency" name="issuingAgency" id="issuingAgency"
+              [(ngModel)]="violation.issuingAgency" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+          <div class="col-md-4">
+            <label>Balance Due($)</label>
+            <input type="number" (keypress)="isDecimal($event);" placeholder="Balance Due" name="balanceDue"
+              id="balanceDue" [(ngModel)]="violation.balanceDue" [readOnly]="!violation?.isManually && idViolation"
+              class="form-control" />
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-4">
+            <label>Penalty Imposed($)</label>
+            <input type="number" placeholder="Penalty Imposed" name="paneltyAmount" id="paneltyAmount"
+              [(ngModel)]="violation.paneltyAmount" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+          <div class="col-md-4">
+            <label>Violation Type</label>
+            <ng-select #violationType="ngModel" name="violationType" id="violationType" [items]="violationTypes"
+              placeholder="Violation Type" [(ngModel)]="violation.violationType"
+              [disabled]="!violation?.isManually && idViolation">
+            </ng-select>
+            <!-- <input type="text" placeholder="Violation Type" name="violation_type" id="violation_type"
+              [(ngModel)]="violation.violation_type" class="form-control" /> -->
+          </div>
+          <div class="col-md-4">
+            <label>Aggravated Level</label>
+            <input type="text" placeholder="Aggravated Level" name="aggravatedLevel" id="aggravatedLevel"
+              [(ngModel)]="violation.aggravatedLevel" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-4">
+            <label>Status of Summons/Notice</label>
+            <input type="text" placeholder="Status of Summons/Notice" name="statusOfSummonsNotice"
+              id="statusOfSummonsNotice" [(ngModel)]="violation.statusOfSummonsNotice"
+              [readOnly]="!violation?.isManually && idViolation" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label>Hearing Result</label>
+            <input type="text" placeholder="Hearing Result" name="hearingResult" id="hearingResult"
+              [(ngModel)]="violation.hearingResult" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+          <div class="col-md-4">
+            <label>Hearing Date</label>
+            <div datetime-picker class="inner-addon right-addon input-group">
+              <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+              <input id="hearingDate" type="text" name="hearingDate" class="form-control"
+                [(ngModel)]="violation.hearingDate" #hearingDate="ngModel"
+                [readOnly]="!violation?.isManually && idViolation" />
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row form-group">
+          <div class="col-md-4">
+            <label>Hearing Time</label>
+            <input id="hearingTime" type="time" name="hearingTime" class="form-control"
+              [(ngModel)]="violation.hearingTime" #hearingTime="ngModel"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+          <div class="col-md-4">
+            <label>Hearing Location</label>
+            <input type="text" placeholder="Hearing Location" name="hearingLocation" id="hearingLocation"
+              [(ngModel)]="violation.hearingLocation" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+          <div class="col-md-4">
+            <label>Certification Status</label>
+            <input type="text" placeholder="Certification Status" name="certificationStatus" id="certificationStatus"
+              [(ngModel)]="violation.certificationStatus" class="form-control"
+              [readOnly]="!violation?.isManually && idViolation" />
+          </div>
+        </div>
+
+        <div class="row form-group mb5">
+          <div class="col-md-4">
+            <label>Compliance On</label>
+            <div datetime-picker class="inner-addon right-addon input-group">
+              <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+              <input id="complianceOn" type="text" name="complianceOn" class="form-control"
+                [(ngModel)]="violation.complianceOn" #complianceOn="ngModel"
+                [readOnly]="!violation?.isManually && idViolation" />
+            </div>
+            <!-- <div datetime-picker class="inner-addon right-addon input-group">
+              <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+              <input id="complianceOn" type="text" name="complianceOn" class="form-control"
+                [(ngModel)]="violation.complianceOn" #complianceOn="ngModel" [readOnly]="!violation.isManually && idViolation" />
+            </div> -->
+          </div>
+          <div class="col-md-4 form-check">
+            <label class="form-check-label" [ngClass]="{'icon-disabled': !violation?.isManually && idViolation}">
+              <input type="checkbox" class="form-check-input" id="isFullyResolved" name="isFullyResolved"
+                [(ngModel)]="violation.isFullyResolved" [readOnly]="!violation?.isManually && idViolation"
+                (ngModelChange)="showDatePicker($event);showResolveDate()">
+              Is Fully Resolved
+              <i class="input-helper disabled"></i>
+            </label>
+            <!-- <label class="form-check-label" [ngClass]="{'icon-disabled': !violation.isManually && idViolation}">
+              <input type="checkbox" class="form-check-input" id="isFullyResolved" name="isFullyResolved"
+                [(ngModel)]="violation.isFullyResolved" [readOnly]="!violation.isManually && idViolation" (ngModelChange)="showDatePicker($event);showResolveDate()">
+              Is Fully Resolved
+              <i class="input-helper disabled"></i>
+            </label> -->
+          </div>
+          <div class="col-md-4 form-check">
+            <label>Closed Date</label>
+            <ng-container *ngIf="!idViolation">
+              <div datetime-picker class="inner-addon right-addon input-group">
+                <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                <input id="resolvedDate" type="text" name="resolvedDate" class="form-control"
+                  [(ngModel)]="violation.resolvedDate" #resolvedDate="ngModel"
+                  [disabled]="!violation.isFullyResolved" />
+              </div>
+            </ng-container>
+            <ng-container *ngIf="idViolation">
+              <div datetime-picker class="inner-addon right-addon input-group">
+                <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                <input id="resolvedDate" type="text" name="resolvedDate" class="form-control"
+                  [(ngModel)]="violation.resolvedDate" #resolvedDate="ngModel"
+                  [disabled]="!violation.isFullyResolved || !violation?.isManually" />
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="row form-group mb5 mt-10">
+          <div class="col-md-4">
+            <label>Cure Date</label>
+            <div datetime-picker class="inner-addon right-addon input-group">
+              <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+              <input id="cureDate" type="text" name="cureDate" [readOnly]="!violation?.isManually && idViolation"
+                class="form-control" [(ngModel)]="violation.cureDate" #cureDate="ngModel" />
+            </div>
+            <!-- <div datetime-picker class="inner-addon right-addon input-group">
+              <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+              <input id="cureDate" type="text" name="cureDate" [readOnly]="!violation.isManually && idViolation" class="form-control" [(ngModel)]="violation.cureDate"
+                #cureDate="ngModel" />
+            </div> -->
+          </div>
+        </div>
+
+        <div class="row form-group mt-10">
+          <div class="col-md-6">
+            <div class="notes-container">
+              <label>Notes</label>
+              <textarea rows="2" name="notes" placeholder="Notes" [(ngModel)]="violation.notes"
+                class="form-control"></textarea>
+              <div class="modify"
+                *ngIf="violation.id > 0 && violation.notesLastModifiedByEmployeeName!=null && violation.notesLastModifiedDate!='Invalid date'">
+                <span>Last modified by {{violation.notesLastModifiedByEmployeeName}} on
+                  {{violation.notesLastModifiedDate}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label>Violation Description</label>
+            <textarea rows="2" name="violationDescription" placeholder="Violation Description"
+              [(ngModel)]="violation.violationDescription" [readOnly]="!violation?.isManually && idViolation"
+              class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="row form-group mb5">
+          <div class="col-md-4">
+            <label>
+              Party Responsible*
+            </label>
+            <select #partyResponsible="ngModel" name="partyResponsible" #status [(ngModel)]='violation.partyResponsible'
+              class="form-control" (change)="updatePartyResponcible(status.value)" required>
+              <option value="1">RPO</option>
+              <!-- <option value="1">RPO Team</option> -->
+              <option value="3">Other</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <ng-container *ngIf="violation.partyResponsible == '2' || violation.partyResponsible == '3'">
+              <label>Person Responsible</label>
+            </ng-container>
+            <input #name="ngModel" *ngIf="violation.partyResponsible == '3'" type="text" class="form-control" id="name"
+              [(ngModel)]='violation.manualPartyResponsible' placeholder="Enter Name" name="name">
+          </div>
+        </div>
+        <div class="mt15">
+          <div class="text-right">
+            <button type="button" class="btn btn-panel no-padding" (click)="addCharges()">Add Explanation
+              Charges</button>
+          </div>
+
+          <add-charges *ngIf="violation.explanationOfCharges && violation.explanationOfCharges.length > 0"
+            [violation]="violation" [isFromDetail]="false" [deleteCharges]="deleteCharges"></add-charges>
+        </div>
+
+        <div class="row form-group mb0 mt10">
+          <div class="col-md-6">
+            <label>Documents</label>
+            <div class="fl-upload">
+              <label for="rfp-file-upload" class="upload-link rpo-file-upload mb0">
+                Click to <span>Browse</span> to upload your files
+              </label>
+              <input id="rfp-file-upload" type="file" (change)="documentUpload($event)" class="rpo-file-upload"
+                multiple />
+            </div>
+            <div class="row form-group mb0">
+              <div class="col-md-8">
+                <div class="file-upload-wrap">
+                  <div class="rpo-file-upload" *ngFor="let document of violation.jobViolationDocuments">
+                    <span class="doc-name" *ngIf="!document.id" style="vertical-align: top;" tooltip="{{document.name}}"
+                      placement="top">{{document.name}}</span>
+                    <a target="" class="remove" tooltip="Delete" placement="right" (click)="deleteDocument(document)">
+                      <span class="material-symbols-outlined">delete</span>
+                    </a>
+                    <a *ngIf="document.id" href="{{document.documentPath}}" class="pointer doc-name link-blue"
+                      style="vertical-align: top;" target="_blank" tooltip="{{document.name}}"
+                      placement="top">{{document.name}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal-footer text-right">
+      <div class="col-sm-7 text-left">
+        <div class="modify" *ngIf="violation.lastModifiedDate && violation.lastModifiedDate">Last modified by
+          {{violation.lastModifiedByEmployeeName}} on {{violation.lastModifiedDate | date :'MM/dd/yyyy, h:mm a'}}</div>
+      </div>
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="submit" class="btn btn-blue" [disabled]="!addViolationForm.form.valid"
+        (click)="saveViolation()">Save</button>
+    </div>
+
+    <ng-container *ngIf="idViolation">
+      <div class="container-fluid">
+        <div class="row form-group">
+          <div class="col-md-4">
+            <label>Related Projects</label>
+          </div>
+        </div>
+        <table class="table">
+          <tr>
+            <th class="min-auto">PROJECT #</th>
+            <th class="date_tab">START</th>
+            <th class="min-auto">FLOOR</th>
+            <th class="date_tab">APT</th>
+            <th class="date_tab">SPECIAL PLACE</th>
+            <th class="min-auto">ADDRESS</th>
+            <th class="min-auto">CONTACT</th>
+          </tr>
+          <ng-container *ngFor="let job of partOfProjects">
+            <tr>
+              <td>
+                {{job?.jobNumber}}
+              </td>
+              <td>
+                {{job?.startDate}}
+              </td>
+              <td>{{job?.floorNumber}}</td>
+              <td>{{job?.apartment}}</td>
+              <td>{{job?.specialPlace}}</td>
+              <td>{{job?.address}}</td>
+              <td>{{job?.contact}}</td>
+            </tr>
+          </ng-container>
+        </table>
+      </div>
+    </ng-container>
+  </form>
+</div>
+
+
+<div class='lds-css table-loader' *ngIf="loading">
+  <div class='lds-ripple'>
+    <div></div>
+    <div></div>
+  </div>
+</div>

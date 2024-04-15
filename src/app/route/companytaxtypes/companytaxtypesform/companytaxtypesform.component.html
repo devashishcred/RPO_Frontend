@@ -1,0 +1,35 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #companytaxtypesform="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Company Tax Type</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Name*</label>
+          <input id="name" name="name" type="text" class="form-control" [(ngModel)]="CompanyTaxTypes.name"
+            #name="ngModel" placeholder="Name" required/>
+          <div class="error-message pl0">
+            <div *ngIf="name.errors && (name.dirty || name.touched)">
+              {{errorMsg.requirename}}
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!companytaxtypesform.form.valid" (click)="saveCompanyTax()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

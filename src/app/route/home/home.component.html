@@ -1,0 +1,184 @@
+<div class="rpo-home">
+    <div class="row component-header">
+        <div class="col-sm-12">
+            <h2 class="component-title pull-left">My Dashboard</h2>
+        </div>
+    </div>
+
+    <div class="component-body">
+        <div class="row col-sm-12 tbl-rop-home">
+            <h4>Upcoming Appointments (For 7 days)</h4>
+            <div class="table-responsive-sm">
+                <table class="table table-hover tbl-upcoming">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Task For</th>
+                            <th>Project Address</th>
+                            <th>Task#</th>
+                            <th>Contact Person</th>
+                            <th>Task Description</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="upcomingAppointment?.length != 0">
+                        <tr *ngFor="let data of upcomingAppointment">
+                            <td>{{data.completeBy}}</td>
+                            <td>{{data.taskDuration}}</td>
+                            <td>
+                                <!-- <a class='taskfor jobRedirect' routerLink="{{url}}" target="_blank" routerLinkActive="router-link-active"   (click)="setJobInLocalStorage($event , data)">{{data.taskFor}}</a> -->
+                                <a class='taskfor jobRedirect link-blue' href="javascript:void(0)"
+                                    routerLinkActive="router-link-active"
+                                    (mousedown)='AllRedirectionsHere($event, data)'>{{data.taskFor}}</a>
+                            </td>
+                            <td>{{data.jobAddress}}</td>
+                            <td (click)="openModalFormView(viewtask, data.id)">{{data.taskNumber}}</td>
+                            <td>{{data.examiner}}</td>
+                            <td>{{data.generalNotes}}</td>
+                        </tr>
+                    </tbody>
+                    <tr *ngIf="upcomingAppointment?.length == 0">
+                        <td colspan="7" class="text-center">No Data Found</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="row col-sm-12 tbl-rop-home">
+                <h4>Upcoming Hearing Dates</h4>
+                <div class="table-responsive-sm">
+                    <table class="table table-hover tbl-upcoming">
+                        <thead>
+                            <tr>
+                                <th>Project#</th>
+                                <th>Project Address</th>
+                                <th>Hearing Date</th>
+                                <th>Violation#</th>
+                                <th>Hearing Result</th>
+                                <th>Issuing Agency</th>
+                                <th>Inspection Location</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="upcomingHearingDates?.length != 0">
+                            <tr *ngFor="let data of upcomingHearingDates">
+                                <td [innerHTML]="data.idJob" (click)="onOpenViolationOfHearingDate($event,data)">
+                                </td>
+                                <td>{{data.address}}</td>
+                                <td>{{data.hearingDate}}</td>
+                                <td>
+                                    {{data.summonsNumber}}
+                                </td>
+                                <td>{{data.hearingResult}}</td>
+                                <td>{{data.issuingAgency}}</td>
+                                <td>{{data.inspectionLocation}}</td>
+                            </tr>
+                        </tbody>
+                        <tr *ngIf="upcomingHearingDates?.length == 0">
+                            <td colspan="7" class="text-center">No Data Found</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row col-sm-12 tbl-rop-home">
+                <h4>Tasks
+                    <strong> Assigned by you </strong> - Due in 5 days
+                </h4>
+
+                <div class="table-responsive-sm">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Due Date</th>
+                                <th>Task For</th>
+                                <th>Address / Special Place name</th>
+                                <th>Assigned to</th>
+                                <th>Task Type</th>
+                                <th>Task Details</th>
+                                <th>A#/LOC/V#</th>
+                                <th>Permits</th>
+                                <th>Recent notes</th>
+                                <th>Task Status</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="taskAssignedByDue?.length != 0">
+                            <tr *ngFor="let data of taskAssignedByDue">
+                                <td>{{data.completeBy}}</td>
+                                <td>
+                                    <!-- <a class='taskfor jobRedirect' routerLink="{{url}}" routerLinkActive="router-link-active"  rel='noreferrer' target='_blank' (click)="setJobInLocalStorage($event, data)">{{data.taskFor}}</a> -->
+                                    <a class='taskfor jobRedirect link-blue' href="javascript:void(0)"
+                                        routerLinkActive="router-link-active" rel='noreferrer'
+                                        (mousedown)='AllRedirectionsHere($event, data)'>{{data.taskFor}}</a>
+                                </td>
+                                <td>{{data.jobAddress}}</td>
+                                <td>{{data.assignedToLastName}}</td>
+                                <td>{{data.taskType}}</td>
+                                <td (click)="openModalFormView(viewtask, data.id)">{{data.generalNotes}}</td>
+                                <td>{{data.jobApplication}}</td>
+                                <td>{{data.workPermitType}}</td>
+                                <td>{{data.progressNote}}</td>
+                                <td>{{data.taskStatus}}</td>
+                            </tr>
+                        </tbody>
+                        <tr *ngIf="taskAssignedByDue?.length == 0">
+                            <td colspan="10" class="text-center">No Data Found</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row col-sm-12 tbl-rop-home">
+                <h4>Overdue Tasks</h4>
+                <div class="table-responsive-sm">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Due Date</th>
+                                <th>Task For</th>
+                                <th>Address / Special Place name</th>
+                                <th>Assigned to</th>
+                                <th>Task Type</th>
+                                <th>Task Details</th>
+                                <th>A#/LOC/V#</th>
+                                <th>Permits</th>
+                                <th>Recent notes</th>
+                                <th>Task Status</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="overDueTasks?.length != 0">
+                            <tr *ngFor="let data of overDueTasks">
+                                <td>{{data.completeBy}}</td>
+                                <td>
+                                    <!-- <a class='taskfor jobRedirect' routerLink="{{url}}" routerLinkActive="router-link-active"  rel='noreferrer' target='_blank' (click)="setJobInLocalStorage($event, data)">{{data.taskFor}}</a> -->
+                                    <a class='taskfor jobRedirect link-blue' href="javascript:void(0)"
+                                        routerLinkActive="router-link-active" rel='noreferrer'
+                                        (mousedown)='AllRedirectionsHere($event, data)'>{{data.taskFor}}</a>
+                                </td>
+                                <td>{{data.jobAddress}}</td>
+                                <td>{{data.assignedToLastName}}</td>
+                                <td>{{data.taskType}}</td>
+                                <td (click)="openModalFormView(viewtask, data.id)">{{data.generalNotes}}</td>
+                                <td>{{data.jobApplication}}</td>
+                                <td>{{data.workPermitType}}</td>
+                                <td>{{data.progressNote}}</td>
+                                <td>{{data.taskStatus}}</td>
+                            </tr>
+                        </tbody>
+                        <tr *ngIf="overDueTasks?.length == 0">
+                            <td colspan="10" class="text-center">No Data Found</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <ng-template #viewtask>
+                <div view-task [modalRef]="modalRef" [idTask]="idTask"></div>
+            </ng-template>
+
+            <div class="lds-css" *ngIf="loading">
+                <div class="lds-ripple">
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="rpo-address-type rpo-component">
+    <div class="row component-header">
+      <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">Checklist Group Master</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showCheckListGroupAddBtn}}" (click)="openModalForm(formAddChecklistGroup,null,true)">Add Checklist Group</button>
+        <div class="pull-left search middle">
+          <div class="inner-addon left-addon">
+            <i class="icon fa fa-search"></i>
+            <input type="text" class="form-control pull-right" placeholder="Search" [(ngModel)]="search" (ngModelChange)="searchChecklistGroup(search)" />
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="component-body">
+      <table id="dt-work" class="display"  style="width:100%"></table>
+    </div>
+  </div>
+  
+  <ng-template #formAddChecklistGroup>
+      <div checklist-master-group-form [modalRef]="modalRef" [reload]="reload" [isNew]="isNew" [groupId]="groupId"></div>
+    </ng-template>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>

@@ -1,0 +1,375 @@
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<div class="content-area">
+    <div class="row">
+        <div class="col-sm-12 pt15">
+            <div class="component-body">
+                <h4 class="component-title pull-left mr-2">Scope</h4>
+                <div class="search-area">
+                    <div class="search middle pull-left">
+                        <div class="{{showBtnStatus}} {{showScopeAddBtn}}"
+                             *ngIf="linkedRFPList?.length > 0 && showCostColumn == 'show'">
+                            <ng-select name="proposalIdRfp" [items]="linkedRFPList" bindLabel="itemName" bindValue="idRFP"
+                                       placeholder="Download Proposal" [(ngModel)]="proposalIdRfp"
+                                       (change)="downloadRFPProposal(proposalIdRfp)" class="prop-dropdown">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <button class="btn btn-panel pull-right no-padding {{sshowMilestoneAddBtn}} {{showBtnStatus}}"
+                            (click)="openAddBillingPointForm(addBilling,0)">Add Billing Points
+                    </button>
+                    <button class="btn btn-panel pull-right no-padding ml15 {{showBtnStatus}} {{showScopeNewAddBtn}}"
+                            (click)="openAddScopeModalForm(addScopeForm,null)">Add Scope
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="padding-left: 14px!important;">
+            <div class="component-body">
+                <div class="c-table" *ngIf="jobScopeData?.length > 0">
+                    <div class="table-responsive">
+                        <table class="table display dataTable no-footer">
+                            <thead>
+                            <tr>
+                                <th>Proposal#</th>
+                                <th style="width:25%">Service Item</th>
+                                <th colspan="3" class="text-center">Quantity Info</th>
+                                <th style="width:11%" class="text-center">Modified By</th>
+                                <th style="width:13%" class="text-center">Date Time</th>
+                                <th *ngIf="showCostColumn == 'show'">Cost ($)</th>
+                                <th style="width:11%" class="text-center">Status</th>
+                                <th style="width:12%">Invoice#</th>
+                                <th style="width:100px">Task#</th>
+                                <th style="width: 100px;">Transmittal#</th>
+                                <ng-container *ngIf="showBtnStatus === 'show'">
+                                    <th style="width: 70px;">Action</th>
+                                </ng-container>
+                            </tr>
+                            </thead>
+                            <tbody style="border: none;">
+                            <ng-container *ngFor="let scopeData of jobScopeData; let i = index">
+                                <tr *ngIf="scopeData.id != 0"
+                                    [ngClass]="(scopeData.isMileStoneName) ? 'has-milestone '+ showMilestoneAddBtn:''+showScopeAddBtn">
+                                    <td>
+                                        {{scopeData.rfpNumber}}
+                                    </td>
+                                    <td [ngClass]="(scopeData.isMileStoneName) ? 'strong':''">
+                      <span>
+                        {{scopeData.rfpServiceItem}}
+                      </span>
+                                    </td>
+                                    <td style="width: 100px" class="text-center">
+                      <span [ngClass]="(scopeData.isMileStoneName) ? '':'blue'"
+                            *ngIf="scopeData.costType != 1 && scopeData.costType == 7">
+                        {{ scopeData.dispalyhrquantity != '' ? scopeData.dispalyhrquantity + 'h:' : '00h:'
+                          }}{{scopeData.dispalyminquantity != '' ? scopeData.dispalyminquantity + 'm' : '00m'}}
+                      </span>
+                                        <span [ngClass]="(scopeData.isMileStoneName) ? '':'blue'"
+                                              *ngIf="scopeData.costType != 1 && scopeData.costType != 7">
+                        {{scopeData.quantity ? scopeData.quantity : '-'}}
+                      </span>
+                                    </td>
+                                    <td style="width: 100px" class="text-center">
+                      <span [ngClass]="(scopeData.isMileStoneName) ? '':'green'"
+                            *ngIf="scopeData.costType != 1 && scopeData.costType == 7">
+                        {{scopeData.dispalyhrquantityachieved != '' ? scopeData.dispalyhrquantityachieved + 'h:' : '00h:'
+                          }}{{ scopeData.dispalyminquantityachieved != '' ? scopeData.dispalyminquantityachieved
+                          + 'm' : '00m'}}
+                      </span>
+                                        <span [ngClass]="(scopeData.isMileStoneName) ? '':'green'"
+                                              *ngIf="scopeData.costType != 1 && scopeData.costType != 7">
+                        {{scopeData.quantityAchieved ? scopeData.quantityAchieved : '-'}}
+                      </span>
+                                    </td>
+                                    <td style="width: 100px;" class="text-center">
+                      <span [ngClass]="(scopeData.isMileStoneName) ? '':'red'"
+                            *ngIf="scopeData.costType != 1 && scopeData.costType == 7">
+                        {{scopeData.dispalyhrquantitypending != '' ? scopeData.dispalyhrquantitypending + 'h:' :
+                          '00h:'}}{{scopeData.dispalyminquantitypending != '' ? scopeData.dispalyminquantitypending
+                          + 'm' : '00m'}}
+                      </span>
+                                        <span [ngClass]="(scopeData.isMileStoneName) ? '':'red'"
+                                              *ngIf="scopeData.costType != 1 && scopeData.costType != 7">
+                        {{scopeData.quantityPending ? scopeData.quantityPending : '-'}}
+                      </span>
+                                    </td>
+                                    <td class="text-center"
+                                        *ngIf="!scopeData.isMilestoneService && !scopeData.isIndividualService && !scopeData.isAdditionalService ">
+                                        {{scopeData.lastModifiedBy ? scopeData.lastModifiedBy : scopeData.createdBy ? scopeData.createdBy :
+                                        '-'}}
+
+                                    </td>
+                                    <td class="text-center" *ngIf="scopeData.isAdditionalService && !scopeData.isMileStoneName ">
+                                        {{scopeData.lastModifiedBy ? scopeData.lastModifiedBy : scopeData.createdBy ? scopeData.createdBy :
+                                        '-'}}
+                                    </td>
+                                    <td class="text-center" *ngIf="scopeData.isAdditionalService && scopeData.isMileStoneName ">
+                                    </td>
+                                    <td class="text-center"
+                                        *ngIf="(!scopeData.isMilestoneService && scopeData.isIndividualService && !scopeData.isAdditionalService) ||(scopeData.isMilestoneService && !scopeData.isIndividualService && !scopeData.isAdditionalService)">
+                                        -
+                                    </td>
+                                    <td class="text-center"
+                                        *ngIf="!scopeData.isMilestoneService && !scopeData.isIndividualService && !scopeData.isAdditionalService ">
+                                        {{scopeData.lastModified ? (scopeData.lastModified | date:'MM/dd/yyyy h:mm a') :
+                                        scopeData.createdDate ? (scopeData.createdDate | date:'MM/dd/yyyy h:mm a') : '-'}}
+                                    </td>
+                                    <td class="text-center" *ngIf="scopeData.isAdditionalService && !scopeData.isMileStoneName  ">
+                                        {{scopeData.lastModified ? (scopeData.lastModified | date:'MM/dd/yyyy h:mm a') :
+                                        scopeData.createdDate ? (scopeData.createdDate | date:'MM/dd/yyyy h:mm a') : '-' }}
+                                    </td>
+                                    <td class="text-center" *ngIf="scopeData.isAdditionalService && scopeData.isMileStoneName  ">
+                                    </td>
+                                    <td class="text-center"
+                                        *ngIf="(!scopeData.isMilestoneService && scopeData.isIndividualService && !scopeData.isAdditionalService) ||(scopeData.isMilestoneService && !scopeData.isIndividualService && !scopeData.isAdditionalService)">
+                                        -
+                                    </td>
+                                    <td class="text-right" *ngIf="showCostColumn == 'show'"
+                                        [ngClass]="(scopeData.isMileStoneName) ? 'strong':''">
+                      <span>
+
+                        {{scopeData.isMileStoneName ? scopeData.jobMilestoneValue : scopeData.isAdditionalService ?
+                          scopeData.totalCost : '' }}
+                      </span>
+                                    </td>
+                                    <td class="text-center">
+                      <span class="label label7 status-label"
+                            *ngIf="scopeData.displayStatusLabel">{{scopeData.status}}</span>
+                                        <span class="label label5 status-label" *ngIf="scopeData.isRemoved">Removed</span>
+                                        <select class="form-control" *ngIf="scopeData.displayStatusDD" [(ngModel)]="scopeData.status"
+                                                [disabled]="showBtnStatus != 'show'"
+                                                (change)="updateStatus(scopeData.status,scopeData.jobMilestoneId,true)">
+                                            <option value="Pending">Pending</option>
+                                            <option value="Completed">Completed</option>
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <span *ngIf="scopeData.displayLabel">{{scopeData.invoiceNumber}}</span>
+                                        <input *ngIf="scopeData.displayTextbox && scopeData.isMileStoneName " type="text"
+                                               class="form-control" [(ngModel)]="scopeData.invoiceNumber" placeholder="Invoice#"
+                                               (ngModelChange)="updateInvoiceNumber(scopeData.invoiceNumber,scopeData.jobMilestoneId,true)"
+                                               [disabled]="showBtnStatus != 'show'" [ngModelOptions]="{updateOn: 'blur'}">
+                                        <input type="text"
+                                               *ngIf="scopeData.displayTextbox && !scopeData.isMileStoneName && !scopeData.isIndividualService"
+                                               class="form-control" [(ngModel)]="scopeData.invoiceNumber" placeholder="Invoice#"
+                                               (ngModelChange)="updateInvoiceNumber(scopeData.invoiceNumber,scopeData.id,false)"
+                                               [disabled]="(scopeData.isRemoved || showBtnStatus != 'show')"
+                                               [ngModelOptions]="{updateOn: 'blur'}">
+                                    </td>
+                                    <td *ngIf="scopeData.idTask == null">
+                                        -
+                                    </td>
+                                    <td *ngIf="scopeData.idTask!= null">
+                                        <ul class="list-inline list-comma">
+                                            <li *ngFor="let task of scopeData.idTask">
+                                                <a data-type="task" id="{{task}}" (click)="callTask(viewtask,task, 'Task')"
+                                                   class="taskHistory" href="javascript:void(0)">{{task}}</a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td *ngIf="scopeData.idTransmittal!= null">
+                                        <ul class="list-inline list-comma">
+                                            <li *ngFor="let task of scopeData.idTransmittal">
+                                                <a data-type="transmittal" id="{{task}}" (click)="callTask(viewtask,task,'Transmittal')"
+                                                   class="taskHistory" href="javascript:void(0)">{{task}}</a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td *ngIf="scopeData.idTransmittal == null">
+                                        -
+                                    </td>
+                                    <td class=" text-right select-column" style="position:relative;" *ngIf="showBtnStatus == 'show'">
+                                        <div class="action-icon"
+                                             *ngIf="(scopeData.quantityPending != '0' && !scopeData.isRemoved && !scopeData.isIndividualService && scopeData.rfpServiceItem != 'Additional Services' ) ||scopeData.isIndividualService">
+                        <span data-toggle="tooltip" *ngIf="scopeData.isMileStoneName "
+                              (click)="openAddBillingPointForm(addBilling,scopeData.jobMilestoneId)" title="Edit"
+                              class="edit-icon" [ngClass]="{'disabled': showScopeAddBtn == 'ml-disable'}"><img src="./assets/images/edit_icon.svg" width="24px"></span>
+
+                                            <span data-toggle="tooltip"
+                                                  *ngIf="!scopeData.isMileStoneName && (!scopeData.isRemoved) && (scopeData.quantityPending != '0') && showBtnStatus == 'show'"
+                                                  (click)="deleteScope(scopeData.id)" title="Delete"
+                                                  [ngClass]="{'disabled': showScopeDeleteBtn == 'hide'}"
+                                                  class="material-symbols-rounded delete-icon">delete</span>
+                                            <span data-toggle="tooltip" *ngIf="scopeData.isMileStoneName"
+                                                  (click)="deleteMilestone(tpldeletemilestone,scopeData,scopeData.jobMilestoneId)"
+                                                  title="Delete" class="material-symbols-rounded delete-icon"
+                                                  [ngClass]="{'disabled': showScopeDeleteBtn == 'hide'}">delete</span>
+                                        </div>
+                                        <!-- <span class="action-1"
+                                          *ngIf="(scopeData.quantityPending != '0' && !scopeData.isRemoved && !scopeData.isIndividualService && scopeData.rfpServiceItem != 'Additional Services' ) ||scopeData.isIndividualService">
+                                          <i class="fa fa-lg fa-ellipsis-v pull-right widget pointer dropdown-toggle action-1" data-toggle="dropdown"
+                                            style="padding:0px 5px;" aria-expanded="false"></i>
+
+                                          <ul class="dropdown-menu widget action-{{i+1}}" style="top: 20px; left: auto; right:48px;">
+                                            <li class="action-{{i+1}} " *ngIf="scopeData.isMileStoneName"><a href="javascript:void(0)" class="action-{{i+1}}"
+                                                (click)="openAddBillingPointForm(addBilling,scopeData.jobMilestoneId)">Edit</a></li>
+                                            <li class="action-{{i}}"><a href="javascript:void(0)" class="action-{{i+1}} {{showScopeNewDeleteBtn}}"
+                                                *ngIf="!scopeData.isMileStoneName && (!scopeData.isRemoved) && (scopeData.quantityPending != '0') && showBtnStatus == 'show'"
+                                                (click)="deleteScope(scopeData.id)">Delete</a></li>
+                                            <li class="action-{{i}}"><a href="javascript:void(0)" class="action-{{i+1}}" *ngIf="scopeData.isMileStoneName"
+                                                (click)="deleteMilestone(tpldeletemilestone,scopeData,scopeData.jobMilestoneId)">Delete</a></li>
+                                          </ul>
+                                        </span> -->
+                                    </td>
+                                    <!-- <td>
+                                      <div>
+                                        <a href="javascript:void(0)" class="btn btn-primary">History</a>
+                                        <a href="javascript:void(0)" class="btn btn-danger  {{showScopeNewDeleteBtn}}" *ngIf="" ">Delete</a>
+                                      </div>
+                                    </td> -->
+                                </tr>
+                            </ng-container>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div *ngIf="jobScopeData?.length == 0">
+                    {{this.errorMsg.noResultFoundCommon}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #addScopeForm>
+        <div class="modal-custom-content" cdkDrag>
+            <form #addScopeForm="ngForm">
+                <div class="modal-header" cdkDragHandle>
+                    <button type="button" class="close close-icn" cdkDragHandle>
+                        <span class="fa fa-arrows"></span>
+                    </button>
+                    <h4 class="modal-title pull-left">Add Project Scope</h4>
+                </div>
+                <div class="modal-body pb0 pt15 add-related-job">
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label for="task">Project Type*</label>
+                            <ng-select id="jobType" name="idJobType" [(ngModel)]="addJobScope.idJobType" [items]="jobTypes"
+                                       bindLabel="itemName" bindValue="id" placeholder="Project Type" #idJobType="ngModel"
+                                       (change)="setJobTypeDesc()" required>
+                            </ng-select>
+                            <div class="error-message pl0">
+                                <div *ngIf="idJobType.errors && (idJobType.dirty || idJobType.touched)">
+                                    {{errorMsg.requireJobType}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="task">Project Type Description</label>
+                            <ng-select id="jobTypeDesc" name="jobTypeDesc" [(ngModel)]="addJobScope.idJobTypeDesc"
+                                       [items]="jobTypeDescOptions" bindLabel="itemName" bindValue="id" placeholder="Project Type Description"
+                                       (change)="setJobSubType()">
+                            </ng-select>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="task">Project Sub Type</label>
+                            <ng-select id="jobSubType" name="jobSubType" [(ngModel)]="addJobScope.idjobSubType" [items]="jobSubTypes"
+                                       bindLabel="itemName" bindValue="id" placeholder="Project Sub Type"
+                                       (change)="setSevicesData(addJobScope.idjobSubType)">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="serviceGroups?.length > 0">
+                        <div class="col-md-12 work-type-3">
+                            <div class="work-type-group" *ngFor="let serviceGroup of serviceGroups; let parentIndex = index">
+                                <div class="work-type-inner" *ngIf="serviceGroup.serviceItems?.length > 0">
+                                    <label *ngIf="serviceGroup.serviceItems?.length > 0">
+                                        <b>{{serviceGroup.itemName}}</b>
+                                    </label>
+                                    <div class="row wt-popup-row" *ngIf="serviceGroup.serviceItems?.length > 0">
+                                        <div class="col-sm-3" *ngFor="let serviceItem of serviceGroup.serviceItems;let childIndex = index">
+                                            <div class="checkbox form-check">
+                                                <label class="form-check-label">
+                                                    <input type="hidden" class="form-check-input"
+                                                           [(ngModel)]="serviceGroup.tmpServiceItems[childIndex].id"
+                                                           name="hidServiceWorkTypeId{{childIndex}}">
+
+
+                                                    <input type="checkbox" class="form-check-input" [checked]="serviceItem.checked"
+                                                           name="serviceItem{{serviceItem.id}}" value="serviceItem" id="{{serviceItem.id}}"
+                                                           [disabled]=" serviceItem.disabled"
+                                                           [(ngModel)]="serviceGroup.tmpServiceItems[childIndex].checked"
+                                                           (ngModelChange)="isFieldValChange(serviceGroup.itemName, serviceItem, serviceGroup.tmpServiceItems[childIndex].checked, serviceGroup.serviceItems,parentIndex )">
+                                                    {{serviceItem.itemName}}
+                                                    <i class="input-helper"></i>
+                                                </label>
+                                                <div class="note-box row">
+                                                    <input class="form-control qty" type="text" name="quantity"
+                                                           *ngIf="serviceItem.costType == 2 || serviceItem.costType == 3 || serviceItem.costType == 4 || serviceItem.costType == 6"
+                                                           [(ngModel)]="serviceGroup.tmpServiceItems[childIndex].quantity" (keypress)="isNumber(event)"
+                                                           placeholder="Quantity">
+                                                    <input class="form-control qty" type="text" name="quantity" *ngIf="serviceItem.costType == 7"
+                                                           [(ngModel)]="serviceGroup.tmpServiceItems[childIndex].quantity"
+                                                           (keypress)="isDecimal($event)" placeholder="Hours">
+                                                    <input class="form-control" type="text" name="description"
+                                                           *ngIf="serviceItem.customServiceDescription"
+                                                           [(ngModel)]="serviceGroup.tmpServiceItems[childIndex].description"
+                                                           placeholder="Description">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+                    <button type="button" class="btn btn-blue" [disabled]="!addScopeForm.form.valid"
+                            (click)="saveJobScope()">Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #addBilling>
+        <div add-billing [modalRef]="modalRef" [mileStoneeID]="mileStoneID" (reload)=reload($event)></div>
+    </ng-template>
+    <!-- (reload)="reload($event)" -->
+
+    <!-- Scope History -->
+    <ng-template #scopeHistory>
+        <div scope-history [modalRefHistory]="modalRefHistory" [scopeHistoryData]="scopeHistoryData"
+             [costType]="scopeCostType"></div>
+    </ng-template>
+    <ng-template #tpldeletemilestone>
+        <div class="modal-custom-content" cdkDrag>
+            <div class="modal-header" cdkDragHandle>
+                <button type="button" class="close close-icn" cdkDragHandle>
+                    <span class="fa fa-arrows"></span>
+                </button>
+                <h4 class="modal-title pull-left">Delete Billing Point</h4>
+            </div>
+
+            <div class="modal-body" *ngIf="!this.args">
+                <label>Are you sure you want to delete this Billing point?
+                    If there are service items linked with this billable point will become unlinked and move to
+                    individual/additional services.
+                </label>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-blue pull-right" (click)="ConfirmationDelete()">Yes</button>
+                <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">No</button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #viewtask>
+        <div view-task [modalRef]="modalRef" [idTask]="idTask"></div>
+    </ng-template>
+    <div class="lds-css" *ngIf="load">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

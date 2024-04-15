@@ -1,0 +1,28 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">Company Types</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showCompanyTypeAddBtn}}" (click)="openModalForm(companytypesform,null,true)">Add Company Type</button>
+        <div class="pull-left search middle">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Company Type" [(ngModel)]="search" (ngModelChange)="searchCompanyTypes(search)" />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-company-types" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #companytypesform>
+    <div add-company-types  [modalRef]="modalRef" [reload]="reload" [CompanyTypesId]="CompanyTypesId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

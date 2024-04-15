@@ -1,0 +1,45 @@
+.rpo-contact {
+  button.middle {
+    margin-top: 12px;
+  }
+  .search {
+    width: 494px;
+    margin-right: 10px;
+    &.middle {
+      margin-top: 15px;
+    }
+    .inner-addon{
+      width: 294px;
+      float: right;
+    }
+    .sel-contact{
+      width: 200px;
+      .dropdown-noBlur{
+        border: 1px solid #ddd!important;
+        border-radius: 6px !important;
+        height: 36px !important;
+        color: #121212;
+      }
+    }
+  }
+}
+.rpo-image-border {
+  border: 1px solid #DCD;
+  padding: 4px;
+}
+.radio{
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-right: 0px;
+}
+
+.static-btn > button{
+  background: #233a75;
+  color: #fff;
+  border: 0 none;
+  border-radius: 2px;
+  line-height: 30px;
+  font-size: 13px;
+  min-width: 80px;
+  font-weight: 600;
+}

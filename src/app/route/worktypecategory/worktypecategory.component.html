@@ -1,0 +1,28 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <h2 class="component-title pull-left mr-2">Service Groups</h2>
+      <button type="button" class="btn btn-panel pull-right middle {{showServiceGroupAddBtn}}" (click)="openModalForm(formWorkTypeCategory,null,true)">Add Service Group</button>
+      <div class="pull-left search middle">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control pull-right" placeholder="Search" [(ngModel)]="search" (ngModelChange)="searchWorkType(search)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-work" class="display"  style="width:100%"></table>
+  </div>
+</div>
+
+<ng-template #formWorkTypeCategory>
+    <div form-work-type-category [modalRef]="modalRef" [reload]="reload" [isNew]="isNew" [idRfpSubJobType]="idRfpSubJobType"></div>
+  </ng-template>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

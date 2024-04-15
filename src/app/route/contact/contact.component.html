@@ -1,0 +1,78 @@
+<div class="rpo-contact rpo-component" [ngStyle]="{'display': !this.isConsulting ? 'none' : ''}">
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <h2 class="component-title pull-left mr-2">Contacts</h2>
+      <div class="pull-left search middle">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search Contacts" [(ngModel)]="srch" (change)="search(srch)" />
+        </div>
+        <div class="sel-contact select-company pr-2">
+          <div class="dropdown">
+            <button id='filterDropDown' class="btn btn-default dropdown-toggle btn-block dropdown-noBlur" style="text-align:left;"
+              type="button" data-toggle="dropdown">Filter Contacts
+              <span class="caret caret-right"></span>
+            </button>
+            <div #filterDropdown class="dropdown-menu">
+              <div class="row form-group">
+                <div class="col-sm-12">
+                  <label for="idContactLicenseType" class="normal-font-weight">Filter by License Type</label>
+
+                  <!-- <a href="javascript:void(0)" class="pull-right" (click)="clearsearch()">
+                    Clear Filter
+                  </a> -->
+                  <ng-select id="idContactLicenseType" name="idContactLicenseType" [(ngModel)]="filter.idContactLicenseType"
+                    [items]="contactLicenseTypes" bindLabel="itemName" bindValue="id" placeholder="Select Contact License Type"
+                    #idContactLicenseType="ngModel" class="filterLicense">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <label for="idCompany" class="normal-font-weight">Filter by Company</label>
+                  <ng-select id="idCompany" name="idCompany" [(ngModel)]="filter.idCompany" [items]="companies" bindLabel="itemName"
+                    bindValue="id" placeholder="Select Company" #idCompany="ngModel" [required]="requireAddType" class="filterCompany">
+                  </ng-select>
+                </div>
+              </div>
+              <div class='' style="width: 100%;padding: 10px 0px;">
+                <button type="button" class="btn btn-panel pull-right" (click)="reload()"> Apply </button>
+                <button type="button" class="btn btn-white pull-right" id="clearFilter" (click)="clearsearch()"> Clear </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <export-widget (onExportClick)="exportData($event)" customClassApply="{{showContactExportBtn}}"></export-widget>
+      <button type="button" class="btn btn-panel pull-right middle {{showContactAddBtn}}" (click)="openModal(formContact)">Add
+        Contact</button>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-contact" class="display" style="width:100%"></table>
+  </div>
+</div>
+
+<ng-template #formContact>
+  <div form-contact [contact]="rec" [modalRef]="modalRef" [onSave]="onSave"></div>
+</ng-template>
+<ng-template #addtask>
+  <div add-task [addtask]="addtask" [idContact]="idContact" [modalRef]="modalRef" [isNew]="true" [frommodeule]='frommodeule'
+    [contactdata]="contactdata" [reload]="reload"></div>
+</ng-template>
+<ng-template #formJob>
+  <div form-job [job]="jobOfContact" [modalRefJob]="modalRef" [onSave]="onSave"></div>
+</ng-template>
+<!-- View Create Send Email -->
+<ng-template #sendemail>
+  <div send-email [sendemail]="sendemail" [modalRef]="modalRef" [idContact]="idContact" [idCompany]="idCompanyFromContact"
+    [openFromContact]="true"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

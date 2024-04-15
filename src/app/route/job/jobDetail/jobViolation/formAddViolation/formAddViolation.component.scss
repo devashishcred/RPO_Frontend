@@ -1,0 +1,55 @@
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    th {
+        background: #e6f3e3;
+        border-bottom: 1px solid #d4ddf2;
+        padding: 8px 10px;
+    }
+    td {
+        border-left: 1px solid #e4eaf7;
+        border-bottom: 1px solid #e4eaf7;
+        padding: 8px 10px;
+    }
+    td:last-child {
+        border-right: 1px solid #e4eaf7;
+    }
+    tr th:first-child {
+        border-top-left-radius: 4px;
+    }
+    tr th:last-child {
+        border-top-right-radius: 4px;
+    }
+    tr:first-child {
+        th:first-child {
+            border-left: 1px solid #e6f3e3;
+        }
+        th:last-child {
+            border-right: 1px solid #e6f3e3;
+        }
+    }
+}
+
+.container-fluid {
+    width: 100%;
+    margin: auto;
+}
+
+.form-check .form-check-label:has(input[type="checkbox"]) {
+    margin-left: 5px;
+    padding-left: 10px!important;
+    margin-top: 30px;
+}
+.input-helper {
+    position: absolute;
+    left: -3px;
+    top: 4px;
+}
+.mt-10 {
+    margin-top: 10px;
+}
+.notes-container {
+    background: #FFF5C4;
+    border-radius: 6px;
+    padding: 6px 10px 10px 10px;
+}

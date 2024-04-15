@@ -1,0 +1,109 @@
+<div class="modal-custom-content" cdkDrag>
+    <form (submit)="save()" ngNativeValidate #AddTimeNoteForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{timeNote.id ? 'Edit ' : 'Add '}}Time Note</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="add-note-job">
+                <div class="form-group row" *ngIf="timeNoteCatdropdownList?.length > 0">
+                    <div class="col-sm-12">
+                        <label>Category*</label>
+                        <ng-select id="jobBillingType" name="jobBillingType" [items]="timeNoteCatdropdownList"
+                                   bindLabel="itemName" bindValue="value" placeholder="Select Category"
+                                   [(ngModel)]="timeNote.jobBillingType" #jobBillingType="ngModel"
+                                   (change)="setServiceItemsDD()" required>
+                        </ng-select>
+                        <div class="error-message pl0">
+                            <div *ngIf="jobBillingType.errors && (jobBillingType.dirty || jobBillingType.touched)">
+                                {{errorMessage.requireTimeNoteCategory}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row" *ngIf="timeNote.jobBillingType == 1">
+                    <div class="col-sm-12">
+                        <label for="selectApp">Service Item*</label>
+                        <ng-select name="idJobFeeSchedule" [items]="jobFeeScheduleItems" bindLabel="itemName"
+                            bindValue="idJobFeeSchedule" placeholder="Service Item" #idJobFeeSchedule="ngModel"
+                            [(ngModel)]="timeNote.idJobFeeSchedule" [required]="requireServiceItem">
+                        </ng-select>
+                        <div class="error-message pl0"
+                            *ngIf="timeNote.jobBillingType == 1 && requireServiceItem && !timeNote.idJobFeeSchedule && idJobFeeSchedule.errors && (idJobFeeSchedule.dirty || idJobFeeSchedule.touched)">
+                            {{errorMessage.requireServiceItem}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row" *ngIf="timeNote.jobBillingType == 2">
+                    <div class="col-sm-12">
+                        <label for="selectApp">Service Item*</label>
+                        <ng-select name="idRfpJobType" [items]="masterServiceItems" bindLabel="itemName" bindValue="id"
+                            placeholder="Service Item" #idRfpJobType="ngModel" [(ngModel)]="timeNote.idRfpJobType"
+                            [required]="requireServiceItem">
+                        </ng-select>
+                        <div class="error-message pl0"
+                            *ngIf="timeNote.jobBillingType == 2 && requireServiceItem && !timeNote.idRfpJobType && idRfpJobType.errors && (idRfpJobType.dirty || idRfpJobType.touched)">
+                            {{errorMessage.requireServiceItem}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label>Description</label>
+                        <textarea rows="3" class="form-control" placeholder="Description" id="progressNotes"
+                            name="progressNotes" [(ngModel)]="timeNote.progressNotes"></textarea>
+                        <div class="error-message pl0">
+                            <span *ngIf="timeNote?.progressNotes?.length >4065">
+                                {{errorMessage.timenoteDescription}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-5">
+                        <label for="time">Performed Date*</label>
+                        <div datetime-picker class="inner-addon right-addon input-group">
+                            <i class="icon material-symbols-outlined datepickerbutton clickable">event</i>
+                            <input type="text" id="timeNoteDate" name="timeNoteDate" class="form-control"
+                                [(ngModel)]="timeNote.timeNoteDate" #timeNoteDate="ngModel" required />
+                        </div>
+                        <div class="error-message pl0">
+                            <div *ngIf="timeNoteDate.errors && (timeNoteDate.dirty || timeNoteDate.touched)">
+                                {{errorMessage.requireTimeNoteDate}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="time">Hours</label>
+                        <input class="form-control" type="text" placeholder="Hours" id="timeHours" name="timeHours"
+                            [(ngModel)]="timeNote.timeHours" #timeHours="ngModel" (keypress)="isNumber($event)" />
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="time">Minutes</label>
+                        <input class="form-control" type="text" placeholder="Minutes(00)" id="timeMinutes"
+                            name="timeMinutes" [(ngModel)]="timeNote.timeMinutes" #timeMinutes="ngModel"
+                            (keypress)="isNumber($event)" pattern="[0-5][0-9]" />
+                        <div class="error-message pl0"
+                            *ngIf="AddTimeNoteForm.hasError('pattern', 'timeMinutes') && (timeMinutes.dirty || timeMinutes.touched)">
+                            {{errorMessage.validMinutes}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="submit" class="btn btn-blue"
+                [disabled]="timeNote?.progressNotes?.length > 4065 || (!AddTimeNoteForm.form.valid) || (timeNote.jobBillingType == 1 && !timeNote.idJobFeeSchedule) || (timeNote.jobBillingType == 2 && !timeNote.idRfpJobType)">{{timeNote.id
+                ? 'Update' : 'Add Note'}}</button>
+        </div>
+    </form>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

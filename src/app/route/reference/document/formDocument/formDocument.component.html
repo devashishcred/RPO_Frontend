@@ -1,0 +1,56 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #documentForm (submit)="save()" novalidate>
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">Add Document</h4>
+        </div>
+    
+        <div class="modal-body">
+            <div class="form-document">
+                <div class="row form-group">
+                    <div class="col-sm-7">
+                        <label>Document Name</label>
+                        <input class="form-control" placeholder="Administrator" />
+                    </div>
+                </div>
+                
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <label>Keywords $$$</label>
+                        <textarea class="form-control" placeholder="Write a keywords"></textarea>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <label>Description ----</label>
+                        <textarea class="form-control" placeholder="Write a general notes...."></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Attach File</label>
+                        <div class="attach-box">
+                            <input class="form-control" type="text" placeholder=".doc,.ppt.pdf" />
+                            <label class="rpo-file-upload" for="document-file-upload">Attach</label>
+                            <input type="file" id="document-file-upload" class="rpo-file-upload"/>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    
+        <div class="modal-footer">
+            <button type="button" class="btn btn-blue pull-right"  (click)="save()">Save</button>
+            <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">Cancel</button>
+        </div>
+    </form>
+</div>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

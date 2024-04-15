@@ -1,0 +1,38 @@
+<div class="search-area product-permit">
+    <div class="search middle pull-left">
+        <div class="inner-addon left-addon">
+            <i class="icon fa fa-search"></i>
+            <input class="form-control" type="text" [(ngModel)]="searchpermit" placeholder="Search Work Permit" (ngModelChange)="searchPermit($event)"/>
+        </div>
+    </div>
+    <ng-container *ngIf="!isCustomerLoggedIn">
+        <button class="btn btn-panel pull-right no-padding {{btnShowHide}} {{showJobApplicationAddBtn}} {{showBtnStatus}}" *ngIf="isAppData" (click)="openModalFormAddPermit(formAddPermit)">Add Permit</button>
+    
+        <div class="work-status permit-status pull-right">
+            <label>
+                <span class="red"></span>Withdrawn
+            </label>
+            <label>
+                <span class="orange"></span>Signed off or Work Completed
+            </label>
+        </div>
+    </ng-container>
+    
+</div>
+<div class="overflow-table jobDobWorkPermitApplication">
+    <table id="dt-aplication-permit" class="display permit-table"  style="width:100%"></table>
+</div>
+
+<ng-template #formAddPermit>
+    <div form-add-permit [formAddPermit]="recformAddPermit" [modalRef]="modalRef" [onSave]="onSave" [idApplicationNumber]="idApplicationNumber" [idApp]="idApp"  [isDep]="isDep"
+        [appType]="appType" [reload]="reload" [idJob]="idJob" [idJobAppObject]="idJobApp" [isNew]="isNew"></div>
+</ng-template>
+<ng-template #pullpermit>
+    <div pull-permit [modalRef]="modalRef" [reload]="reload" [idJob]="idJob" [pullpermitData]="PullpermitData" [jobApp]="idJobApp" [permitID]="permitID" [documentCode]="selectedDocumentCode" (updatePermits)="updatePermits($event)"></div>
+  </ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>

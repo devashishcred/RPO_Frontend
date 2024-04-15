@@ -1,0 +1,254 @@
+<div class="modal-custom-content" cdkDrag>
+    <form novalidate name="sendMailForm" #sendMailForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">Create Transmittal</h4>
+        </div>
+
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label class="block">From*</label>
+                    <ng-select name="mailFromForm" [items]="empList" bindLabel="employeeName" bindValue="id"
+                        placeholder="From" [(ngModel)]="mailFrom" required #mailFromForm="ngModel"
+                        [disabled]="disabled">
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="mailFromForm.errors && (mailFromForm.dirty || mailFromForm.touched)">
+                            {{errorMsg.requireMailFrom}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>To Company</label>
+                    <ng-select name="mailToForm" [items]="companies" bindLabel="itemName" bindValue="id"
+                        placeholder="To Company" [(ngModel)]="mailTo" (change)="getContacts(true)" #mailToForm="ngModel"
+                        [disabled]="disabled">
+                    </ng-select>
+                </div>
+                <div class="col-md-4">
+                    <label>To Contact*</label>
+                    <ng-select name="mailAttentionForm" [items]="contacts" bindLabel="nameWithEmail" bindValue="id"
+                        placeholder="To Contact" [(ngModel)]="mailAttention" required #mailAttentionForm="ngModel"
+                        (click)="getContacts(true)" (change)="changeEmailBody()" [disabled]="disabled">
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="mailAttentionForm.errors && (mailAttentionForm.dirty || mailAttentionForm.touched)">
+                            {{errorMsg.requireMailAttention}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group cc-multiple-check" id="contactCCDiv">
+                <div class="col-md-12" *ngIf="contactCCItems?.length > 0" id="contactCCDiv" class="treeviewDiv">
+                    <label>CC</label>
+                    <!-- in version 9 ngx-dropdown-treeview not working so i changed dropdown code -->
+                    <!-- <ngx-dropdown-treeview [buttonClass]="treeViewButtonClasses" [config]="treeViewConfig" [items]="contactCCItems"
+                    (selectedChange)="onSelectedChange($event)" (filterChange)="onFilterChange($event)" class="ngTreeView"
+                    [ngxDisabledOnSelector]="'button.dropdown-toggle'" [disabled]="!dropdownEnabled">
+                </ngx-dropdown-treeview> -->
+                    <div class="dropdown">
+                        <input class=" btn btn-default dropdown-toggle" readonly="readonly"
+                            style="width: 100%; background-color:#fff; text-align: start;" [disabled]="!dropdownEnabled"
+                            [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}"
+                            placeholder="Select options" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+
+                        <ul class="dropdown-menu" style="padding: 1rem;" aria-labelledby="dropdownMenu1">
+                            <ngx-treeview [buttonClass]="treeViewButtonClasses" [config]="treeViewConfig"
+                                [items]="contactCCItems" (selectedChange)="onSelectedChange($event)"
+                                (filterChange)="onFilterChange($event)" class="ngTreeView"
+                                [ngxDisabledOnSelector]="'button.dropdown-toggle'"
+                                [disabled]="!dropdownEnabled"></ngx-treeview>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label>Transmittal Type*</label>
+                    <ng-select name="mailTypeForm" [items]="this.mailTypes" bindLabel="name" bindValue="id"
+                        placeholder="Transmittal Type" [(ngModel)]="mailType" required #mailTypeForm="ngModel"
+                        (change)="setEmailBody()" [disabled]="disabled">
+                    </ng-select>
+                    <!-- <ng-select name="mailTypeForm" [items]="this.mailType == 9 ? allMailTypes : this.mailTypes" bindLabel="name" bindValue="id"
+                        placeholder="Transmittal Type" [(ngModel)]="mailType" required #mailTypeForm="ngModel"
+                        (change)="setEmailBody()" [disabled]="disabled">
+                    </ng-select> -->
+                    <div class="error-message pl0">
+                        <div *ngIf="mailTypeForm.errors && (mailTypeForm.dirty || mailTypeForm.touched)">
+                            {{errorMsg.requireMailType}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Sent Via*</label>
+                    <ng-select name="mailViaForm" [items]="mailViaData" bindLabel="name" bindValue="id"
+                        placeholder="Sent Via" [(ngModel)]="mailVia" required #mailViaForm="ngModel"
+                        [disabled]="disabled">
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="mailViaForm.errors && (mailViaForm.dirty || mailViaForm.touched)">
+                            {{errorMsg.requireSentVia}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 text-right" *ngIf="!disabled">
+                    <label class="block">&nbsp;</label>
+                    <button class="btn btn-blue no-padding" (click)="openDocumentModal(selectJobDocument)">Select
+                        Document</button>
+                </div>
+            </div>
+            <div class="doc-table-div" *ngIf="jobDocumentList?.length > 0">
+                <table class="table doc-table ">
+                    <thead>
+                        <tr>
+                            <th>COPIES</th>
+                            <th>DOC ID</th>
+                            <th>CODES</th>
+                            <!-- <th>APPLIC/PERMIT#</th> -->
+                            <th>A#/LOC/V#</th>
+                            <th>APPLIC TYPE</th>
+                            <th>DESCRIPTION/WORK/INSPECTION TYPE</th>
+                            <th>MODIFIED</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let document of jobDocumentList;let i = index">
+                            <td>
+                                <input type="text" name="copies{{i}}" [(ngModel)]="document.copies"
+                                    [disabled]="disabled">
+                            </td>
+                            <td>{{document.idJobDocument}}</td>
+                            <td>{{document.documentCode}}</td>
+                            <td>{{document.applicationNumber}} {{document.summonsNumber}} {{document.trackingNumber}}
+                            </td>
+                            <td>{{document.appplicationType}}</td>
+                            <td>
+                                <a *ngIf="document.documentPath" class="link-blue" href="{{document.documentPath}}"
+                                    target="_blank">{{document.documentDescription || 'link'}}</a>
+                                <span *ngIf="!document.documentPath">{{document.documentDescription}}</span>
+                            </td>
+                            <td>{{document.lastModifiedDate | date: 'MM/dd/yyyy'}}</td>
+                            <td class="text-center link"><a href="javascript:void(0)" class="link-blue" *ngIf="!disabled"
+                                    (click)="deleteJobDoc(document.id,document.idJobDocument)"><i
+                                        class="material-symbols-rounded">delete</i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12 modify">Note : Changing the selection in any of the above drop-downs will reset
+                    the
+                    Subject and Message.</div>
+            </div>
+
+
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label>Subject*</label>
+                    <input type="text" name="emailsubject" [(ngModel)]="subject" required #emailsubject="ngModel"
+                        class="form-control" [disabled]="disabled" placeholder="Subject">
+                    <div class="error-message pl0">
+                        <div *ngIf="emailsubject.errors && (emailsubject.dirty || emailsubject.touched)">
+                            {{errorMsg.requireSubject}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label class="block">Message</label>
+                    <ck-editor class="col-md-14" name="mailBody" [(ngModel)]="mailBody"
+                        [config]="constantValues.CKEDITORCONFIGSETTING" debounce="100" [readonly]="disabled"
+                        (ready)="onReady()"></ck-editor>
+                </div>
+
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12 modify">Note : Max characters cannot be more than 8000.</div>
+            </div>
+
+            <div class="row email-attach">
+                <div class="col-sm-12">
+                    <h4 class="blue-title mb5">
+                        Attachments
+                        <div class="fl-upload">
+                            <label for="contact-file-upload" class="upload-link rpo-file-upload mb0">
+                                Click to <span>Browse</span> to Attach your files </label>
+                            <input id="contact-file-upload" type="file" (change)="documentUpload($event)"
+                                class="rpo-file-upload" multiple [disabled]="disabled" />
+                        </div>
+                    </h4>
+                    <div>
+                        <!-- Report files -->
+                        <div class="rpo-file-upload">
+                            <a href="{{reportDocument.displayPath}}" class="link-blue" target="_blank">{{reportDocument.name}}</a>
+                            <!-- <a target="" class="remove" *ngIf="!disabled" tooltip="Delete" placement="right"
+                            (click)="deleteAlreadyAttchedFile(attachment)">
+                            <i class="material-symbols-rounded">delete</i>
+                        </a> -->
+                        </div>
+                        <!-- already attached files will display -->
+                        <div class="file-upload-wrap" *ngIf="jobTransmittalAttachments?.length > 0">
+                            <div class="rpo-file-upload" *ngFor="let attachment of jobTransmittalAttachments">
+                                <a href="{{attachment.documentPath}}" class="link-blue" target="_blank">{{attachment.name}}</a>
+                                <a target="" class="remove" *ngIf="!disabled" tooltip="Delete" placement="right"
+                                    (click)="deleteAlreadyAttchedFile(attachment)">
+                                    <i class="material-symbols-rounded">delete</i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="file-upload-wrap">
+                            <div class="rpo-file-upload" *ngFor="let document of documents">
+                                <span class="doc-name" *ngIf="!document.id" style="vertical-align: top;"
+                                    tooltip="{{document.name}}" placement="top">{{document.name}}</span>
+                                <a target="" class="remove" tooltip="Delete" placement="right"
+                                    (click)="deleteDocument(document)">
+                                    <i class="material-symbols-rounded">delete</i>
+                                </a>
+                                <a *ngIf="document.id" href="{{document.documentPath}}" class="pointer doc-name link-blue"
+                                    style="vertical-align: top;" target="_blank" tooltip="{{document.name}}"
+                                    placement="top">{{document.name}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-message" *ngIf="exceedFileSize">
+                        <span> The total size of attachments exceed 23MB. Please remove few files to continue sending
+                            email.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-blue pull-right" (click)="sendEMail(false);"
+                [disabled]="!sendMailForm.form.valid || exceedFileSize">Send</button>
+            <button type="button" class="btn btn-white pull-right"
+                (click)="modalRef.hide();loading=false">Cancel</button>
+            <button type="button" class="btn btn-white pull-right" (click)="previewTransmittal();"
+                [disabled]="!sendMailForm.form.valid || exceedFileSize">Preview</button>
+            <button type="button" class="btn btn-white pull-right"
+                *ngIf="(!idOldTrasmittal && !draftToSend) || (idOldTrasmittal && draftToSend)"
+                [disabled]="!sendMailForm.form.valid || exceedFileSize" (click)="sendEMail(true);">Save</button>
+        </div>
+    </form>
+</div>
+<ng-template #selectJobDocument>
+    <div select-job-document [modalRefDoc]="modalRefDoc" [idJob]="idJob" [jobDocumentList]="jobDocumentList"
+        (getSelectedDocument)="getSelectedDocument($event)"
+        (getSelectedDocumentToDelete)="getSelectedDocumentToDelete($event)" [documentsToDelete]="documentsToDelete">
+    </div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

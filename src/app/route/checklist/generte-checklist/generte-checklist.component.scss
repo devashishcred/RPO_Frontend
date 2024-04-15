@@ -1,0 +1,41 @@
+html body .modal-dialog .modal-content .modal-header .close-icn {color: #3475e0;}
+.modal-header{border: none;}
+.modal-header{border-bottom: none; padding: 20px 30px 0}
+.modal-body{padding: 20px 30px 30px;}
+h4.modal-title{color: rgb(40, 50, 55); font-size: 18px; font-weight: bold}
+.modal-dialog {width: 1100px; max-width: 1100px;}
+label{display: block; color: rgb(69, 76, 92); font-size: 14px; font-weight: 700;}
+.input{border: 1px solid #dddddd; height: 40px; line-height: 40px; background: #FFFFFF; padding: 0 10px; border-radius: 6px; display: inline-block; width: 100%; margin-bottom: 15px;}
+.input:focus{outline: none; box-shadow: none; border: 1px solid #3475e0}
+.col-md-12{ padding-left: unset;
+
+    label{
+        margin-top: 5px;
+    }}
+.col-md-12.floor{display: flex;}
+.col-md-12.floor .input.name{margin: 0 5px;;}
+
+.floor-lable label{border: 1px solid #3475e0; background-color: #FFFFFF; padding: 0 10px; border-radius: 30px; float: left; margin: 2px; line-height: 36px;}
+.fa-times-circle{cursor: pointer;}
+.plumbing{
+    &.row{
+        border-bottom: 1px solid #ddd;
+    }
+    .addPlumbingRow{padding-left: 24px !important;}
+    .addPlumbingList{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding-left: 0;
+    }
+}
+.flex-center:has(.button-switch) .button-switch{
+    margin-left: 10px;
+}
+.w100 {
+    width: 100%;
+}
+.compositeChecklist .lable-ccl{
+    font-size: 14px;
+    font-weight: bold;
+}

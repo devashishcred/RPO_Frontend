@@ -1,0 +1,62 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #taskTypeForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Task Type</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+        <p *ngIf="!taskType.isActive"><b>Status:</b> <span> <i class="incative-color fa fa-exclamation-circle ml10"></i> Inactive
+        </span></p>
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <label for="task">Task Type*</label>
+          <input id="name" name="name" type="text" class="form-control" [(ngModel)]="taskType.name" #name="ngModel" placeholder="Name"
+            required/>
+          <div class="error-message pl0">
+            <div *ngIf="name.errors && (name.dirty || name.touched)">
+              {{errorMsg.requirename}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <div class="checkbox form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="isDisplayTime" [(ngModel)]="taskType.isDisplayTime" />Display Time
+              <i class="input-helper"></i>
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="checkbox form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="isDisplayContact" [(ngModel)]="taskType.isDisplayContact" />Display Contact
+              <i class="input-helper"></i>
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="checkbox form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="isDisplayDuration" [(ngModel)]="taskType.isDisplayDuration" />Display Duration
+              <i class="input-helper"></i>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!taskTypeForm.form.valid" (click)="saveTaskType()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </form>
+</div>

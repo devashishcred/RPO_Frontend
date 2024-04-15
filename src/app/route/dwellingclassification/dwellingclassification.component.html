@@ -1,0 +1,29 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">Multiple Dwelling Classifications</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showDwellingAddBtn}}" (click)="openModalForm(dwellingclassificationform,null,true)">Add Multiple Dwelling Classifications</button>
+        <div class="pull-left search middle">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Multiple Dwelling Classifications" [(ngModel)]="search" (ngModelChange)="searchDwellingClassification(search)"
+            />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-dwelling-classification" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #dwellingclassificationform>
+    <div add-dwelling-classification  [modalRef]="modalRef" [reload]="reload" [dwellingclassificationId]="dwellingclassificationId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

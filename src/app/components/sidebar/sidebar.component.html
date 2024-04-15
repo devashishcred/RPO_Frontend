@@ -1,0 +1,128 @@
+<div class="navbar-header menu-part">
+    <img class="logo pointer" src="./assets/snap_cor_logo_white.svg.png" (click)="goToMain()" alt="logo">
+    <button class="hamburger-btn" (click)="toggleSideMenu()"><img class="information-icon pointer"
+            src="./assets/menu-icon2.png" alt="information"></button>
+    <div class="search">
+        <form class="navbar-form navbar-left" novalidate name="globalsearch">
+            <div class="input-group search-box search-box-head">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <span class="fa fa-bars"></span>
+                    </button>
+                    <ul class="dropdown-menu widget">
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 1}">
+                            <a href="javascript:void(0)" (click)="search(1 , 'Job#')">Job#</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 2}">
+                            <a href="javascript:void(0)" (click)="search(2, 'Application#')">Application#</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 11}">
+                            <a href="javascript:void(0)" (click)="search(11 , 'Tracking#')">Tracking#</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 12}">
+                            <a href="javascript:void(0)" (click)="search(12, 'Violation#')">Violation#</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 3}">
+                            <a href="javascript:void(0)" (click)="search(3, 'RFP#')">RFP#</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 4}">
+                            <a href="javascript:void(0)" (click)="search(4, 'Job Address')">Job Address</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 5}">
+                            <a href="javascript:void(0)" (click)="search(5, 'Contact name')">Contact name</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 6}">
+                            <a href="javascript:void(0)" (click)="search(6 ,'Company name')">Company name</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 7}">
+                            <a href="javascript:void(0)" (click)="search(7, 'Special place name')">Special place
+                                name</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 8}">
+                            <a href="javascript:void(0)" (click)="search(8, 'Transmittal#')">Transmittal#</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 9}">
+                            <a href="javascript:void(0)" (click)="search(9, 'Zone District')">Zone District</a>
+                        </li>
+                        <li [ngClass]="{'selectedGlobalType' : globalSearchType == 10}">
+                            <a href="javascript:void(0)" (click)="search(10, 'Overlay')">Overlay</a>
+                        </li>
+                    </ul>
+                </div>
+                <input class="form-control search-area" (keyup.enter)="globalSearch()" type="text" placeholder="Job#"
+                    [(ngModel)]="globalSearchText" name="globalSearchText">
+                <div class="input-group-btn search-btn">
+                    <button type="button" class="btn btn-default" (click)="globalSearch()">
+                        <span class="fa fa-search"></span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ul class="nav navbar-nav">
+        <li class='sub-menu'>
+            <a class="active"><i class="fa fa-laptop" aria-hidden="true"></i> CRM <i class="fa fa-angle-down"
+                    aria-hidden="true"></i>
+            </a>
+            <ul class="show">
+                <li><a>Company</a></li>
+                <li><a>Contact</a></li>
+                <li><a>Address</a></li>
+            </ul>
+        </li>
+        <li>
+            <a><i class="fa-sharp fa-regular fa-circle-dot"></i> RFP</a>
+        </li>
+        <li>
+            <a><i class="fa-solid fa-clipboard-list"></i> Projects</a>
+        </li>
+        <li class='sub-menu'>
+            <a><i class="fa-solid fa-square-poll-vertical"></i> Reports <i class="fa fa-angle-down"
+                    aria-hidden="true"></i></a>
+            <ul>
+                <li><a>Company</a></li>
+                <li><a>Contact</a></li>
+                <li><a>Address</a></li>
+            </ul>
+        </li>
+        <li class='sub-menu'>
+            <a><i class="fa-solid fa-message"></i> reference <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+            <ul>
+                <li><a>Company</a></li>
+                <li><a>Contact</a></li>
+                <li><a>Address</a></li>
+            </ul>
+        </li>
+        <li class='sub-menu'>
+            <a><i class="fa-regular fa-calendar-check"></i> Task <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+            <ul>
+                <li><a>Company</a></li>
+                <li><a>Contact</a></li>
+                <li><a>Address</a></li>
+            </ul>
+        </li>
+        <li class='sub-menu'>
+            <a><i class="fa fa-gear" aria-hidden="true"></i> administration <i class="fa fa-angle-down"
+                    aria-hidden="true"></i></a>
+            <ul>
+                <li><a>Company</a></li>
+                <li><a>Contact</a></li>
+                <li><a>Address</a></li>
+            </ul>
+        </li>
+    </ul>
+    <div class="nav-bottom">
+        <div class="profile-detail">
+            <div class="profile-icon">G</div>
+            <div class="user-detail">
+                <p class="name">Glen Peterson</p>
+                <p class="email">maya.harris@gmail.com</p>
+            </div>
+        </div>
+        <div class="rpo-detail">
+            <p class="RPO-user">Construction Consultants</p>
+        </div>
+    </div>
+
+</div>

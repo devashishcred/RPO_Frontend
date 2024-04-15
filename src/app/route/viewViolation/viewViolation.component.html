@@ -1,0 +1,488 @@
+<div class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">View Violation {{'( Violation # ' + data.id + ')' }}</h4>
+    </div>
+
+    <!-- This is ECB/AOTH Violation View Start -->
+    <ng-container *ngIf="violationType == 'AOTH Violation'">
+        <div class="modal-body pt15">
+            <div class="row task-row">
+                <div class="col-sm-12 column-data view-det">
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Summons/Notice#</label>
+                            <span>{{data?.summonsNumber || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Issue Date</label>
+                            <span>{{data?.dateIssued || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Respondent Name</label>
+                            <span>{{data?.respondentName || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Respondent Address</label>
+                            <span>{{data?.respondentAddress || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Inspection Location</label>
+                            <span>{{data?.inspectionLocation || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Issuing Agency</label>
+                            <span>{{data?.issuingAgency || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Balance Due($)</label>
+                            <span>{{data?.balanceDue || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Penalty Imposed($)</label>
+                            <span>{{data?.paneltyAmount || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Violation Type</label>
+                            <span>{{data?.violationType || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Aggravated Level</label>
+                            <span>{{data?.aggravatedLevel || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Status of Summons/Notice</label>
+                            <span>{{data?.statusOfSummonsNotice || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Hearing Result</label>
+                            <span>{{data?.hearingResult || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Hearing Date</label>
+                            <span>{{(data?.hearingDate | date: 'MM/dd/yyyy') || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Hearing Time</label>
+                            <span>{{(data?.hearingTime | date: 'h:mm a') || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Hearing Location</label>
+                            <span>{{data?.hearingLocation || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Certification Status</label>
+                            <span>{{data?.certificationStatus || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Is Fully Resolved</label>
+                            <span>{{data?.isFullyResolved ? "Yes" : "No"}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Closed Date</label>
+                            <span>{{(data?.resolvedDate | date: 'MM/dd/yyyy') || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Compliance On</label>
+                            <span>{{(data?.complianceOn | date: 'MM/dd/yyyy') || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Notes</label>
+                            <span>{{data?.notes || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Cure Date</label>
+                            <span>{{(data?.cureDate | date: 'MM/dd/yyyy') || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Party Responsible</label>
+                            <span *ngIf="data?.partyResponsible == 1">RPO</span>
+                            <!-- <span *ngIf="data?.partyResponsible == 1">RPO User</span> -->
+                            <span *ngIf="data?.partyResponsible == 2">Contact</span>
+                            <span *ngIf="data?.partyResponsible == 3">Other</span>
+                            <span *ngIf="!data?.partyResponsible || data?.partyResponsible == 0">-</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="data?.partyResponsible == 2 || data?.partyResponsible == 3">
+                            <label class="block">PERSON RESPONSIBLE</label>
+                            <span *ngIf="data?.partyResponsible == 2">{{jobContactName}}</span>
+                            <span *ngIf="data?.partyResponsible == 3">{{data?.manualPartyResponsible || "-"}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Violation Description</label>
+                            <span>{{data?.violationDescription || '-'}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group" *ngIf="data?.explanationOfCharges?.length>0">
+                        <div class="col-md-4">
+                            <label>Explanation Charges</label>
+                        </div>
+                    </div>
+                    <div class="row form-group" *ngIf="data?.explanationOfCharges?.length>0">
+                        <div class="col-sm-12">
+                            <table class="table blue-table mb0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:20%">Infraction Code</th>
+                                        <th style="width:20%">Code Section</th>
+                                        <th style="width:30%">Section Law Description</th>
+                                        <th style="width:15%">Penalty Amount($)</th>
+                                        <th class="text-left" style="width:25%">Penalty Master Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let charges of data.explanationOfCharges; let i = index">
+                                        <td>
+                                            <span>{{charges.code}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{charges.codeSection}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{charges.description}}</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <span>{{charges.paneltyAmount}}</span>
+                                        </td>
+                                        <td class="text-left penaltyInfo">
+                                            <span *ngIf="charges.dobPenaltySchedule"><strong> Cure:
+                                                </strong>{{charges.dobPenaltySchedule.cure ? "Yes" : "No"}}</span>
+                                            <span *ngIf="charges.dobPenaltySchedule"><strong> Stipulation:
+                                                </strong>{{charges.dobPenaltySchedule.stipulation ? "Yes" :
+                                                "No"}}</span>
+                                            <span *ngIf="charges.dobPenaltySchedule"><strong> Mitigated Penalty:
+                                                </strong>{{charges.dobPenaltySchedule.mitigatedPenalty ? "Yes" :
+                                                "No"}}</span>
+                                            <span *ngIf="charges.fdnyPenaltySchedule"><strong> First Penalty ($):
+                                                </strong>
+                                                {{charges.fdnyPenaltySchedule.firstViolationPenalty}}
+                                            </span>
+                                            <span *ngIf="charges.fdnyPenaltySchedule"><strong> First Mitigated Penalty
+                                                    ($): </strong>
+                                                {{charges.fdnyPenaltySchedule.firstViolationMitigatedPenalty}}
+                                            </span>
+                                            <span *ngIf="charges.fdnyPenaltySchedule"><strong> First Maximum Penalty
+                                                    ($): </strong>
+                                                {{charges.fdnyPenaltySchedule.firstViolationMaximumPenalty}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row form-group" *ngIf="data?.jobViolationDocuments?.length>0">
+                        <div class="col-sm-12">
+                            <label class="block">Documents</label>
+                            <div class="file-upload-wrap">
+                                <div class="rpo-file-upload" *ngFor="let document of data.jobViolationDocuments">
+                                    <span class="doc-name" *ngIf="!document.id" style="vertical-align: top;"
+                                        tooltip="{{document.name}}" placement="top">{{document.name}}</span>
+                                    <a *ngIf="document.id" href="{{document.documentPath}}"
+                                        class="pointer doc-name link-blue" style="vertical-align: top;" target="_blank"
+                                        tooltip="{{document.name}}" placement="top">{{document.name}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="modify">Last modified by {{data.lastModifiedByEmployeeName}} on
+                                {{data.lastModifiedDate | date
+                                :'MM/dd/yyyy, h:mm a'}}
+                            </div>
+                            <div class="modify">Created by {{data.createdByEmployeeName}} on {{data.createdDate | date
+                                :'MM/dd/yyyy, h:mm a'}}</div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <label>Related Projects</label>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th class="min-auto">PROJECT #</th>
+                            <th class="date_tab">START</th>
+                            <th class="min-auto">FLOOR</th>
+                            <th class="date_tab">APT</th>
+                            <th class="date_tab">SPECIAL PLACE</th>
+                            <th class="min-auto">ADDRESS</th>
+                            <th class="min-auto">CONTACT</th>
+                        </tr>
+                        <ng-container *ngFor="let job of partOfProjects">
+                            <tr [ngClass]="{'cursor-pointer': isFromGlobalSearch}" (click)="redirectOnDetailPage(job)">
+                                <td>
+                                    {{job?.jobNumber}}
+                                </td>
+                                <td>
+                                    {{job?.startDate}}
+                                </td>
+                                <td>{{job?.floorNumber}}</td>
+                                <td>{{job?.apartment}}</td>
+                                <td>{{job?.specialPlace}}</td>
+                                <td>{{job?.address}}</td>
+                                <td>{{job?.contact}}</td>
+                            </tr>
+                        </ng-container>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <!-- This is ECB/AOTH Violation View End -->
+
+    <!-- This is DOB Violation View Start -->
+    <ng-container *ngIf="violationType == 'DOB Violation'">
+        <div class="modal-body pt15">
+            <div class="row task-row">
+                <div class="col-sm-12 column-data view-det">
+
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Issue Date</label>
+                            <span>{{data?.dateIssued || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">DOB Violation#</label>
+                            <span>{{data?.summonsNumber || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Related ECB#</label>
+                            <span>{{data?.ecbNumber || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Device Number</label>
+                            <span>{{data?.deviceNumber || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Violation Category</label>
+                            <span>{{data?.violationCategory || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Disposition Date</label>
+                            <span>{{data?.dispositionDate || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">DOB Disposition Comments</label>
+                            <span>{{data?.dispositionComments || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Violation Description</label>
+                            <span>{{data?.violationDescription || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Notes</label>
+                            <span>{{data?.notes || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Party Responsible</label>
+                            <span *ngIf="data?.partyResponsible == 1">RPO</span>
+                            <!-- <span *ngIf="data?.partyResponsible == 1">RPO Team</span> -->
+                            <span *ngIf="data?.partyResponsible == 3">Other</span>
+                            <span *ngIf="!data?.partyResponsible || data?.partyResponsible == 0">-</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="data?.partyResponsible == 3">
+                            <label class="block">PERSON RESPONSIBLE</label>
+                            <span>{{data?.manualPartyResponsible || "-"}}</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="isFromChecklist">
+                            <label class="block">Status</label>
+                            <span>{{data?.status == 0 ? '-' : (data?.status == 1 ? 'Open' : 'Completed')}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="modify">Last modified by {{data.lastModifiedByEmployeeName}} on
+                                {{data.lastModifiedDate | date
+                                :'MM/dd/yyyy, h:mm a'}}
+                            </div>
+                            <div class="modify">Created by {{data.createdByEmployeeName}} on {{data.createdDate | date
+                                :'MM/dd/yyyy, h:mm a'}}</div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <label>Related Projects</label>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th class="min-auto">PROJECT #</th>
+                            <th class="date_tab">START</th>
+                            <th class="min-auto">FLOOR</th>
+                            <th class="date_tab">APT</th>
+                            <th class="date_tab">SPECIAL PLACE</th>
+                            <th class="min-auto">ADDRESS</th>
+                            <th class="min-auto">CONTACT</th>
+                        </tr>
+                        <ng-container *ngFor="let job of partOfProjects">
+                            <tr [ngClass]="{'cursor-pointer': isFromGlobalSearch}" (click)="redirectOnDetailPage(job)">
+                                <td>
+                                    {{job?.jobNumber}}
+                                </td>
+                                <td>
+                                    {{job?.startDate}}
+                                </td>
+                                <td>{{job?.floorNumber}}</td>
+                                <td>{{job?.apartment}}</td>
+                                <td>{{job?.specialPlace}}</td>
+                                <td>{{job?.address}}</td>
+                                <td>{{job?.contact}}</td>
+                            </tr>
+                        </ng-container>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <!-- This is DOB Violation View End -->
+
+    <!-- This is DOB Violation View Start -->
+    <ng-container *ngIf="violationType == 'DOB Safety Violation'">
+        <div class="modal-body pt15">
+            <div class="row task-row">
+                <div class="col-sm-12 column-data view-det">
+
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Issue Date</label>
+                            <span>{{data?.dateIssued || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">DOB Safety Violation#</label>
+                            <span>{{data?.summonsNumber || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Device Type</label>
+                            <span>{{data?.device_Type || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Device Number</label>
+                            <span>{{data?.deviceNumber || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Violation Status</label>
+                            <span>{{data?.violation_Status || '-'}}</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="block">Violation Type</label>
+                            <span>{{data?.violationType || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Violation Description</label>
+                            <span>{{data?.violationDescription || '-'}}</span>
+                        </div>
+                        <!-- <div class="col-sm-4">
+                            <label class="block">DOB Disposition Comments</label>
+                            <span>{{data?.dispositionComments || '-'}}</span>
+                        </div> -->
+                        <div class="col-sm-8">
+                            <label class="block">Notes</label>
+                            <span>{{data?.notes || '-'}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-4">
+                            <label class="block">Party Responsible</label>
+                            <span *ngIf="data?.partyResponsible == 1">RPO</span>
+                            <!-- <span *ngIf="data?.partyResponsible == 1">RPO Team</span> -->
+                            <span *ngIf="data?.partyResponsible == 3">Other</span>
+                            <span *ngIf="!data?.partyResponsible || data?.partyResponsible == 0">-</span>
+                        </div>
+                        <div class="col-sm-4" *ngIf="data?.partyResponsible == 3">
+                            <label class="block">PERSON RESPONSIBLE</label>
+                            <span>{{data?.manualPartyResponsible || "-"}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="modify">Last modified by {{data.lastModifiedByEmployeeName}} on
+                                {{data.lastModifiedDate | date
+                                :'MM/dd/yyyy, h:mm a'}}
+                            </div>
+                            <div class="modify">Created by {{data.createdByEmployeeName}} on {{data.createdDate | date
+                                :'MM/dd/yyyy, h:mm a'}}</div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <label>Related Projects</label>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th class="min-auto">PROJECT #</th>
+                            <th class="date_tab">START</th>
+                            <th class="min-auto">FLOOR</th>
+                            <th class="date_tab">APT</th>
+                            <th class="date_tab">SPECIAL PLACE</th>
+                            <th class="min-auto">ADDRESS</th>
+                            <th class="min-auto">CONTACT</th>
+                        </tr>
+                        <ng-container *ngFor="let job of partOfProjects">
+                            <tr [ngClass]="{'cursor-pointer': isFromGlobalSearch}" (click)="redirectOnDetailPage(job)">
+                                <td>
+                                    {{job?.jobNumber}}
+                                </td>
+                                <td>
+                                    {{job?.startDate}}
+                                </td>
+                                <td>{{job?.floorNumber}}</td>
+                                <td>{{job?.apartment}}</td>
+                                <td>{{job?.specialPlace}}</td>
+                                <td>{{job?.address}}</td>
+                                <td>{{job?.contact}}</td>
+                            </tr>
+                        </ng-container>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <!-- This is DOB Violation View End -->
+
+    <div class="modal-footer text-right">
+        <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide();loading=false">Cancel</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

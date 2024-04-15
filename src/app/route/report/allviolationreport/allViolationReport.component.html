@@ -1,0 +1,59 @@
+<div class="rpo-job rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+
+      <h2 class="component-title pull-left mr-2">Violation Reports</h2>
+      <ng-select class="pull-left mr-2" [(ngModel)]="violationType" bindValue="id" bindLabel="label"
+        [clearable]="false" style="width: 250px;margin-top: 14px;" (change)="onSelectViolationType()" [items]="violationOptions"
+        placeholder="Select Violation">
+      </ng-select>
+
+      <ng-container *ngIf="violationOptions.length>0">
+        <div class="search middle pull-left">
+          <div class="inner-addon left-addon">
+            <i class="icon fa fa-search"></i>
+            <input type="text" class="form-control" placeholder="Search violations" [(ngModel)]="srch"
+              (ngModelChange)="searchJob(srch)" />
+          </div>
+        </div>
+        <!-- customClassApply='{{showExportBtn}}' -->
+        <ng-container *ngIf="!this.isCustomerLoggedIn">
+          <ng-container *ngIf="showExportBtn == 'show'">
+            <export-xls-pdf-widget (onExportClick)="exportClick($event)" showEmailOptions="true"
+              [disabled]='disableExport'>
+            </export-xls-pdf-widget>
+          </ng-container>
+          <a href="javascript:void(0)" tooltip="Reset" class="pull-left mt-12 material-icon" (click)="clearSort()">
+            <i class="material-symbols-rounded">cached</i>
+          </a>
+          <a href="javascript:void(0)" tooltip="Advanced Search" class="pull-left mt-12 material-icon"
+            (click)="openModalAdvanceSearch(reportAdvanceSearch)">
+            <img src="./assets/images/filter_icon.svg" width="24px">
+          </a>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <ng-container>
+      <table id="dt-all-violation-report" class="display task-grid" style="width:100%"></table>
+    </ng-container>
+  </div>
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
+
+<ng-template #reportAdvanceSearch>
+  <div report-advance-search [modalRefAdvanceSearch]="modalRefAdvanceSearch"
+       (reloadAdvanceSearch)="reloadAdvanceSearch($event)" (clearSearchEvent)="clearSearchEvent($event)" [filledFilter]="filter" [isFromCOC]="false"
+       [isSearchFromAddress]="isSearchFromAddress"></div>
+</ng-template>
+
+<ng-template #jobSelect>
+  <app-job-list [modalRef]="modalRefJobSelect" [reportDocument]='reportDocument'></app-job-list>
+</ng-template>

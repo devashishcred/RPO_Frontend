@@ -1,0 +1,273 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #workTypeform="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} Service Item</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <p *ngIf="!workType.isActive">Status: <span><i class="incative-color fa fa-exclamation-circle"></i>Inactive
+            </span></p>
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label for="task">Project Type*</label>
+                    <ng-select name="idRfpJobType" [items]="jobTypes" bindLabel="itemName" bindValue="id" placeholder="Project Type" [(ngModel)]="workType.idRfpJobType"
+                               (ngModelChange)="getSubJobTypesCagetory(workType.idRfpJobType,true)" #idRfpJobType="ngModel" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idRfpJobType.errors && (idRfpJobType.dirty || idRfpJobType.touched)">
+                            {{errorMessage.requireJobType}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="task">Project Type Description</label>
+                    <ng-select name="idRfpSubJobTypeCategory" [items]="subJobTypesCategory" bindLabel="itemName" bindValue="id" placeholder="Project Type Description"
+                               [(ngModel)]="workType.idRfpSubJobTypeCategory" (ngModelChange)="getSubJobTypes(workType.idRfpSubJobTypeCategory,true)">
+                    </ng-select>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label for="task">Project Sub Type</label>
+                    <ng-select name="idRfpSuidRfpJobTypebJobType" [items]="subJobTypes" bindLabel="itemName" bindValue="id" placeholder="Project Sub Type"
+                               [(ngModel)]="workType.idRfpSubJobType" (ngModelChange)="getWorkTypeCategory(workType.idRfpSubJobType,true)"
+                               #idRfpSubJobType="ngModel">
+                    </ng-select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="task">Service Group</label>
+                    <ng-select name="idRfpServiceGroup" [items]="workTypesCategory" bindLabel="itemName" bindValue="id" placeholder="Service Group"
+                               [(ngModel)]="workType.idRfpServiceGroup" #idRfpServiceGroup="ngModel">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Service Item Name*</label>
+                    <input id="workTypeName" name="workTypeName" type="text" class="form-control" [(ngModel)]="workType.name" #workTypeName="ngModel"
+                           placeholder="Service Item Name" required/>
+                    <div class="error-message pl0">
+                        <div *ngIf="workTypeName.errors && (workTypeName.dirty || workTypeName.touched)">
+                            {{errorMessage.requireServiceItemName}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label for="task">Cost Type*</label>
+
+                    <ng-select name="costType" [items]="costTypeListing" bindLabel="itemName" bindValue="id" placeholder="Cost Type" [(ngModel)]="workType.costType"
+                               (ngModelChange)="costTypeChange()" #costType="ngModel" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="costType.errors && (costType.dirty || costType.touched)">
+                            {{errorMessage.costTypeRequired}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="workType.costType!=4 && workType.costType!=6">
+                    <label for="task">Cost ($)</label>
+                    <input id="cost" name="cost" type="text" class="form-control" [(ngModel)]="workType.cost" #cost="ngModel" (blur)="costBlur(workType.cost)" (keypress)="isDecimal($event)"
+                           placeholder="Cost ($)"/>
+
+                    <div class="error-message pl0">
+                        <div *ngIf="workType.costType && costNull">
+                            {{errorMessage.costRequired}}
+                        </div>
+                        <!-- <div *ngIf="workType.cost && workType.cost == 0">
+                            {{errorMessage.requriredCost}}
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label for="task">Part Of</label>
+
+                    <ng-select name="partOf" [items]="partOfListing" bindLabel="itemName" bindValue="id" placeholder="Part Of" [(ngModel)]="workType.partOf"
+                               #partOf="ngModel">
+                    </ng-select>
+                    <!-- <div class="error-message pl0">
+                        <div *ngIf="costType.errors && (costType.dirty || costType.touched)">
+                            {{errorMessage.costTypeRequired}}
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <!-- For Additional cost section starts-->
+            <div class="row form-group" *ngIf="showAdditionalCost">
+                <div class="col-sm-12">
+                    <label for="task">Additional Unit Price ($)*</label>
+                    <input id="additionalUnitPrice" name="additionalUnitPrice" type="text" class="form-control" [(ngModel)]="workType.additionalUnitPrice"
+                           (keypress)="isDecimal($event)" #additionalUnitPrice="ngModel" placeholder="Additional Unit Price ($)" required/>
+                    <div class="error-message pl0">
+                        <div *ngIf="additionalUnitPrice.errors && (additionalUnitPrice.dirty || additionalUnitPrice.touched)">
+                            {{errorMessage.requireAdditionalPrice}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group" *ngIf="showCumulative">
+                <div class="col-sm-12">
+                    <label for="task">
+                        <b>
+                            Cumulative Cost
+                            <i class="fa fa-plus pl-title" (click)="addNewCumulative(true,'')" tooltip="Add Cumulative"></i>
+                        </b>
+                    </label>
+                </div>
+                <div class="col-sm-12 mb5">
+                    <div class="col-sm-3">
+                        Quantity
+                    </div>
+                    <div class="col-sm-3">
+                        Cost ($)
+                    </div>
+                </div>
+                <div class="row mb10" *ngFor="let cum of workType.rfpJobTypeCumulativeCosts;index as k">
+                    <div class="col-sm-12">
+                        <div class="col-sm-3">
+
+                            <input id="{{cum.id}}_qty" name="{{cum.id}}_qty" type="text" class="form-control" [(ngModel)]="cum.qty" readonly/>
+                        </div>
+                        <div class="col-sm-5">
+                            <input id="{{cum.id}}_cumcost" name="{{cum.id}}_cumcost" type="text" class="form-control" [(ngModel)]="cum.cumulativeCost"
+                                   (keypress)="isDecimal($event)" placeholder="Cost ($)" required/>
+                            <div class="error-message pl0">
+                                <div *ngIf="(cum.cumulativeCost == '' || cum.cumulativeCost == null || cum.cumulativeCost == '0') ">
+                                    {{errorMessage.requriredCost}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3" *ngIf="cumulativeLenght==(k+1)">
+                            <label class="pointer" (click)="removeCumulative(k)" style="font-size: 18px; margin-top: 3px; color: #757070;">
+                                <i class="material-symbols-rounded">delete</i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- For cumilative caluclations section ends-->
+
+            <div class="row form-group">
+                <div class="col-sm-12 modify">
+                    Note : Add following keywords in Service Description to have dynamic data inserted: ##ServiceDescription## , ##ServiceQuantity##
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Service Description</label>
+                    <ck-editor [(ngModel)]="workType.serviceDescription" name="serviceDescription" [config]="configuration" debounce="400 " (ready)="onReady()" #ckeditor></ck-editor>
+                </div>
+            </div>
+            <!-- hours cost section starts-->
+            <!-- For range caluclations section starts-->
+            <div class="row col-sm-12 form-group" *ngIf="showCostRange">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label for="task">
+                            <b>Cost Range
+                                <i class="fa fa-plus pl-title" (click)="addNewRange(true,'')" tooltip="Add New Range"></i>
+                            </b>
+                        </label>
+                    </div>
+                </div>
+                <div class="row mb5">
+                    <div class="col-sm-4">
+                        From (minimum)
+                    </div>
+                    <div class="col-sm-4">
+                        To (Maximum)
+                    </div>
+                    <div class="col-sm-3">
+                        Cost ($)
+                    </div>
+                </div>
+
+                <div class="row mb10" *ngFor="let item of workType.rfpJobTypeCostRanges;index as j">
+                    <div class="col-sm-4">
+                        <input id="{{j}}_{{item.id}}_minimumQuantity" name="{{j}}_{{item.id}}_minimumQuantity" type="text" class="form-control" [(ngModel)]="item.minimumQuantity"
+                               (keypress)="isNumber(event)" (ngModelChange)="CheckMinMax(item)" placeholder="From (minimum)" required/>
+                        <div class="error-message pl0">
+                            <div *ngIf="item.minimumQuantity=='' || item.minimumQuantity==null">
+                                {{errorMessage.requiredMinimum}}
+                            </div>
+                            <div *ngIf="item.minimumQuantity <=0 && (item.minimumQuantity!='' && item.minimumQuantity!=null)">
+                                {{errorMessage.Minimun}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <input id="{{j}}_{{item.id}}_maximumQuantity" name="{{j}}_{{item.id}}_maximumQuantity" type="text" class="form-control" [(ngModel)]="item.maximumQuantity"
+                               (keypress)="isDecimal($event)" (ngModelChange)="CheckMinMax(item)" placeholder="To (Maximum)" required/>
+                        <div class="error-message pl0">
+                            <div *ngIf="item.maximumQuantity=='' || item.maximumQuantity==null">
+                                {{errorMessage.requiredMaximum}}
+                            </div>
+                            <div *ngIf="item.maximumQuantity!='' && item.maximumQuantity!=null &&(item.minimumQuantity > item.maximumQuantity)">
+                                {{errorMessage.MaxMinimun}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <input id="{{j}}_{{item.id}}_rangeCost" name="{{j}}_{{item.id}}_rangeCost" type="text" class="form-control" [(ngModel)]="item.rangeCost"
+                               (keypress)="isNumber(event)" placeholder="Cost ($)" required/>
+                        <div class="error-message pl0">
+                            <div *ngIf="item.rangeCost=='' || item.rangeCost==null">
+                                {{errorMessage.requriredCost}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <label class="pointer" (click)="removeRange(j)" style="font-size: 18px; margin-top: 3px; color: #757070;">
+                            <i class="material-symbols-rounded">delete</i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12 modify">
+                    Note : Tick below checkbox if ##ServiceDescription## keyword is used in Service Description
+                </div>
+            </div>
+            <div class="row form-group">
+
+                <div class="col-sm-12">
+                    <div class="checkbox form-check">
+                        <label class="mr5 form-check-label input-inline">
+                            <input type="checkbox" class="form-check-input" name="customServiceDescription" [(ngModel)]="workType.customServiceDescription"/>Custom Service Description
+                            <i class="input-helper"></i>
+                        </label>
+                        <label class="mr5 form-check-label input-inline">
+                            <input type="checkbox" class="form-check-input" name="ShowInScope" [(ngModel)]="workType.isShowScope"/>Don't Show in Scope
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- For range caluclations section starts-->
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" [disabled]="!workTypeform.form.valid || costNull"
+                    (click)="saveWorkType()">Save
+            </button>
+            <!--  -->
+            <!-- !workTypeform.form.valid || (!workType.costType && workType.cost) || (workType.costType!=null && workType.costType !=6 && !workType.cost) || (workType.costType!=null && workType.costType!=6) || (workType.costType == 6 && workType.rfpJobTypeCumulativeCosts =='') -->
+            <!-- {{!workTypeform.form.valid}}l6  || {{!workType.costType}}l55 && {{workType.cost}} l5 ||  {{workType.costType!=null}}l444 && {{ workType.costType !=6 }} l44 &&  {{!workType.cost}}l4 || {{workType.costType!=null}}l33 && {{workType.costType!=6}}l3 || {{workType.costType == 6}}l22 && {{workType.rfpJobTypeCumulativeCosts ==''}} l2 || {{workType.costType == 6 }} && {{workType.rfpJobTypeCumulativeCosts !=''}}L1   -->
+            <!-- {{workType.rfpJobTypeCumulativeCosts[workType.rfpJobTypeCumulativeCosts.length - 1].cumulativeCost == 0}} L -->
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

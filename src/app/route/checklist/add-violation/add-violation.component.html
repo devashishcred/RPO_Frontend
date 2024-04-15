@@ -1,0 +1,191 @@
+<div class="modal-custom-content" cdkDrag>
+  <div class="modal-header" cdkDragHandle>
+    <button type="button" class="close close-icn" cdkDragHandle>
+      <span class="fa fa-arrows"></span>
+    </button>
+    <h4 class="modal-title pull-left">Add {{type === 'ECB' ? 'ECB/AOTH' : type == 'DOB' ? 'DOB' : 'DOB SAFETY'}} Violation</h4>
+  </div>
+
+  <ng-container *ngIf="type === 'ECB'">
+    <div class="modal-body pt15 pb0 px-2">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <table class="table">
+              <tr>
+                <th style="width: 50px;">
+                  <div class="checkbox form-check">
+                    <label class="form-check-label nolabel">
+                      <input class="form-check-input" (click)="onEcbSelectAll()" [ngModel]="isAllSelected"
+                        type="checkbox">
+                      <i class="input-helper"></i>
+                    </label>
+                  </div>
+                </th>
+                <th class="date_tab">ISSUE DATE</th>
+                <th class="min-auto">ECB VIOLATION#</th>
+                <th style="width: 200px;">VIOLATION DESCRIPTION</th>
+                <th class="min-auto">PARTY RESPONSIBLE</th>
+                <th class="status_tab">STATUS</th>
+              </tr>
+              <tr *ngFor="let violation of ecbViolation;let i = index">
+                <td>
+                  <div class="checkbox form-check">
+                    <label class="form-check-label nolabel">
+                      <input class="form-check-input" (click)="onSelectViolation(violation.jobViolations.id,i)" [ngModel]="violation.isPartofchecklist" type="checkbox">
+                      <i class="input-helper"></i>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  {{violation.jobViolations.dateIssued | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>{{violation.jobViolations.summonsNumber}}</td>
+                <td>
+                  <div class="long-text">
+                    {{violation.jobViolations.violationDescription}}
+                  </div>
+                </td>
+                <td>
+                  {{violation.jobViolations.partyResponsible == '3' ? 'Other' : 'RPO'}}
+                  <!-- {{violation.jobViolations.partyResponsible == '3' ? 'Other' : 'RPO Team'}} -->
+                </td>
+                <td>{{violation.jobViolations.status == 0 ? '-' : (violation.jobViolations.status == 1 ? 'Open' : 'Completed')}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'DOB'">
+    <div class="modal-body pt15 pb0 px-2">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <table class="table">
+              <tr>
+                <th style="width: 50px;">
+                  <div class="checkbox form-check">
+                    <label class="form-check-label nolabel">
+                      <input class="form-check-input" (click)="onDobSelectAll()" [ngModel]="isAllSelected"
+                        type="checkbox">
+                      <i class="input-helper"></i>
+                    </label>
+                  </div>
+                </th>
+                <th class="date_tab">ISSUE DATE</th>
+                <th class="min-auto">DOB VIOLATION#</th>
+                <th class="min-auto">RELATED ECB#</th>
+                <th style="width: 200px;">VIOLATION DESCRIPTION</th>
+                <th class="min-auto">PARTY RESPONSIBLE</th>
+                <th class="status_tab">STATUS</th>
+              </tr>
+              <tr *ngFor="let violation of dobViolation;let i = index;">
+                <td>
+                  <div class="checkbox form-check">
+                    <label class="form-check-label nolabel">
+                      <input class="form-check-input" (click)="onSelectViolation(violation.jobViolations.id,i)" [ngModel]="violation.isPartofchecklist" type="checkbox">
+                      <i class="input-helper"></i>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  {{violation.jobViolations.dateIssued | date: 'MM/dd/yyyy'}}
+                </td>
+                <td>{{violation.jobViolations.summonsNumber}}</td>
+                <td>{{violation.jobViolations.ecbNumber}}</td>
+                <td>
+                  <div class="long-text">
+                    {{violation.jobViolations.violationDescription}}
+                  </div>
+                </td>
+                <td>
+                  {{violation.jobViolations.partyResponsible == '3' ? 'Other' : 'RPO'}}
+                  <!-- {{violation.jobViolations.partyResponsible == '3' ? 'Other' : 'RPO Team'}} -->
+                </td>
+                <td>{{violation.jobViolations.status == 0 ? '-' : (violation.jobViolations.status == 1 ? 'Open' : 'Completed')}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="type === 'DOB Safety'">
+    <div class="modal-body pt15 pb0 px-2">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table">
+                <tr>
+                  <th style="width: 50px;">
+                    <div class="checkbox form-check">
+                      <label class="form-check-label nolabel">
+                        <input class="form-check-input" (click)="onDobSafetySelectAll()" [ngModel]="isAllSelected"
+                          type="checkbox">
+                        <i class="input-helper"></i>
+                      </label>
+                    </div>
+                  </th>
+                  <th style="width: 200px;">ISSUE DATE</th>
+                  <th style="width: 200px;">DOB SAFETY VIOLATION#</th>
+                  <th style="width: 200px;">VIOLATION TYPE</th>
+                  <th style="width: 200px;">VIOLATION DESCRIPTION</th>
+                  <th style="width: 200px;">DEVICE TYPE</th>
+                  <th style="width: 200px;">DEVICE NUMBER</th>
+                  <th style="width: 200px;">VIOLATION STATUS</th>
+                  <th style="width: 200px;">PARTY RESPONSIBLE</th>
+                </tr>
+                <tr *ngFor="let violation of dobSafetyViolation;let i = index;">
+                  <td>
+                    <div class="checkbox form-check">
+                      <label class="form-check-label nolabel">
+                        <input class="form-check-input" (click)="onSelectViolation(violation.jobViolations.id,i)" [ngModel]="violation.isPartofchecklist" type="checkbox">
+                        <i class="input-helper"></i>
+                      </label>
+                    </div>
+                  </td>
+                  <td>
+                    {{violation.jobViolations.dateIssued | date: 'MM/dd/yyyy'}}
+                  </td>
+                  <td>{{violation.jobViolations.summonsNumber}}</td>
+                  <td>{{violation.jobViolations.violation_type}}</td>
+                  <td>
+                    <div class="long-text">
+                      {{violation.jobViolations.violationDescription}}
+                    </div>
+                  </td>
+                  <td>{{violation.jobViolations.device_type}}</td>
+                  <td>{{violation.jobViolations.deviceNumber}}</td>
+                  <td>{{violation.jobViolations.violation_status}}</td>
+                  <td>
+                    {{violation.jobViolations.partyResponsible == '3' ? 'Other' : 'RPO'}}
+                    <!-- {{violation.jobViolations.partyResponsible == '3' ? 'Other' : 'RPO Team'}} -->
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+
+  <div class="modal-footer text-right">
+    <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+    <button type="submit" class="btn btn-blue" (click)="addEcbAndDobViolationInChecklist()">Save</button>
+  </div>
+
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+</div>

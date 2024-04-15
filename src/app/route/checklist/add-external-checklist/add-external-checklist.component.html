@@ -1,0 +1,60 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #groupform="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left"> Add External Application </h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Application Type*</label>
+                    <ng-select id="idGroupType" name="idGroupType" [items]="applicationTypes" bindLabel="itemName" bindValue="id" placeholder="Application Type"
+                    (change)="selectApplication($event)"  [(ngModel)]="externalApplicationData.idJobApplicationType"
+                        #idGroupType="ngModel" [disabled]="id" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idGroupType.errors && (idGroupType.dirty || idGroupType.touched)">
+                            Application Type is required
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Application #</label>
+                    <input id="nameDesc" name="nameDesc" type="text" class="form-control" [(ngModel)]="externalApplicationData.applicationNumber" #nameDesc="ngModel"/>
+                    <div class="error-message pl0">
+                        <div *ngIf="nameDesc.errors && (nameDesc.dirty || nameDesc.touched)">
+                            Checklist Group Name is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="task">Work Permit Type*</label>
+                    <ng-select id="idJobWorkType" name="idJobWorkType" [multiple]="true" [items]="workpermitTypes" bindLabel="description" bindValue="id" placeholder="Work Permit Type" [(ngModel)]="externalApplicationData.idJobWorkType"
+                        #idJobWorkType="ngModel" [disabled]="id" required>
+                    </ng-select>
+                    <div class="error-message pl0">
+                        <div *ngIf="idJobWorkType.errors && (idJobWorkType.dirty || idJobWorkType.touched)">
+                            Work Permit Type is required
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" [disabled]="!groupform.form.valid" (click)="saveExternalApplication()">Save</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,155 @@
+<div class="modal-custom-content" cdkDrag>
+    <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">
+                {{ idViolation ? 'Edit' : 'Add' }} DOB Safety Violation
+            </h4>
+        </div>
+        <div class="modal-body pt15 pb0">
+            <div class="form-add-dob-safety-violation">
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        <label>Issue Date *</label>
+                        <div datetime-picker class="inner-addon right-addon input-group">
+                            <i class="icon material-symbols-outlined clickable datepickerbutton">event</i>
+                            <input type="text" formControlName="dateIssued" class="form-control" [readOnly]="idViolation && !violation?.isManually"/>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label>DOB Safety Violation# *</label>
+                        <input type="text" placeholder="DOB Violation" [readOnly]="idViolation" formControlName="summonsNumber"
+                               class="form-control"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Device Type</label>
+                        <input type="text" placeholder="Device Type" [readOnly]="idViolation && !violation?.isManually" formControlName="device_Type" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        <label>Device Number</label>
+                        <input type="text" placeholder="Device Number" [readOnly]="idViolation && !violation?.isManually" formControlName="deviceNumber" class="form-control"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Violation Type</label>
+                        <input type="text" placeholder="Violation Type" [readOnly]="idViolation && !violation?.isManually" formControlName="violationType" class="form-control"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Violation Status</label>
+                        <input type="text" placeholder="Violation Status" [readOnly]="idViolation && !violation?.isManually" formControlName="violation_Status" class="form-control"/>
+                    </div>
+                </div>
+
+                <!-- <div class="row form-group mb-5">
+                  <div class="col-md-12">
+                    <label>DOB Disposition Comments</label>
+                    <textarea rows="2" formControlName="dispositionComments" [readOnly]="idViolation && !violation?.isManually" placeholder="DOB Disposition Comments"
+                      class="form-control"></textarea>
+                  </div>
+                </div> -->
+
+                <div class="row form-group mb-5">
+                    <div class="col-md-12">
+                        <label>Violation Description</label>
+                        <textarea rows="2" placeholder="Violation Description" [readOnly]="idViolation && !violation?.isManually" formControlName="violationDescription"
+                                  class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-8">
+                        <div class="notes-container">
+                            <label>Notes</label>
+                            <textarea rows="2" name="notes" placeholder="Notes" formControlName="notes"
+                                      class="form-control"></textarea>
+                            <div class="modify"
+                                 *ngIf="violation?.notesLastModifiedByEmployeeName && violation?.notesLastModifiedByEmployeeName!= null">
+                <span>Last modified by {{ violation?.notesLastModifiedByEmployeeName }} on
+                    {{ violation?.notesLastModifiedDate | date :'MM/dd/yyyy, h:mm a' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group mb-5">
+                    <div class="col-md-4">
+                        <label>
+                            Party Responsible*
+                        </label>
+                        <select formControlName="partyResponsible" #status class="form-control">
+                            <option value="1">RPO</option>
+                            <!-- <option value="1">RPO Team</option> -->
+                            <option value="3">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <ng-container *ngIf="partyResponsible.value == '3'">
+                            <label>Person Responsible</label>
+                        </ng-container>
+                        <input *ngIf="partyResponsible.value == '3'" type="text" class="form-control"
+                               formControlName="manualPartyResponsible" placeholder="Person Responsible">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal-footer text-right">
+            <div class="col-sm-7 text-left">
+                <div class="modify" *ngIf="violation?.lastModifiedDate && violation?.lastModifiedDate">Last modified by
+                    {{ violation?.lastModifiedByEmployeeName }} on {{ violation?.lastModifiedDate | date :'MM/dd/yyyy, h:mm a' }}
+                </div>
+            </div>
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="submit" class="btn btn-blue" [disabled]="this.formData.invalid">Save</button>
+        </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
+
+        <ng-container *ngIf="idViolation">
+            <div class="container-fluid">
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        <label>Related Projects</label>
+                    </div>
+                </div>
+                <table class="table">
+                    <tr>
+                        <th class="min-auto">PROJECT #</th>
+                        <th class="date_tab">START</th>
+                        <th class="min-auto">FLOOR</th>
+                        <th class="date_tab">APT</th>
+                        <th class="date_tab">SPECIAL PLACE</th>
+                        <th class="min-auto">ADDRESS</th>
+                        <th class="min-auto">CONTACT</th>
+                    </tr>
+                    <ng-container *ngFor="let job of partOfProjects">
+                        <tr>
+                            <td>
+                                {{ job?.jobNumber }}
+                            </td>
+                            <td>
+                                {{ job?.startDate }}
+                            </td>
+                            <td>{{ job?.floorNumber }}</td>
+                            <td>{{ job?.apartment }}</td>
+                            <td>{{ job?.specialPlace }}</td>
+                            <td>{{ job?.address }}</td>
+                            <td>{{ job?.contact }}</td>
+                        </tr>
+                    </ng-container>
+                </table>
+            </div>
+        </ng-container>
+
+
+    </form>
+</div>

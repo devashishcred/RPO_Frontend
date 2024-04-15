@@ -1,0 +1,101 @@
+<div *ngIf="isFromDetail" class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">View Explanation Of Charges</h4>
+    </div>
+    <div class="modal-body pt15 pb0">
+      <table class="table blue-table mb0 mt15">
+        <thead>
+          <tr>
+            <th style="width:15%">Infraction Code</th>
+            <th style="width:25%">Code Section</th>
+            <th style="width:25%">Section Law Description</th>
+            <th style="width:10%">Penalty Amount($)</th>
+            <th class="text-left" style="width:25%">Penalty Master Notes</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="violation.explanationOfCharges?.length > 0">
+          <tr *ngFor="let charges of violation.explanationOfCharges; let i = index">
+            <td>
+              <input type="text" placeholder="Infraction Code" name="charges_{{i}}_code" id="charges_{{i}}_code" [(ngModel)]="charges.code"
+                class="form-control" [readonly]="isFromDetail" />
+            </td>
+            <td>
+              <input type="text" placeholder="Code Section" name="charges_{{i}}_codeSection" id="charges_{{i}}_codeSection" [(ngModel)]="charges.codeSection"
+                [readonly]="isFromDetail" class="form-control" />
+            </td>
+            <td>
+              <textarea rows="2" name="notes" placeholder="Section Law Description" [(ngModel)]="charges.description" name="charges_{{i}}_description"
+                id="charges_{{i}}_description" [readonly]="isFromDetail" class="form-control"></textarea>
+            </td>
+            <td>
+              <input type="text" (keypress)="isDecimal($event);" placeholder="Penalty Amount" name="charges_{{i}}_paneltyAmount" id="charges_{{i}}_paneltyAmount"
+                [(ngModel)]="charges.paneltyAmount" [readonly]="isFromDetail" class="form-control text-right" />
+            </td>
+            <td class="text-left penaltyInfo">
+              <span *ngIf="charges.dobPenaltySchedule"><strong> Cure: </strong>{{charges.dobPenaltySchedule.cure ? "Yes" : "No"}}</span>
+              <span *ngIf="charges.dobPenaltySchedule"><strong> Stipulation: </strong>{{charges.dobPenaltySchedule.stipulation ? "Yes" : "No"}}</span>
+              <span *ngIf="charges.dobPenaltySchedule"><strong> Mitigated Penalty: </strong>{{charges.dobPenaltySchedule.mitigatedPenalty ? "Yes" : "No"}}</span>
+              <span *ngIf="charges.fdnyPenaltySchedule"><strong> First Penalty ($): </strong>
+                {{charges.fdnyPenaltySchedule.firstViolationPenalty}}
+              </span>
+              <span *ngIf="charges.fdnyPenaltySchedule"><strong> First Mitigated Penalty ($): </strong>
+                {{charges.fdnyPenaltySchedule.firstViolationMitigatedPenalty}}
+              </span>
+              <span *ngIf="charges.fdnyPenaltySchedule"><strong> First Maximum Penalty ($): </strong>
+                {{charges.fdnyPenaltySchedule.firstViolationMaximumPenalty}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+  
+      </table>
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+    </div>
+</div>
+
+
+  <div *ngIf="!isFromDetail" class="mini-scroll-wrapper-popup mt15">
+    <table class="table blue-table mb0">
+      <thead>
+        <tr>
+          <th style="width:20%">Infraction Code</th>
+          <th style="width:20%">Code Section</th>
+          <th style="width:30%">Section Law Description</th>
+          <th style="width:15%">Penalty Amount($)</th>
+          <th style="width:5%"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="violation.explanationOfCharges?.length > 0">
+        <tr *ngFor="let charges of violation.explanationOfCharges; let i = index">
+          <td>
+            <input type="text" placeholder="Infraction Code" name="charges_{{i}}_code" id="charges_{{i}}_code" [(ngModel)]="charges.code"
+              class="form-control" [readonly]="charges.isFromAuth" />
+          </td>
+          <td>
+            <input type="text" placeholder="Code Section" name="charges_{{i}}_codeSection" id="charges_{{i}}_codeSection" [(ngModel)]="charges.codeSection"
+              [readonly]="charges.isFromAuth" class="form-control" />
+          </td>
+          <td>
+            <textarea rows="2" name="notes" placeholder="Section Law Description" [(ngModel)]="charges.description" name="charges_{{i}}_description"
+              id="charges_{{i}}_description" [readonly]="charges.isFromAuth" class="form-control"></textarea>
+          </td>
+          <td>
+            <input type="text" (keypress)="isDecimal($event);" placeholder="Penalty Amount" name="charges_{{i}}_paneltyAmount" id="charges_{{i}}_paneltyAmount"
+              [(ngModel)]="charges.paneltyAmount" [readonly]="charges.isFromAuth" class="form-control" />
+          </td>
+          <td>
+            <a class="text-center" tooltip="Delete" *ngIf="!charges.isFromAuth" id="charges_del_{{i}}_{{charges.rowCnt}}" (click)="deleteCharges(charges.rowCnt,charges)">
+              <span class="material-symbols-outlined  cursor-pointer">delete</span>
+            </a>
+          </td>
+  
+        </tr>
+      </tbody>
+  
+    </table>
+  </div>

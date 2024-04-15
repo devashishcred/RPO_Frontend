@@ -1,0 +1,28 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">Prefix</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showPrefixAddBtn}}" (click)="openModalForm(prefixform,null,true)">Add Prefix</button>
+        <div class="pull-left search middle">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search Prefix" [(ngModel)]="search" (ngModelChange)="searchPrefix(search)" />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body">
+    <table id="dt-prefix" class="display"  style="width:100%"></table>
+  </div>
+  <ng-template #prefixform>
+    <div add-prefix  [modalRef]="modalRef" [reload]="reload" [prefixId]="prefixId" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

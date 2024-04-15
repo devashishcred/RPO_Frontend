@@ -1,0 +1,75 @@
+<div class="rpo-task rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+      <h2 class="component-title pull-left mr-2">Task</h2>
+      <div class="search middle pull-left mr-2">
+        <div class="inner-addon left-addon">
+          <i class="icon fa fa-search"></i>
+          <input type="text" class="form-control" placeholder="Search Task" [(ngModel)]="srch" (ngModelChange)="search(srch)" />
+        </div>
+      </div>    
+    <a href="javascript:void(0)" tooltip="Reset" class="pull-left mt-12 material-icon" (click)="clearSort()">
+      <i class="material-symbols-rounded">cached</i>
+    </a> 
+    <a href="javascript:void(0)" tooltip="Advanced Search" class="pull-left mt-12 material-icon {{showDocumentAddBtn}}" (click)="openModalTaskFilter(taskfilter)">
+      <img src="./assets/images/filter_icon.svg" width="24px">
+    </a>
+      <button type="button" class="btn btn-panel middle add-job pull-right" (click)="openAddTaskForm(addTaskMaster,null)">Create
+        Task</button>
+        <div class="work-status pull-right status-label">
+          <label>
+            <span class="status red"></span>Overdue
+          </label>
+          <label>
+            <span class="status orange"></span>Due today
+          </label>
+          <label>
+            <span class="status blue"></span>Due tomorrow
+          </label>
+          <label>
+            <span class="status yellow"></span>Due in 5 days
+          </label>
+          <label>
+            <span class="status green"></span>Due after 5 days
+          </label>
+          <label>
+            <span class="status grey"></span>Unattainable/ Completed
+          </label>
+          
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body task-grid">
+    <table id="dt-task" class="display task-grid"  style="width:100%"></table>
+  </div>
+</div>
+
+<ng-template #taskfilter>
+  <div task-filter [taskFilter]="taskfilter" [modalRef]="modalRef" [filledFilter]="filter" [reloadSearch]="reloadSearch" [reload]="reload"></div>
+</ng-template>
+
+<ng-template #progressionnote>
+  <div add-progression-note [progressionNote]="progressionNote" [modalRef]="modalRef" [jobId]="idJob" [idTask]="idTask" [reload]="reload" [fromTask]="true"></div>
+</ng-template>
+<ng-template #addtask>
+  <div add-task [addtask]="addtask" [modalRef]="modalRef"  [isNew]="isNew" [idTaskType]='idTaskType' [idTask]="idTask" [isSendFromTask]="isSendFromTask" [idJob]="idJob" [reload]="reload"></div>
+</ng-template>
+
+<ng-template #reminder>
+  <div add-reminder [reminder]="reminder" [modalRef]="modalRef" [idTask]="idTask" [reload]="reload"></div>
+</ng-template>
+<ng-template #viewtask>
+    <div view-task [modalRef]="modalRef" [idTask]="idTask"></div>
+</ng-template>
+
+<ng-template #addTaskMaster>
+  <div add-task-master  [modalRef]="modalRef" [idTask]="idTask"  [isNew]="isNew"  [reload]="reload"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>
+

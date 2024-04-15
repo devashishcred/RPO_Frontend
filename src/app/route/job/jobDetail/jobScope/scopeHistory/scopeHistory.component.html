@@ -1,0 +1,41 @@
+<div class="modal-custom-content" cdkDrag>
+  <div class="modal-header" cdkDragHandle>
+    <button type="button" class="close close-icn" cdkDragHandle>
+      <span class="fa fa-arrows"></span>
+    </button>
+    <h4 class="modal-title pull-left">{{costType == 7 ? 'Time notes History' : 'Task History'}}</h4>
+  </div>
+  <div class="modal-body pb0 pt15">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="timeline-centered">
+          <article class="timeline-entry" *ngFor="let history of scopeHistoryData; index as i">
+            <div class="timeline-entry-inner">
+              <div class="timeline-icon"></div>
+              <div class="timeline-label">
+                <p class="date">{{history.historyDate | date:'MM/dd/yyyy h:mm a'}}</p>
+                <p class="name">{{history.firstName}} {{history.lastName}}</p>
+                <p class="description" [innerHTML]="history.description | safeHtml"></p>
+              </div>
+            </div>
+          </article>
+          <div *ngIf="scopeHistoryData?.length == 0 && !loading">
+            <p>No matching records found</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer text-right">
+    <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide();loading=false">Cancel</button>
+  </div>
+</div>
+<ng-template #viewtask>
+  <div view-task [modalRef]="modalRef" [idTask]="idTask"></div>
+</ng-template>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple">
+    <div></div>
+    <div></div>
+  </div>
+</div>

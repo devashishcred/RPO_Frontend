@@ -1,0 +1,125 @@
+@import "../../../constants";
+div.rpo-login {
+  position: relative;
+  padding: 30px;
+  background-image: url("../../../assets/bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  img.logo {
+    display: block;
+    width: 189px;
+    height: auto;
+    margin: 0; padding: 0;
+  }
+  .container-box{
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);    
+    .container{
+      width: 100%;
+      box-shadow: 0 1px 40px rgba($primary-brand-color, 0.1);
+      background: $primary-contrast;
+      border-radius: 20px;
+    }
+  }
+  .welcome-txt{
+    background-image: url("../../../assets/login1.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 80vh;
+    border-radius: 20px 0 0 20px;
+    color: $primary-contrast;
+    position: relative;
+    div{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      transform: translate(-50%, -50%);
+    }
+    h2{
+      font-size: 32px;
+      font-weight: 600;
+      margin-top: 18px;
+    }
+    p{
+      font-size: $large;
+      font-weight: normal;
+      margin-top: 12px;
+    }
+  }
+  .login-box{    
+    position: relative;
+    height: 80vh;
+    .form-container{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 70%;
+      transform: translate(-50%, -50%);
+    }
+    .login-title{
+      font-size: 26px;
+      color: $secondry-color;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  }
+  .copyRight{
+    position: absolute;
+    color: #454C5C;
+    font-size: 12px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+  }
+  .box {
+    opacity: 1;
+    padding: 50px;
+    border-width: 1px;
+    border-radius: 2px;
+    border-color: #d5e1e8;
+    border-style: solid;
+    background-color: #f4f8f9;
+    background-image: none;
+    background-size: auto;
+    background-repeat: repeat;
+    background-position: center center;
+    box-shadow: #eaeaea 1px 1px 10px;
+    span {
+      color: #0553FC;
+      font-size: 26px;
+      font-weight: 300;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    input {
+      opacity: 1;
+      background-color: rgb(255, 255, 255);
+      border-color: rgb(221, 221, 221);
+      border-width: 1px;
+      color: rgb(102, 102, 102);
+      padding: 0px 10px;
+      text-align: left;
+      font-size: 22px;
+      border-radius: 2px;
+      border-style: solid;
+      background-size: auto;
+      background-repeat: repeat;
+      background-position: center center;
+      height: 52px;
+    }
+  }
+}
+
+.material-symbols-outlined {
+  position: absolute;
+  right: 26px;
+  top: 32px;
+  cursor: pointer;
+}

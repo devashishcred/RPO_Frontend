@@ -1,0 +1,189 @@
+.rpo-Company {
+  .component-header {
+    margin-top: 71px !important;
+  }
+  button.middle {
+    margin-top: 12px;
+  }
+  .component-body {
+    color: #212121;
+    .contact-card {
+      padding-right: 0px;
+      padding-left: 0px;
+      .panel-contact {
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      }
+      .panel-default > .panel-heading {
+        border-color: transparent !important;
+      }
+      .panel-heading-contactDetail {
+        font-size: 14px;
+        background-color: #f1f1f1;
+        padding: 25px 20px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        & > .row {
+          min-height: 30px;
+        }
+        .user-icon {
+          font-size: 18px;
+          font-weight: bold;
+          margin-right: 15px;
+          width: 54px;
+          height: 54px;
+          border-radius: 50%;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          float: left;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          background-position: top;
+          background-size: cover;
+          span {
+            font-weight: 700;
+          }
+          img {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            max-width: 100%;
+          }
+        }
+        .user-info {
+          margin-left: 75px;
+          .p-contactsTitle {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 100%;
+            white-space: nowrap;
+            padding-right: 12px;
+            a {
+              color: #454c5c;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+    .label-card {
+      font-weight: bold;
+      display: block;
+      font-size: 14px;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+    }
+    .span-label-card-other {
+      font-size: 12px;
+      opacity: 0.5;
+    }
+    .span-label-card-other1 {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    a.span-label-card-other1 {
+      font-weight: normal;
+      color: #006cff;
+    }
+    .grid-card.panel {
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      .panel-heading {
+        font-size: 14px;
+        background-color: #f1f1f1;
+        padding: 25px 20px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom: none;
+        .comp-name {
+          margin-bottom: 0px !important;
+          padding-right: 20px;
+          font-size: 18px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.span-label-card {
+  color: #626d76;
+  font-size: 12px;
+}
+
+.div-no-padding-left-card {
+  padding-left: 0px;
+}
+
+.div-no-padding-right-card {
+  padding-right: 0px;
+}
+
+.p-contactTitle {
+  font-size: 20px !important;
+  margin-bottom: 0px !important;
+  padding-right: 20px;
+}
+
+.body-noPaddingTop {
+  padding-top: 0px;
+  padding-right: 0px;
+}
+
+.panel-contacts {
+  margin-top: 10px;
+}
+
+.panel-heading-contactCompaniesDetail {
+  background-color: #e6f3f7;
+  color: #323a3d;
+  border-color: #aec7d1;
+}
+
+.p-companiesTitle {
+  font-size: 16px !important;
+  font-weight: normal;
+  margin-bottom: 0px !important;
+}
+
+.p-companiesSubTitle {
+  font-size: 13px !important;
+  font-weight: bold;
+}
+
+.companiesAddress {
+  font-size: 13px !important;
+  font-weight: normal;
+  margin-bottom: 0px !important;
+}
+
+.company-widget {
+  position: absolute;
+  top: 4px;
+  right: 15px;
+}
+
+.filter-tabs-area {
+  margin-top: -20px !important;
+}
+.filter-tabs-area .tabs ul li {
+  max-width: 150px;
+}
+
+.search {
+  width: 524px;
+  margin-right: 10px;
+  &.middle {
+    margin-top: 15px;
+  }
+  .select-company {
+    width: 230px;
+  }
+  .inner-addon {
+    width: 294px;
+  }
+}

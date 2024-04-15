@@ -1,0 +1,186 @@
+<div class="modal-custom-content"  cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <!-- <button type="button" class="close close-icn" (click)="modalRef.hide()">
+            <span class="fa fa-times-circle"></span>
+        </button> -->
+        <button type="button" class="close close-icn mr-2" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">View Address Details</h4>
+    </div>
+
+    <div class="modal-body pt15 pb5">
+        <div class="column-data clearfix view-det">
+            <p *ngIf="address.borough">
+                <label>BOROUGH</label>
+                <span>{{address.borough.description}}</span>
+            </p>
+            <p *ngIf="address.idBorough == 6">
+                <label>BOROUGH NAME</label>
+                <span>{{address.outsideNYC}}</span>
+            </p>
+            <p *ngIf="address.houseNumber">
+                <label>HOUSE NUMBER</label>
+                <span>{{address.houseNumber}}</span>
+            </p>
+            <p *ngIf="address.street">
+                <label>STREET</label>
+                <span>{{address.street}}</span>
+            </p>
+            <p *ngIf="address.zipCode">
+                <label>ZIP</label>
+                <span>{{address.zipCode}}</span>
+            </p>
+            <p *ngIf="address.block">
+                <label>BLOCK</label>
+                <span>{{address.block}}</span>
+            </p>
+            <p *ngIf="address.lot">
+                <label>LOT</label>
+                <span>{{address.lot}}</span>
+            </p>
+            <p *ngIf="address.binNumber">
+                <label>BIN#</label>
+                <span>{{address.binNumber}}</span>
+            </p>
+            <p *ngIf="address.comunityBoardNumber">
+                <label>COMMUNITY BOARD#</label>
+                <span>{{address.comunityBoardNumber}}</span>
+            </p>
+            <p *ngIf="address.zoneDistrict">
+                <label>ZONE DISTRICT(s)</label>
+                <span>{{address.zoneDistrict}}</span>
+            </p>
+            <p *ngIf="address.overlay">
+                <label>OVERLAY(s)</label>
+                <span>{{address.overlay}}</span>
+            </p>
+            <p *ngIf="address.specialDistrict">
+                <label>SPECIAL DISTRICT(S)</label>
+                <span>{{address.specialDistrict}}</span>
+            </p>
+            <p *ngIf="address.map">
+                <label>MAP</label>
+                <span>{{address.map}}</span>
+            </p>
+
+            <p *ngIf="address.nonProfit">
+                <label>NON-PROFIT</label>
+                <span>{{address.nonProfit ? "Yes" : "No"}}</span>
+            </p>
+            <p *ngIf="address.addressType">
+                <label>ADDRESS TYPE</label>
+                <span>{{address.addressType.name}}</span>
+            </p>
+            <p *ngIf="address.company">
+                <label>COMPANY</label>
+                <span>{{address.company.name}}</span>
+            </p>
+            <p *ngIf="address.ownerContact">
+                <label>OWNER</label>
+                <span>
+                    {{address.prefix ? address.ownerContact.prefix.name: ""}} {{address.ownerContact.firstName}}
+                    {{address.ownerContact.lastName}}
+                </span>
+            </p>
+            <p *ngIf="jobDetail?.rfpAddress.ownerType">
+                <label>OWNER TYPE</label>
+                <span>
+                    {{jobDetail?.rfpAddress.ownerType.name}}
+                </span>
+            </p>
+            <p *ngIf="address.occupancyClassification">
+                <label>OCCUPANCY CLASSIFICATION{{address.isOcupancyClassification20082014 ? "(2008/2014)" : ""}}</label>
+                <span>{{address.occupancyClassification.description}}</span>
+            </p>
+            <p *ngIf="address.constructionClassification">
+                <label>CONSTRUCTION CLASSIFICATION{{address.isConstructionClassification20082014 ? "(2008/2014)" :
+                    ""}}</label>
+                <span>{{address.constructionClassification.description}}</span>
+            </p>
+            <p *ngIf="address.multipleDwellingClassification">
+                <label>MULTIPLE DWELLING CLASSIFICATION</label>
+                <span>{{address.multipleDwellingClassification.description}}</span>
+            </p>
+            <p *ngIf="address.primaryStructuralSystem">
+                <label>PRIMARY STRUCTURAL SYSTEM</label>
+                <span>{{address.primaryStructuralSystem.description}}</span>
+            </p>
+            <p *ngIf="address.structureOccupancyCategory">
+                <label>STRUCTURE OCCUPANCY CATEGORY</label>
+                <span>{{address.structureOccupancyCategory.description}}</span>
+            </p>
+            <p *ngIf="address.seismicDesignCategory">
+                <label>SEISMIC DESIGN CATEGORY</label>
+                <span>{{address.seismicDesignCategory.description}}</span>
+            </p>
+            <p *ngIf="address.stories">
+                <label>STORIES</label>
+                <span>{{address.stories}}</span>
+            </p>
+            <p *ngIf="address.height">
+                <label>HEIGHT (<i>INCH</i>)</label>
+                <span>{{address.height}}</span>
+            </p>
+            <p *ngIf="address.feet">
+                <label>HEIGHT (<i>FEET</i>)</label>
+                <span>{{address.feet}}</span>
+            </p>
+            <p *ngIf="address.dwellingUnits">
+                <label>DWELLING UNITS</label>
+                <span>{{address.dwellingUnits}}</span>
+            </p>
+            <p *ngIf="address.grossArea">
+                <label>GROSS AREA</label>
+                <span>{{address.grossArea}}</span>
+            </p>
+            <p *ngIf="address.streetLegalWidth">
+                <label>STREET LEGAL WIDTH</label>
+                <span>{{address.streetLegalWidth}}</span>
+            </p>
+            <p>
+                <label>LANDMARK</label>
+                <span>{{address.isLandmark ? "Yes" : "No"}}</span>
+            </p>
+            <p>
+                <!-- <label>LITTLE 'E'</label> -->
+                <label>ENVIRONMENTAL RESTRICTIONS</label>
+                <span>{{address.isLittleE ? "Yes" : "No"}}</span>
+            </p>
+            <p>
+                <label>TIDAL WETLANDS MAP</label>
+                <span>{{address.tidalWetlandsMapCheck ? "Yes" : "No"}}</span>
+            </p>
+            <p>
+                <label>COASTAL EROSION HAZARD AREA MAP</label>
+                <span>{{address.coastalErosionHazardAreaMapCheck ? "Yes" : "No"}}</span>
+            </p>
+            <p>
+                <label>SPECIAL FLOOD HAZARD AREA</label>
+                <span>{{address.specialFloodHazardAreaCheck ? "Yes" : "No"}}</span>
+            </p>
+            <p>
+                <label>FRESHWATER WETLANDS MAP</label>
+                <span>{{address.freshwaterWetlandsMapCheck ? "Yes" : "No"}}</span>
+            </p>
+            <p>
+                <label>BSA DECISION</label>
+                <span>{{address.isBSADecision ? "Yes" : "No"}}</span>
+            </p>
+        </div>
+        <div class="modify text-left mb15" *ngIf="address.lastModifiedByEmployeeName">
+            Last modified by {{address.lastModifiedByEmployeeName}} on {{address.lastModifiedDate | date:'MM/dd/yyyy
+            h:mm a'}}
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide()">Cancel</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

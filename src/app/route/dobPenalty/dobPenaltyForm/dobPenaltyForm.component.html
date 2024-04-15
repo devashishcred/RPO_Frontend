@@ -1,0 +1,115 @@
+<div class="modal-custom-content" cdkDrag>
+  <form #dobPenaltyForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+      </button>
+      <h4 class="modal-title pull-left">{{isNew ? 'Create' : 'Edit'}} DOB Penalty Schedule</h4>
+    </div>
+    <div class="modal-body pb0 pt15">
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Section of Law</label>
+          <input id="sectionOfLaw" name="name" type="text" class="form-control" [(ngModel)]="dobPenalty.sectionOfLaw" #sectionOfLaw="ngModel"
+          />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Classification</label>
+          <input id="classification" name="classification" type="text" class="form-control" [(ngModel)]="dobPenalty.classification"
+            #classification="ngModel" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Infraction Code*</label>
+          <input id="infractionCode" name="infractionCode" type="text" class="form-control" [(ngModel)]="dobPenalty.infractionCode"
+            #infractionCode="ngModel" required/>
+          <div class="error-message pl0">
+            <div *ngIf="infractionCode.errors && (infractionCode.dirty || infractionCode.touched)">
+              {{errorMsg.requireIinfractionCode}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Violation Description</label>
+          <input id="violationDescription" name="violationDescription" type="text" class="form-control" [(ngModel)]="dobPenalty.violationDescription"
+            #violationDescription="ngModel" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <div class="checkbox form-check">
+            <label class="form-check-label">
+              <input id="cure" name="cure" class="form-check-input" type="checkbox" [(ngModel)]="dobPenalty.cure" #cure="ngModel" />Cure
+              <i class="input-helper"></i>
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="checkbox form-check">
+            <label class="form-check-label">
+            <input id="stipulation" name="stipulation" type="checkbox" [(ngModel)]="dobPenalty.stipulation" #stipulation="ngModel" />Stipulation
+            <i class="input-helper"></i>
+          </label>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="checkbox form-check">
+            <label class="form-check-label">
+            <input id="mitigatedPenalty" name="mitigatedPenalty" type="checkbox" [(ngModel)]="dobPenalty.mitigatedPenalty" #mitigatedPenalty="ngModel"
+            />Mitigated Penalty
+            <i class="input-helper"></i>
+          </label>
+        </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Standard Penalty ($)</label>
+          <input id="standardPenalty" name="standardPenalty" type="text" class="form-control" [(ngModel)]="dobPenalty.standardPenalty"
+            #standardPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Default Penalty ($)</label>
+          <input id="defaultPenalty" name="defaultPenalty" type="text" class="form-control" [(ngModel)]="dobPenalty.defaultPenalty"
+            #defaultPenalty="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Aggravated I Penalty ($)</label>
+          <input id="aggravatedPenalty_I" name="aggravatedPenalty_I" type="text" class="form-control" [(ngModel)]="dobPenalty.aggravatedPenalty_I"
+            #aggravatedPenalty_I="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Aggravated I Default Penalty ($)</label>
+          <input id="aggravatedDefaultPenalty_I" name="aggravatedDefaultPenalty_I" type="text" class="form-control" [(ngModel)]="dobPenalty.aggravatedDefaultPenalty_I"
+            #aggravatedDefaultPenalty_I="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-sm-6">
+          <label for="task">Aggravated II Penalty ($)</label>
+          <input id="aggravatedPenalty_II" name="aggravatedPenalty_II" type="text" class="form-control" [(ngModel)]="dobPenalty.aggravatedPenalty_II"
+            #aggravatedPenalty_II="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+        <div class="col-sm-6">
+          <label for="task">Aggravated II Default – Max Penalty ($)</label>
+          <input id="aggravatedDefaultMaxPenalty_II" name="aggravatedDefaultMaxPenalty_II" type="text" class="form-control" [(ngModel)]="dobPenalty.aggravatedDefaultMaxPenalty_II"
+            #aggravatedDefaultMaxPenalty_II="ngModel" (keypress)="isDecimal($event)" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button type="button" class="btn btn-blue" [disabled]="!dobPenaltyForm.form.valid" (click)="saveDobPenalty()">Save</button>
+    </div>
+    <div class="lds-css" *ngIf="loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  
+  </form>
+</div>

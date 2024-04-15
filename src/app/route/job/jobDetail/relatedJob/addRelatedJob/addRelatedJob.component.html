@@ -1,0 +1,63 @@
+<div class="modal-custom-content" cdkDrag>
+  <form (submit)="save()" ngNativeValidate #relatedJobForm="ngForm">
+    <div class="modal-header" cdkDragHandle>
+      <button type="button" class="close close-icn" cdkDragHandle>
+        <span class="fa fa-arrows"></span>
+    </button>
+      <h4 class="modal-title pull-left">{{fromRfp ? 'Select Project' : 'Add Related Project'}}</h4>
+    </div>
+    <div class="modal-body pb0">
+      <div class="add-related-job">
+        <div class="row">
+          <div class="col-sm-12" *ngIf="dropdownList?.length > 0">
+            <ng-select name="addRelJob" [items]="dropdownList" bindLabel="itemName" bindValue="id" placeholder="Project#"
+              [(ngModel)]="addRelJob" required (change)="setJobDetail()">
+            </ng-select>
+          </div>
+          <div class="col-sm-8" *ngIf="dropdownList?.length == 0">
+            <p>There are no more projects to add.</p>
+          </div>
+        </div>
+        <div class="row" *ngIf="addRelJob && !fromReports">
+          <div class="col-sm-12">
+            <div class="labeled-info">
+              <ul class="list-inline">
+                <li *ngIf="jobAddress">
+                  <label>Address</label>
+                  <p>{{jobAddress}}</p>
+                </li>
+                <li *ngIf="jobSpecialPlace">
+                  <label>Special place name</label>
+                  <p>{{jobSpecialPlace}}</p>
+                </li>
+              </ul>
+              <ul class="list-inline">
+                <li *ngIf="jobClient">
+                  <label>Contact</label>
+                  <p>{{jobClient}}</p>
+                </li>
+                <li *ngIf="jobCompany">
+                  <label>Company</label>
+                  <p>{{jobCompany}}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+    </div>
+    <div class="modal-footer text-right">
+      <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+      <button *ngIf="dropdownList?.length > 0" type="submit" class="btn btn-blue"
+        [disabled]="!relatedJobForm.form.valid">{{fromRfp ? 'Select' : fromReports ? 'Select' :'Add'}}</button>
+    </div>
+  </form>
+  <div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

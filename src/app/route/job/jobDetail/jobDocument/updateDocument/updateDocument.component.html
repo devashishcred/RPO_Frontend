@@ -1,0 +1,63 @@
+<style>
+    object {
+        width: 100%;
+        border-color: #ccc;
+        border-width: 1px 0px 1px 0px;
+        height: 600px;
+        /* height: 1000px; */
+    }
+
+    .valid-drag {
+        background: #F0FFFF;
+    }
+
+    .document-upload {
+        cursor: pointer
+    }
+</style>
+<div class="modal-custom-content" cdkDrag>
+    <div class="modal-header" cdkDragHandle>
+        <button type="button" class="close close-icn" cdkDragHandle>
+            <span class="fa fa-arrows"></span>
+        </button>
+        <h4 class="modal-title pull-left">Update Product Document</h4>
+    </div>
+    <div class="modal-body pt15" id="hero">
+<!--        <div class="text-center mt15 document-upload">-->
+        <!--            <div ngfDrop multiple="" selectable="1" [(validDrag)]="validComboDrag" [(files)]="files" accept=".pdf" [(lastInvalids)]="lastInvalids"-->
+        <!--                [(dragFiles)]="dragFiles" class="well my-drop-zone mb0" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"-->
+        <!--                (filesChange)="filesChange(files)">-->
+        <!--                Click to <span>browse</span> to upload your files.-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="row mt15">
+            <div class="col-md-6">
+                <div class="file-upload-wrap">
+                    <div class="rpo-file-upload" *ngFor="let document of documents">
+                        <span class="doc-name" id="doc-ref" style="vertical-align: top;" tooltip="{{document.name}}" placement="top">{{document.name}}</span>
+                        <a target="" class="remove" tooltip="Delete" placement="right" (click)="deleteDocument(document)">
+                            <i class="material-symbols-rounded">delete</i>
+                        </a>
+
+                    </div>
+                    <div class="rpo-file-upload" >
+                        <a *ngIf="documents.length == 0" href="{{selectedDocumentPath}}" class="pointer doc-name link-blue" style="vertical-align: top;"
+                        target="_blank" tooltip="{{selectedDocumentPath}}" placement="top">{{selectedDocumentName}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-blue" (click)="uploadDocument()">Upload</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="lds-css" *ngIf="loading">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>

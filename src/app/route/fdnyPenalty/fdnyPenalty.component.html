@@ -1,0 +1,29 @@
+<div class="rpo-address-type rpo-component">
+  <div class="row component-header">
+    <div class="col-sm-12">
+        <h2 class="component-title pull-left mr-2">FDNY Penalty Schedule</h2>
+        <button type="button" class="btn btn-panel pull-right middle {{showFdnyPenaltyAddBtn}}" (click)="openModalForm(fdnypenaltyform,null,true)">Add FDNY Penalty Schedule</button>
+        <div class="pull-left search middle">
+            <div class="inner-addon left-addon">
+              <i class="icon fa fa-search"></i>
+              <input type="text" class="form-control pull-right" placeholder="Search FDNY Penalty Schedule" [(ngModel)]="search" (ngModelChange)="searchFDNYPenalty(search)"
+            />
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="component-body overflow-hidden">
+    <table id="dt-fdnypenalty" class="display task-grid"  style="width:100%"></table>
+  </div>
+  <ng-template #fdnypenaltyform>
+    <div add-fdny-penalty  [modalRef]="modalRef" [reload]="reload" [id]="id" [isNew]="isNew"></div>
+  </ng-template>
+
+</div>
+<div class="lds-css" *ngIf="loading">
+  <div class="lds-ripple"> 
+    <div></div> 
+    <div></div>
+  </div>
+</div>

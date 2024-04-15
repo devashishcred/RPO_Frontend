@@ -1,0 +1,30 @@
+.search-area{
+    border: none !important;
+}
+.prop-dropdown{
+    width: 220px;
+    margin-right: 10px;
+}
+.list-comma{
+    li{
+        padding: 0px;
+        display: inline-block;;
+    }
+    li:not(:last-child){
+        a{
+            &:after{
+                content: ",";
+            }
+        }
+    }
+}
+.btn.btn-panel{margin-bottom: 15px;}
+table thead tr th:last-child{
+    max-width: fit-content;
+}
+table {
+    table-layout: auto!important;
+}
+.table-responsive {
+    overflow-x: scroll;
+}

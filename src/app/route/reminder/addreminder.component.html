@@ -1,0 +1,64 @@
+<div class="modal-custom-content" cdkDrag>
+    <form #reminderForm="ngForm">
+        <div class="modal-header" cdkDragHandle>
+            <button type="button" class="close close-icn" cdkDragHandle>
+                <span class="fa fa-arrows"></span>
+            </button>
+            <h4 class="modal-title pull-left">Task Reminder</h4>
+        </div>
+        <div class="modal-body pb0 pt15">
+            <div class="reminder-box">
+                <ul class="list-inline">
+                    <li>
+                        <label>Remind me in</label>
+                    </li>
+                    <li>
+                        <input type="text" name="daysreminder" class="form-control" placeholder="days*" [(ngModel)]="reminders.remindmeIn" #daysreminder="ngModel"
+                            pattern="^$|^[0-9]+" maxlength="3" required>
+                    </li>
+                    <li>
+                        <i>days</i>
+                    </li>
+                    <li>
+                        <button class="btn btn-blue" [disabled]="!reminderForm.form.valid" (click)="saveReminder()">Set</button>
+                    </li>
+                </ul>
+                <div class="error-message pl0">
+                    <div *ngIf="daysreminder.errors?.required && (daysreminder.dirty || daysreminder.touched)">
+                        {{errorMsg.requiredDaysToSetReminder}}
+                    </div>
+                    <div *ngIf="daysreminder.errors?.pattern  && (daysreminder.dirty || daysreminder.touched)">
+                        {{errorMsg.reminderDays}}
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="exsitingReminder?.length > 0">
+                <div class="note-list">
+                    <div *ngFor="let rem of exsitingReminder;  let i = index">
+                        <div class="single-note">
+                            <p *ngIf="rem.remindmeIn == 1">System will send you a reminder in
+                                <b *ngIf="rem.remindmeIn == 1">{{rem.remindmeIn}} day</b>, that is on
+                                <b>{{rem.reminderDate}}</b> Created On
+                                <b>{{rem.lastModifiedDate}}</b>
+                            </p>
+                            <p *ngIf="rem.remindmeIn > 1">System will send you a reminder in
+                                <b>{{rem.remindmeIn}} days</b>, that is on
+                                <b>{{rem.reminderDate}}</b> Created On
+                                <b>{{rem.lastModifiedDate}}</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <button type="button" class="btn btn-white pull-right" (click)="modalRef.hide();loading=false">Cancel</button>
+          </div>
+        <div class="lds-css" *ngIf="loading">
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </form>
+</div>
