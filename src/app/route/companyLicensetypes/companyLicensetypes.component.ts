@@ -72,7 +72,7 @@ export class CompanyLicenseTypesComponent implements OnInit, OnDestroy {
     document.title = 'License Types'
     const vm = this
     this.filter = {} as any
-    vm.table = $('#dt-License-types').DataTable({
+    vm.table = $('#dt-company-license-types').DataTable({
       paging: true,
       dom: "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'i><'col-sm-12 col-md-7'p>>",
       pageLength: 25,
@@ -135,7 +135,7 @@ export class CompanyLicenseTypesComponent implements OnInit, OnDestroy {
               this.appComponent.showDeleteConfirmation(this.delete, [data.id, row])
             }
           })
-          $('#dt-License-types tbody').on('click', 'span', function (ev: any) {
+          $('#dt-company-license-types tbody').on('click', 'span', function (ev: any) {
             const row = vm.table.row($(this).parents('tr'))
             const data = row.data()
             if($(this).hasClass('disabled')) {
@@ -150,7 +150,7 @@ export class CompanyLicenseTypesComponent implements OnInit, OnDestroy {
               vm.openModalForm(vm.LicenseTypesform, data.id, false)
             }
           })
-          $('#dt-License-types tbody').on('click', 'td.clickable', function (ev: any) {
+          $('#dt-company-license-types tbody').on('click', 'td.clickable', function (ev: any) {
             const row = vm.table.row($(this).parents('tr'))
             const data = row.data()
             if ($(this).hasClass('clickable')) {
@@ -167,8 +167,8 @@ export class CompanyLicenseTypesComponent implements OnInit, OnDestroy {
   * @method ngOnDestroy
   */
   ngOnDestroy() {
-    $('#dt-License-types tbody').off('click')
-    $('#dt-License-types').off('draw.dt')
+    $('#dt-company-license-types tbody').off('click')
+    $('#dt-company-license-types').off('draw.dt')
   }
 
   /**

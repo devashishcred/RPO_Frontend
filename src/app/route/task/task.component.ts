@@ -738,6 +738,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.specialColumn.destroy()
     $('#dt-task tbody').off('click')
+    this.table.destroy()
   }
 
   clearSort() {

@@ -435,9 +435,6 @@ export class JobApplicationDobSecondComponent implements OnInit, OnDestroy {
     if (this.sub) {
       this.sub.unsubscribe();
     }
-    console.log('ng destroy run',this.table)
-    this.table.clear();
-    this.table.destroy();
   }
 
   /**

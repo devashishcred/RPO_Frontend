@@ -87,7 +87,7 @@ export class AfterHourVarianceReportComponent implements OnInit {
 		document.title = 'AHV Permit Expiry Report'
 
 		var vm = this;
-		vm.table = $('#dt-application-status').DataTable({
+		vm.table = $('#dt-ahv-application').DataTable({
 			paging: true,
 			dom: "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'i><'col-sm-12 col-md-7'p>>",
 			pageLength: 25,
@@ -222,14 +222,14 @@ export class AfterHourVarianceReportComponent implements OnInit {
 				})
 			}
 		});
-		$('#dt-application-status tbody').on('click', 'td.clickable', function (ev: any) {
+		$('#dt-ahv-application tbody').on('click', 'td.clickable', function (ev: any) {
 			const row = vm.table.row($(this).parents('tr'))
 			const data = row.data()
 			if ($(this).hasClass('clickable')) {
 
 			}
 		});
-		$('#dt-application-status tbody').on('mousedown', 'td.jobRedirect', function (ev: any) {
+		$('#dt-ahv-application tbody').on('mousedown', 'td.jobRedirect', function (ev: any) {
 
 			const row = vm.table.row($(this).parents('tr'))
 			const data = row.data()

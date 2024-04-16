@@ -162,8 +162,8 @@ export class JobDotPermitComponent implements OnInit {
    */
   private getApplication(vm: any) {
     if (this.appRowChanges) {
-      $("#dt-aplication-permit").DataTable().destroy();
-      $("#dt-aplication-permit").empty();
+      $("#dt-dot-aplication-permit").DataTable().destroy();
+      $("#dt-dot-aplication-permit").empty();
       this.appRowChanges = false;
     }
     this.jobSharedService.getJobData().subscribe((data: any) => {
@@ -221,7 +221,7 @@ export class JobDotPermitComponent implements OnInit {
       this.filter.idJobApplication = -1
     }
 
-    vm.table = $('#dt-aplication-permit').DataTable({
+    vm.table = $('#dt-dot-aplication-permit').DataTable({
       paging: true,
       dom: "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'i><'col-sm-12 col-md-4'p>>",
       pageLength: 25,
@@ -352,7 +352,7 @@ export class JobDotPermitComponent implements OnInit {
       },
       initComplete: () => {
         if (vm.isCustomerLoggedIn) {
-          const table = $('#dt-aplication-permit').DataTable();
+          const table = $('#dt-dot-aplication-permit').DataTable();
           vm.setPermissionForEmptyActionColumn(table);
         }
 
@@ -385,7 +385,7 @@ export class JobDotPermitComponent implements OnInit {
           })
       }
     });
-    $('#dt-aplication-permit tbody').on('click', 'span', function (ev: any) {
+    $('#dt-dot-aplication-permit tbody').on('click', 'span', function (ev: any) {
       const row = vm.table.row($(this).parents('tr'))
       const data = row.data()
       if ($(this).hasClass('disabled')) {
@@ -400,7 +400,7 @@ export class JobDotPermitComponent implements OnInit {
         vm.openModalFormAddPermit(vm.formAddDotPermit, data.id)
       }
     })
-    $('#dt-aplication-permit tbody').on('click', 'td.clickable', function (ev: any) {
+    $('#dt-dot-aplication-permit tbody').on('click', 'td.clickable', function (ev: any) {
       const row = vm.table.row($(this).parents('tr'))
       const data = row.data()
       if ($(this).hasClass('clickable')) {

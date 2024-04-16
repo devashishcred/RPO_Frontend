@@ -72,7 +72,7 @@ export class StructureOccupancyCategoriesComponent implements OnInit, OnDestroy 
     document.title = 'Structure Occupancy Categories'
     const vm = this
     this.filter = {} as any
-    vm.table = $('#dt-JobContact-types').DataTable({
+    vm.table = $('#dt-structure-occupancy-table').DataTable({
       paging: true,
       dom: "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'i><'col-sm-12 col-md-7'p>>",
       pageLength: 25,
@@ -140,7 +140,7 @@ export class StructureOccupancyCategoriesComponent implements OnInit, OnDestroy 
               this.appComponent.showDeleteConfirmation(this.delete, [data.id, row])
             }
           })
-          $('#dt-JobContact-types tbody').on('click', 'span', function (ev: any) {
+          $('#dt-structure-occupancy-table tbody').on('click', 'span', function (ev: any) {
             const row = vm.table.row($(this).parents('tr'))
             const data = row.data()
             if($(this).hasClass('disabled')) {
@@ -155,7 +155,7 @@ export class StructureOccupancyCategoriesComponent implements OnInit, OnDestroy 
               vm.openModalForm(vm.StructureOccupancyCategoriesform, data.id, false)
             }
           })
-          $('#dt-JobContact-types tbody').on('click', 'td.clickable', function (ev: any) {
+          $('#dt-structure-occupancy-table tbody').on('click', 'td.clickable', function (ev: any) {
             const row = vm.table.row($(this).parents('tr'))
             const data = row.data()
             if ($(this).hasClass('clickable')) {
@@ -173,8 +173,8 @@ export class StructureOccupancyCategoriesComponent implements OnInit, OnDestroy 
   * @method ngOnDestroy
   */
   ngOnDestroy() {
-    $('#dt-JobContact-types tbody').off('click')
-    $('#dt-JobContact-types').off('draw.dt')
+    $('#dt-structure-occupancy-table tbody').off('click')
+    $('#dt-structure-occupancy-table').off('draw.dt')
   }
 
   /**

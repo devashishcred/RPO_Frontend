@@ -74,7 +74,7 @@ export class ChecklistItemMasterComponent implements OnInit {
   ngOnInit() {
     document.title = 'Checklist Item Master'
     const vm = this
-    vm.table = $('#dt-work').DataTable({
+    vm.table = $('#dt-checklist-item-master-table').DataTable({
       paging: true,
       dom: "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'i><'col-sm-12 col-md-7'p>>",
       pageLength: 25,
@@ -200,7 +200,7 @@ export class ChecklistItemMasterComponent implements OnInit {
               this.changeGroupStatus(data, data.id)
             }
           })
-        $('#dt-work tbody').on('click', 'span', function (ev: any) {
+        $('#dt-checklist-item-master-table tbody').on('click', 'span', function (ev: any) {
           const row = vm.table.row($(this).parents('tr'))
           const data = row.data()
           if($(this).hasClass('disabled')) {
@@ -214,7 +214,7 @@ export class ChecklistItemMasterComponent implements OnInit {
             vm.openModalForm(vm.formAddChecklistItem, vm.groupId, false)
           }
         })
-        $('#dt-work tbody').on('click', 'td.clickable', function (ev: any) {
+        $('#dt-checklist-item-master-table tbody').on('click', 'td.clickable', function (ev: any) {
           const row = vm.table.row($(this).parents('tr'))
           const data = row.data()
           if ($(this).hasClass('clickable')) {

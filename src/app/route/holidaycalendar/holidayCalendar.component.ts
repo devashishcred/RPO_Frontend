@@ -75,7 +75,7 @@ export class HolidayCalendarComponent implements OnInit, OnDestroy {
     document.title = 'Holiday Calendar'
     const vm = this
     this.filter = {} as any
-    vm.table = $('#dt-company-types').DataTable({
+    vm.table = $('#dt-holiday-calendar-table').DataTable({
       paging: true,
       dom: "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'i><'col-sm-12 col-md-7'p>>",
       pageLength: 25,
@@ -146,7 +146,7 @@ export class HolidayCalendarComponent implements OnInit, OnDestroy {
               this.appComponent.showDeleteConfirmation(this.delete, [data.id, row])
             }
           })
-          $('#dt-company-types tbody').on('click', 'span', function (ev: any) {
+          $('#dt-holiday-calendar-table tbody').on('click', 'span', function (ev: any) {
             const row = vm.table.row($(this).parents('tr'))
             const data = row.data()
             if ($(this).hasClass('delete-icon')) {
@@ -158,7 +158,7 @@ export class HolidayCalendarComponent implements OnInit, OnDestroy {
               vm.openModalForm(vm.holidaycalendarform, data.id, false)
             }
           })
-          $('#dt-company-types tbody').on('click', 'td.clickable', function (ev: any) {
+          $('#dt-holiday-calendar-table tbody').on('click', 'td.clickable', function (ev: any) {
             const row = vm.table.row($(this).parents('tr'))
             const data = row.data()
             if ($(this).hasClass('clickable')) {
@@ -176,8 +176,8 @@ export class HolidayCalendarComponent implements OnInit, OnDestroy {
   * @method ngOnDestroy
   */
   ngOnDestroy() {
-    $('#dt-company-types tbody').off('click')
-    $('#dt-company-types').off('draw.dt')
+    $('#dt-holiday-calendar-table tbody').off('click')
+    $('#dt-holiday-calendar-table').off('draw.dt')
   }
 
   /**

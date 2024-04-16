@@ -186,7 +186,7 @@ export class JobApplicationDotComponent implements OnInit, OnDestroy {
     this.setColumns()
     this.reload = this.reload.bind(this)
     this.delete = this.delete.bind(this)
-    vm.table = $('#dt-aplication').DataTable({
+    vm.table = $('#dt-dot-aplication').DataTable({
       "aaSorting": [],
       paging: true,
       dom: "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-4'l><'col-sm-12 col-md-4'i><'col-sm-12 col-md-4'p>>",
@@ -239,11 +239,11 @@ export class JobApplicationDotComponent implements OnInit, OnDestroy {
           $('.select-column').show()
         }
 
-        if ($('#dt-aplication > tbody > tr:first > td').hasClass('dataTables_empty')) {
-          $('#dt-aplication > tbody > tr:first').addClass('row-selected')
+        if ($('#dt-dot-aplication > tbody > tr:first > td').hasClass('dataTables_empty')) {
+          $('#dt-dot-aplication > tbody > tr:first').addClass('row-selected')
         } else {
-          $("#dt-aplication").find('> tbody > tr').removeClass('row-selected')
-          $('#dt-aplication > tbody > tr:first').addClass('row-selected')
+          $("#dt-dot-aplication").find('> tbody > tr').removeClass('row-selected')
+          $('#dt-dot-aplication > tbody > tr:first').addClass('row-selected')
         }
       },
 
@@ -251,10 +251,10 @@ export class JobApplicationDotComponent implements OnInit, OnDestroy {
         if (this.isCustomerLoggedIn) {
           this.setPermissionForEmptyActionColumn();
         }
-        if (!$('#dt-aplication > tbody > tr:first > td').hasClass('dataTables_empty')) {
-          $('#dt-aplication > tbody > tr:first').addClass('row-selected')
+        if (!$('#dt-dot-aplication > tbody > tr:first > td').hasClass('dataTables_empty')) {
+          $('#dt-dot-aplication > tbody > tr:first').addClass('row-selected')
         }
-        if ($('#dt-aplication > tbody > tr:first > td').hasClass('dataTables_empty')) {
+        if ($('#dt-dot-aplication > tbody > tr:first > td').hasClass('dataTables_empty')) {
           this.sharedService.getDotApplicationCount.emit(0);
         }
         this.specialColumn
@@ -279,7 +279,7 @@ export class JobApplicationDotComponent implements OnInit, OnDestroy {
       }
     });
     //work permit data table end
-    $('#dt-aplication tbody').on('click', 'td.clickable', function (ev: any) {
+    $('#dt-dot-aplication tbody').on('click', 'td.clickable', function (ev: any) {
       const row = vm.table.row($(this).parents('tr'))
       const appData = row.data()
       if ($(this).hasClass('clickable')) {
@@ -290,7 +290,7 @@ export class JobApplicationDotComponent implements OnInit, OnDestroy {
         $("body > rpo-app ~ .dropdown-menu").remove();
       }
     })
-    $('#dt-aplication tbody').on('click', 'span', function (ev: any) {
+    $('#dt-dot-aplication tbody').on('click', 'span', function (ev: any) {
       const row = vm.table.row($(this).parents('tr'))
       const data = row.data()
       if ($(this).hasClass('disabled')) {
@@ -308,7 +308,7 @@ export class JobApplicationDotComponent implements OnInit, OnDestroy {
 
 
   setPermissionForEmptyActionColumn() {
-    const dataTable = $('#dt-aplication').DataTable();
+    const dataTable = $('#dt-dot-aplication').DataTable();
     const columns = dataTable.columns().header().toArray();
 
     columns.forEach((column, columnIndex) => {
