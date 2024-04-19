@@ -13,7 +13,7 @@
       "node"
     ],
     "typeRoots": [
-      "../node_modules/@types"
+      "node_modules/@types"
     ],
     "lib": [
       "es2017",
@@ -21,7 +21,7 @@
     ]
   },
   "include": [
-    "../**/*"
+    "src/**/*"
   ],
 //  "angularCompilerOptions": {
 //    "preserveWhitespaces": false,
