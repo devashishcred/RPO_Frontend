@@ -1,6 +1,7 @@
 import { Injectable, ModuleWithProviders } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterModule, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 import { CompanyComponent } from './route/company/company.component';
 import { ContactComponent } from './route/contact/contact.component';
